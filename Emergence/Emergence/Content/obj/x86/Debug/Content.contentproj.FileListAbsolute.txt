@@ -1,0 +1,5 @@
+C:\Users\Kevin\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\ellrol001\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kevin\Desktop\Emergence\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache

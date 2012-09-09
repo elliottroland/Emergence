@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapq3 SYSTEM "mapq3.dtd">
+<mapq3>
+  <entity>
+    <epair key="classname" value="worldspawn"/>
+    <brush>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>-608 152 8 -608 -408 8 -608 -408 0</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>768 152 8 -608 152 8 -608 152 0</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>432 -368 8 432 192 8 432 192 0</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>-608 -408 8 768 -408 8 768 -408 0</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>-608 -408 8 -608 152 8 768 152 8</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+      <plane>
+        <shader>textures/radiant/notex</shader>
+        <planepts>768 152 0 -608 152 0 -608 -408 0</planepts>
+        <texdef>-256 32 45 0.500000 1.000000</texdef>
+        <flags>0 0 0</flags>
+      </plane>
+    </brush>
+  </entity>
+</mapq3>

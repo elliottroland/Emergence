@@ -1,0 +1,44 @@
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\clangdark.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\menuFont.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\metal_b.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\base_floor\pool_side2.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\maps\test.map
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Emergence.exe
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Emergence.pdb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Fonts.dll
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Graphics.dll
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Support.dll
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Graphics.xml
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Support.xml
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Fonts.xml
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Emergence.exe
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Emergence.pdb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\line.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\CogAttempt.xnb
+C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\debugFont.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\CogAttempt.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\metal_b.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\menuFont.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\clangdark.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\debugFont.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\line.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\base_floor\pool_side2.xnb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\maps\test.map
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Emergence.exe
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Emergence.pdb
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Fonts.dll
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Graphics.dll
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Support.dll
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Graphics.xml
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Support.xml
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Nuclex.Fonts.xml
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Emergence.exe
+C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\obj\Xbox 360\Debug\Emergence.pdb

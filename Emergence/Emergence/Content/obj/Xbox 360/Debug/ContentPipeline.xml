@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>CogAttempt.FBX</Source>
+      <Name>CogAttempt</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\CogAttempt.xnb</Output>
+      <Time>2012-09-09T15:54:16.4227473+02:00</Time>
+      <Dependency>
+        <Key>obj\Xbox 360\Debug\CogAttempt_0.xml</Key>
+        <Value>2012-09-09T15:55:39.1384784+02:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>debugFont.spritefont</Source>
+      <Name>debugFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\debugFont.xnb</Output>
+      <Time>2012-09-09T15:54:16.5247531+02:00</Time>
+    </Item>
+    <Item>
+      <Source>menuFont.spritefont</Source>
+      <Name>menuFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>NuclexVectorFontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\menuFont.xnb</Output>
+      <Time>2012-09-09T15:54:16.574756+02:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\ctf\clangdark.tga</Source>
+      <Name>textures\ctf\clangdark</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\clangdark.xnb</Output>
+      <Time>2012-09-09T15:54:17.1777905+02:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\ctf\metal_b.tga</Source>
+      <Name>textures\ctf\metal_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\metal_b.xnb</Output>
+      <Time>2012-09-09T15:54:17.2137926+02:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\ctf\pittedrust3stripes_fix.tga</Source>
+      <Name>textures\ctf\pittedrust3stripes_fix</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb</Output>
+      <Time>2012-09-09T15:54:17.2487946+02:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\sfx\xmetalfloor_wall_5b.tga</Source>
+      <Name>textures\sfx\xmetalfloor_wall_5b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb</Output>
+      <Time>2012-09-09T15:54:17.3147983+02:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\base_floor\pool_side2.tga</Source>
+      <Name>textures\base_floor\pool_side2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\textures\base_floor\pool_side2.xnb</Output>
+      <Time>2012-09-09T15:54:17.1127868+02:00</Time>
+    </Item>
+    <Item>
+      <Source>line.png</Source>
+      <Name>line</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\line.xnb</Output>
+      <Time>2012-09-09T15:54:16.5507546+02:00</Time>
+    </Item>
+    <Item>
+      <Source>CogAttempt.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Xbox 360\Debug\CogAttempt_0.xml</Output>
+      <Time>2012-09-09T15:54:16.4227473+02:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Xbox360</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>true</CompressContent>
+      <RootDirectory>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\Content\obj\Xbox 360\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\bin\Xbox 360\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\Nuclex\Nuclex.Fonts.Content.TrueTypeImporter.dll</Key>
+        <Value>2012-09-09T15:54:18.6948773+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2009-05-28T00:16:14+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2009-05-28T00:16:06+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2009-05-28T00:16:16+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2009-05-28T00:16:26+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2009-05-28T00:16:12+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2009-05-28T00:16:06+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2012-02-26T13:01:56.6975036+02:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
