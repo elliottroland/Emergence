@@ -91,7 +91,7 @@ namespace Emergence {
             textures.Add("ctf/pittedrust3stripes_fix", Content.Load<Texture2D>("textures/ctf/pittedrust3stripes_fix"));
             textures.Add("common/caulk", Content.Load<Texture2D>("textures/common/caulk"));
 
-            mapEngine = new MapEngine(this, "Content/maps/test2.map", textures);
+            mapEngine = new MapEngine(this, "Content/maps/test.map", textures);
 
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");

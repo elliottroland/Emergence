@@ -13,12 +13,16 @@ namespace Emergence
         public float speed = 200f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 800f, terminalVelocity = -1000f;
         public CoreEngine core;
         private Vector3 size = new Vector3(32,88,32);
+        public Weapon equipped;
+        public int ammo;
 
         public Player(CoreEngine c, PlayerIndex playerIndex, Vector3 position, Vector2 direction) {
             core = c;
             this.position = position;
             this.direction = direction;
             this.playerIndex = playerIndex;
+            equipped = new BFG(new FastRocket());
+            ammo = 200;
         }
 
         public Player(CoreEngine c, PlayerIndex playerIndex, Vector3 position) : this(c, playerIndex, position, new Vector2(0, (float)MathHelper.PiOver2)) { }
@@ -48,6 +52,9 @@ namespace Emergence
         }
 
         public void Update(GameTime gameTime) {
+            
+            equipped.Update(gameTime);
+            
             //ping the input engine for move
             List<Actions> actions = core.inputEngine.getGameKeys();
             actions.AddRange(core.inputEngine.getGameButtons(playerIndex));
@@ -62,9 +69,14 @@ namespace Emergence
             Vector3 jumpVelocity = Vector3.Zero;
 
             foreach (Actions a in actions)
-                if (a == Actions.Jump) {
+                if (a == Actions.Jump)
+                {
                     jumpVelocity.Y = jump;
                 }
+                else if (a == Actions.Fire)
+                    equipped.fire(this);
+                else if (a == Actions.Downgrade)
+                    equipped = equipped.upgradeDown();
 
             Vector3 velocity = Vector3.Zero;
             Vector3 forward = getDirectionVector();

@@ -248,10 +248,17 @@ namespace Emergence
                 mouseOut = new Vector2(mousePos.X - screenCenter.X, mousePos.Y - screenCenter.Y);
                 Mouse.SetPosition((int)screenCenter.X, (int)screenCenter.Y);
 
+                //test shooting
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed && oldMouse.LeftButton == ButtonState.Released)
+                    playerActions[0].Add(Actions.Fire);
+
                 //set old state
                 oldKB = currentKB;
+                oldMouse = Mouse.GetState();
             }
         }
+
+
         public void UpdateMenuInput()
         {
             //Check for PC or XBOX

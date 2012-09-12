@@ -171,30 +171,13 @@ namespace Emergence.Render
                         basicEffect.End();
                     }
 
+                Weapon equipDebug = core.players[cam].equipped;
+
+                core.DrawTextDebug(""+equipDebug.GetType()
+                                + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
+                                + "\nAmmo: " + core.players[cam].ammo);
+
                 cam++;
-
-                /*foreach (ModelMesh mesh in cube.Meshes)
-                {
-                    foreach (BasicEffect effect in mesh.Effects)
-                    {
-
-                        effect.World = Matrix.CreateScale(1);
-                        effect.View = cameras[cam++];
-                        if (curLayout == Layout.TWO)
-                            effect.Projection = halfMatrix;
-                        else
-                            effect.Projection = fullMatrix;
-                    
-                    }
-                    mesh.Draw();
-
-                }
-
-                SpriteBatch sp = new SpriteBatch(Game.GraphicsDevice);
-                sp.Begin();
-                sp.DrawString(font, ""+w.GetType(), new Vector2(v.Width/2,v.Height/2), Color.Black);
-                sp.End();*/
-
             
             }
         

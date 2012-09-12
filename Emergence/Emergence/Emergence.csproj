@@ -94,27 +94,31 @@
   <ItemGroup>
     <Compile Include="Map\Brush.cs" />
     <Compile Include="Map\Face.cs" />
-    <Compile Include="FlakCannon.cs" />
+    <Compile Include="Weapons\BFG.cs" />
+    <Compile Include="Weapons\FastRocket.cs" />
+    <Compile Include="Weapons\FlakCannon.cs" />
     <Compile Include="Input\InputEngine.cs" />
     <Compile Include="Map\MapEngine.cs" />
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\MenuItem.cs" />
     <Compile Include="Menus\MenuEngine.cs" />
     <Compile Include="PhysicsEngine.cs" />
-    <Compile Include="Pistol.cs" />
+    <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Map\Plane.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="CoreEngine.cs" />
-    <Compile Include="Rifle.cs" />
-    <Compile Include="RocketLauncher.cs" />
-    <Compile Include="ShockRifle.cs" />
-    <Compile Include="Shotgun.cs" />
-    <Compile Include="SniperRifle.cs" />
+    <Compile Include="Weapons\Railgun.cs" />
+    <Compile Include="Weapons\Rifle.cs" />
+    <Compile Include="Weapons\RocketLauncher.cs" />
+    <Compile Include="Weapons\ShockRifle.cs" />
+    <Compile Include="Weapons\Shotgun.cs" />
+    <Compile Include="Weapons\SniperRifle.cs" />
     <Compile Include="Map\Vertex.cs" />
     <Compile Include="Render\RenderEngine.cs" />
-    <Compile Include="Weapon.cs" />
+    <Compile Include="Weapons\TripleRocket.cs" />
+    <Compile Include="Weapons\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
