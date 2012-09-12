@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 
 using Emergence.Map;
-
+using Emergence.Weapons;
 
 namespace Emergence.Render
 {

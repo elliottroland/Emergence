@@ -11,8 +11,11 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+
 using Emergence.Map;
 using Emergence.Render;
+using Emergence.Pickup;
+
 using Nuclex.Fonts;
 using Nuclex.Graphics;
 
@@ -42,7 +45,8 @@ namespace Emergence {
         public RenderEngine renderEngine;
         public InputEngine inputEngine;
         public PhysicsEngine physicsEngine;
-        public MenuEngine menuEngine; 
+        public MenuEngine menuEngine;
+        public PickUpEngine pickupEngine;
 
         public Player[] players;
         public GameState currentState = GameState.MenuScreen;

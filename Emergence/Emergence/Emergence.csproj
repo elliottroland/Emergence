@@ -94,6 +94,9 @@
   <ItemGroup>
     <Compile Include="Map\Brush.cs" />
     <Compile Include="Map\Face.cs" />
+    <Compile Include="Pickup\PickUp.cs" />
+    <Compile Include="Pickup\PickUpEngine.cs" />
+    <Compile Include="Pickup\PickUpGen.cs" />
     <Compile Include="Weapons\BFG.cs" />
     <Compile Include="Weapons\FastRocket.cs" />
     <Compile Include="Weapons\FlakCannon.cs" />
