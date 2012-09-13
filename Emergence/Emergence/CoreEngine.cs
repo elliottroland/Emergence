@@ -37,6 +37,8 @@ namespace Emergence {
         SpriteBatch spriteBatch;
 
         SpriteFont debugFont;
+        public Model debugSphere;
+
         public Model cogModel;
         public Texture2D cogTexture;
 
@@ -47,6 +49,10 @@ namespace Emergence {
         public PhysicsEngine physicsEngine;
         public MenuEngine menuEngine;
         public PickUpEngine pickupEngine;
+
+        //test item generator locations
+        PickUpGen[] tests = { new PickUpGen(new Vector3(20, -320, 20), PickUp.PickUpType.AMMO), new PickUpGen(new Vector3(20, -320, -20), PickUp.PickUpType.HEALTH)
+                            ,new PickUpGen(new Vector3(-20, -320, 20), PickUp.PickUpType.LEFT), new PickUpGen(new Vector3(-20, -320, -20), PickUp.PickUpType.RIGHT)};
 
         public Player[] players;
         public GameState currentState = GameState.MenuScreen;
@@ -66,6 +72,8 @@ namespace Emergence {
             renderEngine = new RenderEngine(this, RenderEngine.Layout.ONE);
             inputEngine = new InputEngine(this);
             physicsEngine = new PhysicsEngine(this);
+
+            pickupEngine = new PickUpEngine(tests);
 
             players = new Player[1];
             players[0] = new Player(this, PlayerIndex.One, Vector3.Zero);
@@ -106,7 +114,7 @@ namespace Emergence {
             menuEngine = new MenuEngine(this, vectorFont);
 
             debugFont = Content.Load<SpriteFont>("debugFont");
-            
+            debugSphere = Content.Load<Model>("SphereHighPoly");
 
         }
 
@@ -124,12 +132,13 @@ namespace Emergence {
                 this.Exit();
 
             inputEngine.Update();
+            pickupEngine.Update(gameTime);
             foreach (Player player in players)
                 player.Update(gameTime);
 
             if (currentState == GameState.MenuScreen) 
                 menuEngine.Update();
-            
+
             base.Update(gameTime);
         }
 

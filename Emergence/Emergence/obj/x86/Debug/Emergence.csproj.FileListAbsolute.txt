@@ -149,3 +149,4 @@ C:\Users\User\Git\Emergence\Emergence\Emergence\obj\x86\Debug\ResolveAssemblyRef
 C:\Users\User\Git\Emergence\Emergence\Emergence\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\User\Git\Emergence\Emergence\Emergence\obj\x86\Debug\Emergence.exe
 C:\Users\User\Git\Emergence\Emergence\Emergence\obj\x86\Debug\Emergence.pdb
+C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\SphereHighPoly.xnb

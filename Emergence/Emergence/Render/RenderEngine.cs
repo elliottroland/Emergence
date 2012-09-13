@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Storage;
 
 using Emergence.Map;
 using Emergence.Weapons;
+using Emergence.Pickup;
 
 namespace Emergence.Render
 {
@@ -170,6 +171,58 @@ namespace Emergence.Render
 
                         basicEffect.End();
                     }
+
+                //draw item spawner locations
+                foreach (PickUpGen gen in core.pickupEngine.gens)
+                {
+                    foreach(ModelMesh mesh in core.debugSphere.Meshes){
+                    
+                        foreach(BasicEffect effect in mesh.Effects){
+                        
+                            effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.pos);
+                            effect.View = basicEffect.View;
+                            effect.Projection = basicEffect.Projection;
+
+                            effect.LightingEnabled = true;
+                            effect.AmbientLightColor = Color.Brown.ToVector3();
+
+                        }
+
+                        mesh.Draw();
+                    
+                    }
+
+                    if (gen.held != null)
+                    {
+
+                        foreach (ModelMesh mesh in core.debugSphere.Meshes)
+                        {
+
+                            foreach (BasicEffect effect in mesh.Effects)
+                            {
+                                effect.World = Matrix.CreateScale(10) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
+                                effect.View = basicEffect.View;
+                                effect.Projection = basicEffect.Projection;
+                                effect.LightingEnabled = true;
+                                
+                                switch (gen.held.type)
+                                {
+
+                                    case PickUp.PickUpType.AMMO: { effect.AmbientLightColor = Color.Crimson.ToVector3(); break; }
+                                    case PickUp.PickUpType.HEALTH: { effect.AmbientLightColor = Color.Green.ToVector3(); break; }
+                                    case PickUp.PickUpType.LEFT: { effect.AmbientLightColor = Color.DarkBlue.ToVector3(); break; }
+                                    case PickUp.PickUpType.RIGHT: { effect.AmbientLightColor = Color.Yellow.ToVector3(); break; }
+
+                                }
+
+                            }
+
+                            mesh.Draw();
+
+                        }
+
+                    }
+                }
 
                 Weapon equipDebug = core.players[cam].equipped;
 

@@ -60,6 +60,11 @@
       <Name>test2</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="SphereHighPoly.fbx">
+      <Name>SphereHighPoly</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="textures\common\caulk.tga">
       <Name>caulk</Name>
       <Importer>TextureImporter</Importer>

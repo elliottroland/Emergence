@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework;
 
 namespace Emergence.Pickup
 {
-    class PickUpGen
+    public class PickUpGen
     {
 
         PickUp.PickUpType itemType;
-        Vector3 pos;
+        public Vector3 pos;
         int genTime;
-        PickUp held;
+        public PickUp held;
 
         public PickUpGen(Vector3 p, PickUp.PickUpType t)
         {
@@ -20,6 +20,7 @@ namespace Emergence.Pickup
             pos = p;
             itemType = t;
             held = null;
+            genTime = 300;
         
         }
 
@@ -46,7 +47,7 @@ namespace Emergence.Pickup
         public void genPickUp(PickUp.PickUpType type)
         {
 
-            held = new PickUp(pos - new Vector3(0, 0, 20), itemType);
+            held = new PickUp(pos - new Vector3(0, -50, 0), itemType);
         
         }
 
