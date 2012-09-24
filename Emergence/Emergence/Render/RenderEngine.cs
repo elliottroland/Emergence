@@ -150,6 +150,9 @@ namespace Emergence.Render
                         basicEffect.Begin();
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
                             basicEffect.Texture = face.plane.texture;
+                            basicEffect.DiffuseColor = new Vector3(1, 1, 1);
+                            if(b.colliding)
+                                basicEffect.DiffuseColor = new Vector3(1,0,0);
                             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
                                 pass.Begin();
                                 VertexPositionNormalTexture[] pointList = face.getPoints();

@@ -69,7 +69,7 @@ namespace Emergence.Map {
         }
 
         //planes can be written as ax+by+cz+d=0, this returns the d value
-        public double getD() {
+        public float getD() {
             //return -Vector3.Dot(second, getNormal());
             return -plane.D;
         }

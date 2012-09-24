@@ -10,6 +10,7 @@ namespace Emergence.Map {
         public List<Face> faces;
         public int verts = 0;
         public BoundingBox boundingBox;
+        public bool colliding = false;
 
         public Brush() {
             planes = new List<Plane>();

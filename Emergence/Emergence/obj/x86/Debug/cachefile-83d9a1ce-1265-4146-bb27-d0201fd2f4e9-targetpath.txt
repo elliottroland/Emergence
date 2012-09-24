@@ -1,4 +1,5 @@
 Content\CogAttempt.xnb
+Content\SphereHighPoly.xnb
 Content\debugFont.xnb
 Content\menuFont.xnb
 Content\textures\common\caulk.xnb
@@ -9,7 +10,6 @@ Content\textures\ctf\pittedrust3stripes_fix.xnb
 Content\textures\sfx\xmetalfloor_wall_5b.xnb
 Content\textures\base_floor\pool_side2.xnb
 Content\line.xnb
-Content\SphereHighPoly.xnb
 Content\textures\common\caulk.tga
 Content\textures\base_wall\atech1_f.tga
 Content\maps\test.map
