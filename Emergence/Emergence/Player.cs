@@ -81,7 +81,7 @@ namespace Emergence
 
             Vector3 velocity = Vector3.Zero;
             Vector3 forward = getDirectionVector();
-            forward.Y = 0;
+            //forward.Y = 0;
             forward.Normalize();
             Vector3 right = Vector3.Cross(forward, Vector3.Up);
             right.Normalize();

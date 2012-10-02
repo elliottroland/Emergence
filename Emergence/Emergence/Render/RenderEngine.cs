@@ -229,10 +229,10 @@ namespace Emergence.Render
 
                 Weapon equipDebug = core.players[cam].equipped;
 
-                core.DrawTextDebug(""+equipDebug.GetType()
+                /*core.DrawTextDebug(""+equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
                                 + "\nAmmo: " + core.players[cam].ammo);
-
+                */
                 cam++;
             
             }
