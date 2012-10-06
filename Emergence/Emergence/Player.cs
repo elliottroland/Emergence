@@ -7,6 +7,21 @@ using Emergence.Weapons;
 
 namespace Emergence
 {
+    public struct Bullet{
+    
+        public Vector3 pos;
+        public Vector3 dir;
+        public int timeLeft;
+
+        public void update() {
+
+            pos = pos + dir * 50;
+            timeLeft -= 10;
+        
+        }
+    
+    }
+
     public class Player {
         public Vector3 position;
         public Vector2 direction; //theta, phi -- representing, in spherical coords the direction of a unit vector
@@ -14,15 +29,19 @@ namespace Emergence
         public float speed = 200f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 800f, terminalVelocity = -1000f;
         public CoreEngine core;
         private Vector3 size = new Vector3(32,88,32);
+       
         public Weapon equipped;
+        public int health;
         public int ammo;
+
+        public List<Bullet> bullets = new List<Bullet>();
 
         public Player(CoreEngine c, PlayerIndex playerIndex, Vector3 position, Vector2 direction) {
             core = c;
             this.position = position;
             this.direction = direction;
             this.playerIndex = playerIndex;
-            equipped = new BFG(new FastRocket());
+            equipped = new Pistol();
             ammo = 200;
         }
 
@@ -74,8 +93,9 @@ namespace Emergence
                 {
                     jumpVelocity.Y = jump;
                 }
-                else if (a == Actions.Fire)
+                else if (a == Actions.Fire){
                     equipped.fire(this);
+                }
                 else if (a == Actions.Downgrade)
                     equipped = equipped.upgradeDown();
 
@@ -91,6 +111,18 @@ namespace Emergence
             velocity = velocity * speed;   //this is when it actually becomes the velocity
 
             position = position + core.physicsEngine.applyCollision(gameTime, playerIndex, velocity + jumpVelocity);
+
+            //update all bullet positions
+            for (int i = bullets.Count-1; i >= 0; --i)
+            {
+                Bullet curB = bullets[i];
+                curB.update();
+                bullets[i] = curB;
+                if (bullets[i].timeLeft <= 0)
+                    bullets.Remove(bullets[i]);
+
+            }
+
         }
     }
 }

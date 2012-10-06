@@ -46,6 +46,8 @@ namespace Emergence.Render
 
         Matrix [] cameras;
 
+        float testrot = 0;          //0 to 2PI
+
         public RenderEngine(CoreEngine c, Layout l)
         {
             core = c;
@@ -140,17 +142,26 @@ namespace Emergence.Render
                 core.GraphicsDevice.Clear(voidColor);
 
                 core.GraphicsDevice.VertexDeclaration = vertexDecl;
-                basicEffect.View = cameras[cam];
-                basicEffect.World = Matrix.Identity;
-                basicEffect.TextureEnabled = true;
 
+                //Pass parameters per viewport
+                core.lighting.Parameters["World"].SetValue(Matrix.Identity);
+                core.lighting.Parameters["View"].SetValue(cameras[cam]);
+                core.lighting.Parameters["Projection"].SetValue(basicEffect.Projection);
+                core.lighting.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(Matrix.Invert(basicEffect.World)));
+                core.lighting.Parameters["DifDir"].SetValue(new Vector3(1*(float)Math.Sin(testrot), 0, 1*(float)Math.Cos(testrot)));
+
+                //so I can see
+                core.lighting.Parameters["Ambient"].SetValue(new Vector4(1,1,1,1));
+
+                //Draw each brush with effects
+                //----------------------------------------------------------------------------------------
                 foreach (Brush b in core.mapEngine.brushes)
                     foreach (Face face in b.faces)
                     {
-                        basicEffect.Begin();
+                        core.lighting.Begin();
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
-                            basicEffect.Texture = face.plane.texture;
-                            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+                            core.lighting.Parameters["tex"].SetValue(face.plane.texture);
+                            foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
                                 pass.Begin();
                                 VertexPositionNormalTexture[] pointList = face.getPoints();
                                 //printList(pointList);
@@ -169,10 +180,13 @@ namespace Emergence.Render
                             }
                         }
 
-                        basicEffect.End();
+                        core.lighting.End();
                     }
 
-                //draw item spawner locations
+                //----------------------------------------------------------------------------------------------------
+
+                //Draw item spawner locations
+                //----------------------------------------------------------------------------------------------------
                 foreach (PickUpGen gen in core.pickupEngine.gens)
                 {
                     foreach(ModelMesh mesh in core.debugSphere.Meshes){
@@ -180,7 +194,7 @@ namespace Emergence.Render
                         foreach(BasicEffect effect in mesh.Effects){
                         
                             effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.pos);
-                            effect.View = basicEffect.View;
+                            effect.View = cameras[cam];
                             effect.Projection = basicEffect.Projection;
 
                             effect.LightingEnabled = true;
@@ -201,7 +215,7 @@ namespace Emergence.Render
                             foreach (BasicEffect effect in mesh.Effects)
                             {
                                 effect.World = Matrix.CreateScale(10) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
-                                effect.View = basicEffect.View;
+                                effect.View = cameras[cam];
                                 effect.Projection = basicEffect.Projection;
                                 effect.LightingEnabled = true;
                                 
@@ -224,13 +238,74 @@ namespace Emergence.Render
                     }
                 }
 
-                Weapon equipDebug = core.players[cam].equipped;
+                //--------------------------------------------------------------------------------------------
 
-                core.DrawTextDebug(""+equipDebug.GetType()
+                //Draw each players bullets
+                //--------------------------------------------------------------------------------------------
+                foreach(Player p in core.players){
+
+                    VertexPositionColor[,] bVerts = new VertexPositionColor[p.bullets.Count, 1];
+                    int i = 0;
+
+                    foreach (Bullet b in p.bullets) {
+
+                        bVerts[i++,0].Position = b.pos;
+                    
+                    }
+                    
+                    //If bullets exist for the player
+                    if (bVerts.Length > 0)
+                    {
+                        core.GraphicsDevice.RenderState.PointSpriteEnable = true;
+                        core.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+                        core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
+                        core.GraphicsDevice.RenderState.DestinationBlend = Blend.One;
+                        core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
+                        core.lighting.Parameters["tex"].SetValue(core.bulletTex);
+                        core.lighting.Parameters["Diffuse"].SetValue(new Vector4());
+
+                        for (int j = 0; j < bVerts.Length; ++j )
+                        {
+                            VertexPositionColor[] point = new VertexPositionColor[1];
+                            point[0] = bVerts[j,0];
+
+                            core.lighting.Begin();
+
+                            core.GraphicsDevice.RenderState.PointSize = (64f * 100) / Vector3.Distance(p.position, point[0].Position);
+                            foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
+                            {
+                                pass.Begin();
+                                core.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                                    PrimitiveType.PointList,
+                                    point,
+                                    0,
+                                    1);
+                                pass.End();
+                            }
+
+                            core.lighting.End();
+
+                        }
+                        core.GraphicsDevice.RenderState.PointSpriteEnable = false;
+                        core.GraphicsDevice.RenderState.DepthBufferWriteEnable = true;
+                        core.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+                        core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
+                        core.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+                        core.lighting.Parameters["Diffuse"].SetValue(new Vector4(0,1,0,1));
+                    }
+                
+                }
+
+                //Weapon equipDebug = core.players[cam].equipped;
+
+                /*core.DrawTextDebug(""+equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
-                                + "\nAmmo: " + core.players[cam].ammo);
+                                + "\nAmmo: " + core.players[cam].ammo);*/
 
                 cam++;
+                //testrot += 0.1f;
+                //if (testrot > 2 * Math.PI)
+                   // testrot -= 2 * (float)Math.PI;
             
             }
         

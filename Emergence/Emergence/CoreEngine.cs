@@ -41,6 +41,9 @@ namespace Emergence {
 
         public Model cogModel;
         public Texture2D cogTexture;
+        public Texture2D bulletTex;
+
+        public Effect lighting;
 
 
         public MapEngine mapEngine;
@@ -108,7 +111,11 @@ namespace Emergence {
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
+            bulletTex = Content.Load<Texture2D>("bullet");
 
+            //load shader
+            lighting = Content.Load<Effect>("Lighting");
+            lighting.CurrentTechnique = lighting.Techniques["Technique1"];
 
             VectorFont vectorFont = Content.Load<VectorFont>("menuFont");           
             menuEngine = new MenuEngine(this, vectorFont);
@@ -132,12 +139,17 @@ namespace Emergence {
                 this.Exit();
 
             inputEngine.Update();
-            pickupEngine.Update(gameTime);
-            foreach (Player player in players)
-                player.Update(gameTime);
 
-            if (currentState == GameState.MenuScreen) 
+            if (currentState == GameState.MenuScreen)
                 menuEngine.Update();
+            else
+            {
+
+                pickupEngine.Update(gameTime);
+                foreach (Player player in players)
+                    player.Update(gameTime);
+            
+            }
 
             base.Update(gameTime);
         }
@@ -171,6 +183,7 @@ namespace Emergence {
 
         public void DrawTextDebug(String text)
         {
+
             spriteBatch.Begin();
             spriteBatch.DrawString(debugFont, text, new Vector2(65, 65), Color.Black);
             spriteBatch.DrawString(debugFont, text, new Vector2(64, 64), Color.White);
