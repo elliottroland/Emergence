@@ -7,11 +7,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\CogAttempt.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\CogAttempt.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\CogAttempt_0.xml</Key>
-        <Value>2012-10-05T07:22:46+02:00</Value>
+        <Value>2012-10-06T09:55:06.2986999+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -20,11 +20,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\SphereHighPoly.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\SphereHighPoly.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\SphereHighPoly_0.xml</Key>
-        <Value>2012-10-05T07:22:48+02:00</Value>
+        <Value>2012-10-06T09:54:28.8536999+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -33,7 +33,7 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\debugFont.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\debugFont.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -42,7 +42,7 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>NuclexVectorFontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\menuFont.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\menuFont.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -51,7 +51,7 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb</Output>
       <Time>2012-09-20T13:16:36+02:00</Time>
     </Item>
     <Item>
@@ -60,7 +60,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\common\caulk.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\common\caulk.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -69,7 +69,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_wall\atech1_f.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_wall\atech1_f.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -78,7 +78,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\clangdark.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\clangdark.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -87,7 +87,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\metal_b.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\metal_b.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -96,7 +96,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -105,7 +105,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -114,7 +114,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_floor\pool_side2.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_floor\pool_side2.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -123,7 +123,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\line.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\line.xnb</Output>
       <Time>2012-09-18T10:01:46+02:00</Time>
     </Item>
     <Item>
@@ -132,7 +132,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb</Output>
+      <Output>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb</Output>
       <Time>2012-10-02T07:45:04+02:00</Time>
     </Item>
     <Item>
@@ -154,43 +154,43 @@
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>E:\Emergence\Emergence\Emergence\Content\</RootDirectory>
-      <LoggerRootDirectory>E:\Emergence\Emergence\Emergence\</LoggerRootDirectory>
-      <IntermediateDirectory>E:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>E:\Emergence\Emergence\Emergence\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\User\Git\Emergence\Emergence\Emergence\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\User\Git\Emergence\Emergence\Emergence\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\User\Git\Emergence\Emergence\Emergence\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
-        <Key>E:\Emergence\Emergence\Emergence\Nuclex\Nuclex.Fonts.Content.TrueTypeImporter.dll</Key>
+        <Key>C:\Users\User\Git\Emergence\Emergence\Emergence\Nuclex\Nuclex.Fonts.Content.TrueTypeImporter.dll</Key>
         <Value>2012-09-18T10:01:46+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
         <Value>2009-05-28T00:16:14+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
         <Value>2009-05-28T00:16:06+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
         <Value>2009-05-28T00:16:16+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
         <Value>2009-05-28T00:16:26+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
         <Value>2009-05-28T00:16:12+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
         <Value>2009-05-28T00:16:06+02:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2012-01-15T16:06:41.3561066+02:00</Value>
+        <Key>C:\windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2012-09-05T11:00:34.4833283+02:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

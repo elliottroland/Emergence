@@ -7,3 +7,4 @@ C:\Users\User\Git\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAss
 E:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 G:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 I:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kevin\Documents\GitHub\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache

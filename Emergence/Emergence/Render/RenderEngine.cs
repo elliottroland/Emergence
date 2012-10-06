@@ -162,6 +162,7 @@ namespace Emergence.Render
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
                             core.lighting.Parameters["tex"].SetValue(face.plane.texture);
                             foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
+
                                 pass.Begin();
                                 VertexPositionNormalTexture[] pointList = face.getPoints();
                                 //printList(pointList);
@@ -300,6 +301,7 @@ namespace Emergence.Render
 
                 /*core.DrawTextDebug(""+equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
+
                                 + "\nAmmo: " + core.players[cam].ammo);*/
 
                 cam++;
