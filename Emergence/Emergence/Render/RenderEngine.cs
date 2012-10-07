@@ -160,9 +160,14 @@ namespace Emergence.Render
                     {
                         core.lighting.Begin();
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
+                            /*basicEffect.Texture = face.plane.texture;
+                            //basicEffect.DiffuseColor = new Vector3(1, 1, 1);
+                            basicEffect.DiffuseColor = face.DiffuseColor;
+                            if (face.DiffuseColor == new Vector3(1,1,1) && b.colliding)
+                                basicEffect.DiffuseColor = new Vector3(1, 0, 0);*/
                             core.lighting.Parameters["tex"].SetValue(face.plane.texture);
+                            //foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
                             foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
-
                                 pass.Begin();
                                 VertexPositionNormalTexture[] pointList = face.getPoints();
                                 //printList(pointList);
@@ -182,6 +187,29 @@ namespace Emergence.Render
                         }
 
                         core.lighting.End();
+                        //draw the face normal
+                        /*VertexPositionNormalTexture cent = new VertexPositionNormalTexture(), norm = new VertexPositionNormalTexture();
+                        cent.Position = face.getCenter();
+                        norm.Position = face.plane.getNormal() * 60 + cent.Position;
+                        VertexPositionNormalTexture[] pts = { cent, norm };
+                        basicEffect.Texture = null;
+                        basicEffect.DiffuseColor = new Vector3(1, 0, 0);
+                        foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+                            pass.Begin();
+                            //printList(pointList);
+                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                PrimitiveType.LineList,
+                                pts,
+                                0,
+                                2,
+                                new short[] {0, 1},
+                                0,
+                                1);
+                            pass.End();
+                        }*/
+
+
+                        //basicEffect.End();
                     }
 
                 //----------------------------------------------------------------------------------------------------

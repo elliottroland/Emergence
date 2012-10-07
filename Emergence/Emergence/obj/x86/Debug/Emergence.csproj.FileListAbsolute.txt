@@ -293,3 +293,5 @@ C:\Users\Kevin\Documents\GitHub\Emergence\Emergence\Emergence\obj\x86\Debug\Emer
 C:\Users\Kevin\Documents\GitHub\Emergence\Emergence\Emergence\obj\x86\Debug\Emergence.pdb
 C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb
 C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb
+C:\Users\Kevin\Documents\GitHub\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb
+C:\Users\Kevin\Documents\GitHub\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb

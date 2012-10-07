@@ -26,7 +26,7 @@ namespace Emergence
         public Vector3 position;
         public Vector2 direction; //theta, phi -- representing, in spherical coords the direction of a unit vector
         public PlayerIndex playerIndex;
-        public float speed = 200f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 800f, terminalVelocity = -1000f;
+        public float speed = 200f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 7f, terminalVelocity = -1000f;
         public CoreEngine core;
         private Vector3 size = new Vector3(32,88,32);
        
@@ -101,7 +101,7 @@ namespace Emergence
 
             Vector3 velocity = Vector3.Zero;
             Vector3 forward = getDirectionVector();
-            //forward.Y = 0;
+            forward.Y = 0;
             forward.Normalize();
             Vector3 right = Vector3.Cross(forward, Vector3.Up);
             right.Normalize();
@@ -110,7 +110,9 @@ namespace Emergence
                 velocity.Normalize();
             velocity = velocity * speed;   //this is when it actually becomes the velocity
 
-            position = position + core.physicsEngine.applyCollision(gameTime, playerIndex, velocity + jumpVelocity);
+            //the velocity given to the physics engine is but a request for movement.
+            //the final position is decided by that engine, taking into account gravity and collision detection/response
+            position = core.physicsEngine.applyMovement(gameTime, playerIndex, velocity + jumpVelocity);
 
             //update all bullet positions
             for (int i = bullets.Count-1; i >= 0; --i)
@@ -122,7 +124,6 @@ namespace Emergence
                     bullets.Remove(bullets[i]);
 
             }
-
         }
     }
 }

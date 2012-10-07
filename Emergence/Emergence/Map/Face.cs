@@ -9,6 +9,7 @@ namespace Emergence.Map {
     public class Face {
         public List<Vertex> vertices;
         public Plane plane;
+        public Vector3 DiffuseColor = new Vector3(1, 1, 1);
 
         public Face(List<Vertex> v, Plane p) {
             vertices = v;
