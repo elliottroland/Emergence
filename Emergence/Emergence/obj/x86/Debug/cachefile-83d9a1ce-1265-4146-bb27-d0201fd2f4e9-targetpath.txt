@@ -31,6 +31,14 @@ Content\textures\emergence\wall_brown2.xnb
 Content\textures\emergence\floor_scaff4.xnb
 Content\textures\emergence\trim_blue.xnb
 Content\textures\emergence\trim_green.xnb
+Content\MenuTextures\background2.xnb
+Content\MenuTextures\EmergenceIntro2.xnb
+Content\MenuTextures\SelectionWheel2.xnb
+Content\MenuTextures\background.xnb
+Content\MenuTextures\EmergenceIntro.xnb
+Content\MenuTextures\LoadTex.xnb
+Content\MenuTextures\menuLight.xnb
+Content\MenuTextures\SelectionWheel.xnb
 Content\textures\common\caulk.tga
 Content\textures\base_wall\atech1_f.tga
 Content\textures\emergence\floor_hex.tga

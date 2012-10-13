@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>RootNode</Name>
     <Identity>
-      <SourceFilename>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
+      <SourceFilename>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
       <SourceTool>FbxImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
@@ -53,7 +53,7 @@
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Name>Material</Name>
       <Identity>
-        <SourceFilename>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>

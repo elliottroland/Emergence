@@ -21,6 +21,13 @@ using Nuclex.Fonts;
 using Nuclex.Graphics;
 
 namespace Emergence {
+
+    public struct SelectedStruct
+    {
+        public List<MenuItem> repositionItems;// = new List<MenuItem>();
+        public int selectedIndex;// = 0;
+
+    }
     public enum Actions { Unbound = 0, Jump, Reload, Downgrade, Pause, Sprint, Scoreboard, Aim, Fire };
     public enum MenuAction { Unbound = 0, Up, Down, Left, Right, Select, Back, Join, EditConfig };
 
@@ -35,9 +42,9 @@ namespace Emergence {
 
     public class CoreEngine : Microsoft.Xna.Framework.Game {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
 
-        SpriteFont debugFont;
+        public SpriteFont debugFont;
         public Model debugSphere;
         public Model medicross;
         public Model ammoUp;
@@ -69,6 +76,8 @@ namespace Emergence {
 
         public CoreEngine() {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 576;
             Content.RootDirectory = "Content";
         }
 
@@ -132,8 +141,9 @@ namespace Emergence {
             //load shader
             lighting = Content.Load<Effect>("PointLighting");
 
-            VectorFont vectorFont = Content.Load<VectorFont>("menuFont");           
-            menuEngine = new MenuEngine(this, vectorFont);
+                  
+            menuEngine = new MenuEngine(this);
+           
 
             debugFont = Content.Load<SpriteFont>("debugFont");
             debugSphere = Content.Load<Model>("SphereHighPoly");
@@ -171,7 +181,7 @@ namespace Emergence {
             inputEngine.Update();
 
             if (currentState == GameState.MenuScreen)
-                menuEngine.Update();
+                menuEngine.Update(gameTime);
             else
             {
 

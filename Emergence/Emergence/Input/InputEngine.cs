@@ -173,7 +173,7 @@ namespace Emergence
         }
         public Vector2 getMove(PlayerIndex p)
         {
-            return GamePad.GetState(p).ThumbSticks.Left;
+            return new Vector2(GamePad.GetState(p).ThumbSticks.Left.X, -GamePad.GetState(p).ThumbSticks.Left.Y);
         }
         public Vector2 getLook(PlayerIndex p)
         {
@@ -272,22 +272,19 @@ namespace Emergence
             //Controller input
             for (int pIndex = 3; pIndex >= 0; pIndex--)
             {
-             
+
                 old = oldGPStates[pIndex];
 
-                if (current.IsConnected)//Check only if connected
+
+
+                current = GamePad.GetState((PlayerIndex)pIndex);
+
+                for (int i = 0; i < playerBindings[0].menuButtons.Length; i++)
                 {
-                    firstConnected = pIndex;
-                    onXBOX = true;
-                    
-                    current = GamePad.GetState((PlayerIndex)pIndex);
-                                       
-                    for (int i = 0; i < playerBindings[0].menuButtons.Length; i++)
-                    {
-                        if (isPressed(playerBindings[pIndex].menuButtons[i]))//if button is down
-                            playerMenuActions[pIndex].Add(playerBindings[pIndex].menuControls[i]);//add action bound to button
-                    }
+                    if (isPressed(playerBindings[pIndex].menuButtons[i]))//if button is down
+                        playerMenuActions[pIndex].Add(playerBindings[pIndex].menuControls[i]);//add action bound to button
                 }
+
 
                 //set old state (not necessary if only using isDown)
                 oldGPStates[pIndex] = current;
@@ -309,7 +306,7 @@ namespace Emergence
 
                 //Update mouse data
                 Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-                mouseOut = new Vector2(mousePos.X, mousePos.Y);
+                mouseOut = new Vector2(200, mousePos.Y-250);
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed && oldMouse.LeftButton==ButtonState.Released)
                     playerMenuActions[4].Add(MenuAction.Select);
                 //Mouse.SetPosition((int)screenCenter.X, (int)screenCenter.Y);

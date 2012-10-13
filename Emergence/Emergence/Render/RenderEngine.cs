@@ -167,7 +167,7 @@ namespace Emergence.Render
                 
                 core.GraphicsDevice.Viewport = v;
                 core.GraphicsDevice.Clear(voidColor);
-
+                
                 core.GraphicsDevice.VertexDeclaration = vertexDecl;
                 //core.GraphicsDevice.VertexShader
 
@@ -395,11 +395,11 @@ namespace Emergence.Render
 
                 //Draw HUD
 
-                core.DrawStringDebug("" + equipDebug.GetType()
+                /*core.DrawStringDebug("" + equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
 
                                 + "\nAmmo: " + core.players[cam].ammo);
-
+                */
                 cam++;
             
             }

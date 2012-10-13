@@ -65,7 +65,7 @@ namespace Emergence
 
         public void setSelected(int index)
         {
-            if (index < menuItems.Count && index>=0)
+            if (index < menuItems.Count && index >= 0)
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
