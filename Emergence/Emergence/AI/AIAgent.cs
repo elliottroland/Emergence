@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-
+//git is awesome
 namespace Emergence.AI {
     public class AIAgent : Agent {
         public List<MeshNode> path = new List<MeshNode>();
