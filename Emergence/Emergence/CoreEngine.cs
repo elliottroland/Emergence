@@ -84,7 +84,7 @@ namespace Emergence {
             physicsEngine = new PhysicsEngine(this);
             aiEngine = new AIEngine(this);
 
-            pickupEngine = new PickUpEngine(tests);
+            pickupEngine = new PickUpEngine();
 
             players = new Player[1];
             players[0] = new Player(this, PlayerIndex.One, Vector3.Zero);

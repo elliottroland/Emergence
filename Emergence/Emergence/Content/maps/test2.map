@@ -3024,3 +3024,53 @@
 "light" "800"
 "colour" "0 1 0"
 }
+// entity 5
+{
+"origin" "32 -408 80"
+"classname" "item_health"
+}
+// entity 6
+{
+"origin" "232 -152 328"
+"classname" "ammo_bfg"
+}
+// entity 7
+{
+"origin" "232 -984 224"
+"classname" "item_armor_body"
+}
+// entity 8
+{
+"origin" "24 96 64"
+"classname" "item_flight"
+}
+// entity 9
+{
+"classname" "item_armor_body"
+"origin" "-32 -144 480"
+}
+// entity 10
+{
+"origin" "104 -144 480"
+"classname" "item_armor_body"
+}
+// entity 11
+{
+"classname" "item_flight"
+"origin" "-1272 -160 64"
+}
+// entity 12
+{
+"classname" "ammo_bfg"
+"origin" "1336 -152 64"
+}
+// entity 13
+{
+"classname" "item_health"
+"origin" "-168 -152 328"
+}
+// entity 14
+{
+"classname" "item_armor_body"
+"origin" "-168 -984 224"
+}

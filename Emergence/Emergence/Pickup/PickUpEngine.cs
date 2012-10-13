@@ -9,12 +9,16 @@ namespace Emergence.Pickup
     public class PickUpEngine
     {
 
-        public PickUpGen[] gens;
+        public List<PickUpGen> gens;
 
-        public PickUpEngine(PickUpGen[] g){
+        public PickUpEngine()
+        {
+            gens = new List<PickUpGen>();
+        }
 
-            gens = g;
-        
+        public PickUpEngine(PickUpGen[] g) : this(){
+            foreach (PickUpGen gg in g)
+                gens.Add(gg);
         }
 
         public void Update(GameTime gameTime) {

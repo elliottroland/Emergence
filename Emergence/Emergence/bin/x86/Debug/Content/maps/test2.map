@@ -3024,3 +3024,23 @@
 "light" "800"
 "colour" "0 1 0"
 }
+// entity 5
+{
+"origin" "192 -312 64"
+"classname" "item_health"
+}
+// entity 6
+{
+"origin" "160 -120 64"
+"classname" "ammo_bfg"
+}
+// entity 7
+{
+"origin" "240 -312 64"
+"classname" "item_armor_body"
+}
+// entity 8
+{
+"origin" "224 -120 64"
+"classname" "item_flight"
+}
