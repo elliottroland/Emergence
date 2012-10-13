@@ -11,7 +11,7 @@ namespace Emergence {
     abstract public class Agent {
         public Vector3 position;
         public Vector2 direction; //theta, phi -- representing, in spherical coords the direction of a unit vector
-        public float speed = 200f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 7f, terminalVelocity = -1000f;
+        public float speed = 400f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 8f, terminalVelocity = -1000f;
         public CoreEngine core;
         protected Vector3 size = new Vector3(32,88,32);
        

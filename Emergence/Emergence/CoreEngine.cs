@@ -106,13 +106,23 @@ namespace Emergence {
 
             //load the trextures
             textures = new Dictionary<string, Texture2D>();
-            textures.Add("base_floor/pool_side2", Content.Load<Texture2D>("textures/base_floor/pool_side2"));
+            /*textures.Add("base_floor/pool_side2", Content.Load<Texture2D>("textures/base_floor/pool_side2"));
             textures.Add("base_wall/atech1_f", Content.Load<Texture2D>("textures/base_wall/atech1_f"));
             textures.Add("sfx/xmetalfloor_wall_5b", Content.Load<Texture2D>("textures/sfx/xmetalfloor_wall_5b"));
             textures.Add("ctf/metal_b", Content.Load<Texture2D>("textures/ctf/metal_b"));
             textures.Add("ctf/clangdark", Content.Load<Texture2D>("textures/ctf/clangdark"));
             textures.Add("ctf/pittedrust3stripes_fix", Content.Load<Texture2D>("textures/ctf/pittedrust3stripes_fix"));
             textures.Add("common/caulk", Content.Load<Texture2D>("textures/common/caulk"));
+            textures.Add("emergence/floor_hex", Content.Load < Texture2D("textures/emgergence/floor_hex"));*/
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("Content/textures/texturelist.txt"))
+            {
+                string tex = "";
+                while((tex = sr.ReadLine()) != null) {
+                    tex = tex.Trim();
+                    if(tex.Length > 0 && !tex.StartsWith("//"))
+                        textures.Add(tex, Content.Load<Texture2D>("textures/" + tex));
+                }
+            }
 
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");

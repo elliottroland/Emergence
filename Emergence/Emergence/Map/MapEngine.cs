@@ -121,14 +121,14 @@ namespace Emergence.Map {
             Vector4[] colours = new Vector4[lights.Count];
             float[] radii = new float[lights.Count];
 
-            /*for(int i = 0; i < lights.Count; ++i){
+            for(int i = 0; i < lights.Count; ++i){
             
                 poses[i] = lights[i].position;
                 colours[i] = lights[i].colour;
                 radii[i] = lights[i].radius;
                 Console.WriteLine(lights[i].position + " " + lights[i].radius);
             
-            }*/
+            }
 
             core.lighting.Parameters["lightPoses"].SetValue(poses);
             core.lighting.Parameters["lightColours"].SetValue(colours);
