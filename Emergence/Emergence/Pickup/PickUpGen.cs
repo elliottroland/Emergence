@@ -9,7 +9,7 @@ namespace Emergence.Pickup
     public class PickUpGen
     {
 
-        PickUp.PickUpType itemType;
+        public PickUp.PickUpType itemType;
         public Vector3 pos;
         int genTime;
         public PickUp held;
@@ -38,7 +38,7 @@ namespace Emergence.Pickup
             }
             else                            //spin held pickup
             {
-                held.rotation += 0.1f;
+                held.rotation += 0.05f;
                 if (held.rotation > 2 * MathHelper.Pi)
                     held.rotation -= 2 * MathHelper.Pi;
             }
@@ -47,7 +47,7 @@ namespace Emergence.Pickup
         public void genPickUp(PickUp.PickUpType type)
         {
 
-            held = new PickUp(pos - new Vector3(0, -50, 0), itemType);
+            held = new PickUp(pos + new Vector3(0, 50, 0), itemType);
         
         }
 

@@ -4,10 +4,10 @@ float4x4 Projection;
 
 float4x4 WorldInverseTranspose;
 
-texture tex;
+texture Tex;
 sampler2D texSampler = sampler_state{
 
-	Texture = (tex);
+	Texture = (Tex);
 	MagFilter = Linear;
 	MinFilter = Linear;
 	AddressU = Wrap;
@@ -19,7 +19,7 @@ sampler2D texSampler = sampler_state{
 float4 Ambient = float4(1,0,0,1);
 float AmbIntensity = 0.3;
 float3 DifDir = float3(1, 0, 0);
-float4 Diffuse = float4(0,1,0,1);
+float4 Diffuse = float4(0.4f,0.4f,0.4f,1);
 float DifIntensity = 1;
 
 struct VertexShaderInput

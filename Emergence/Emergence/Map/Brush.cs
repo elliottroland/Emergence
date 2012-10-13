@@ -58,7 +58,8 @@ namespace Emergence.Map {
 
             //now for each plane, create the face
             for (int i = 0; i < planes.Count; i++)
-                faces.Add(new Face(verts[i], planes[i]));
+                if(verts[i].Count >= 3)
+                    faces.Add(new Face(verts[i], planes[i]));
         }
 
         public bool contains(Vertex v) {

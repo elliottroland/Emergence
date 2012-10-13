@@ -54,5 +54,19 @@ namespace Emergence.Weapons
         //Revert to more basic weapon
         public abstract Weapon upgradeDown();
 
+        public void makeNormalBullet(Player p){
+
+            if (curCooldown == cooldown)
+            {
+                //Do weapon specific things
+                Bullet b = new Bullet();
+                b.pos = p.position + p.getDirectionVector() + new Vector3(0, 60, 0);
+                b.dir = p.getDirectionVector();
+                b.timeLeft = 600;
+                p.bullets.Add(b);
+            }
+        
+        }
+
     }
 }

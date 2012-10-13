@@ -57,6 +57,16 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="bullets.fbx">
+      <Name>bullets</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="arrow.fbx">
+      <Name>arrow</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="maps\test.map">
       <Name>test</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -65,6 +75,16 @@
       <Name>test2</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="PointLighting.fx">
+      <Name>PointLighting</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Medicross.fbx">
+      <Name>Medicross</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="SphereHighPoly.fbx">
       <Name>SphereHighPoly</Name>
       <Importer>FbxImporter</Importer>

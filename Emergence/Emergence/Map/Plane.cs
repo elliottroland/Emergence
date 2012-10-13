@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Emergence.Map {
     public class Plane {
-        public Vector3 first, second, third;
+        public Vector3 first, second, third, meshFirst, meshSecond, meshThird;
         public Texture2D texture;
         public double hOffset, vOffset, textureRotation, hScale, vScale;
 
@@ -21,11 +21,17 @@ namespace Emergence.Map {
             this.second = MapEngine.toWorldSpace(second);
             this.third = MapEngine.toWorldSpace(third);
 
+            meshFirst = this.first;
+            meshSecond = this.second;
+            meshThird = this.third;
+
             this.texture = texture;
 
             plane = new Microsoft.Xna.Framework.Plane(this.first, this.second, this.third);
             //this accounts for a different winding from XNA
             plane.Normal = -plane.Normal;
+
+            fixMeshOrder();
 
             //if a,b,c are our points, then b is the corner if and only if dot(a-b, c-b) = 0
             //but because we don't have exact values, we want to take the one which is closest to 0
@@ -59,6 +65,23 @@ namespace Emergence.Map {
             textureRotation = tR;
             hScale = hS;
             vScale = vS;
+        }
+
+        public void fixMeshOrder() {
+            //swap the accordingly
+            float dot = Math.Abs(Vector3.Dot(meshFirst - meshSecond, meshThird - meshSecond));
+            if (Math.Abs(Vector3.Dot(meshFirst - meshThird, meshSecond - meshThird)) < dot) {
+                Vector3 temp = meshSecond;
+                meshSecond = meshThird;
+                meshThird = temp;
+                dot = Math.Abs(Vector3.Dot(meshFirst - meshThird, meshSecond - meshThird));
+            }
+            if (Math.Abs(Vector3.Dot(meshThird - meshFirst, meshSecond - meshFirst)) < dot) {
+                Vector3 temp = meshSecond;
+                meshSecond = meshFirst;
+                meshFirst = temp;
+                dot = Math.Abs(Vector3.Dot(meshThird - meshFirst, meshSecond - meshFirst));
+            }
         }
 
         public Vector3 getNormal()  {

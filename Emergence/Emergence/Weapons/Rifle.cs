@@ -21,8 +21,8 @@ namespace Emergence.Weapons
     {
         public Rifle()
         {
-            ammoUsed = 10;
-            cooldown = 25;
+            ammoUsed = 5;
+            cooldown = 20;
             damage = 20;
             // TODO: Construct any child components here
         }
@@ -36,7 +36,7 @@ namespace Emergence.Weapons
         {
             base.fire(p);
             //Do weapon specific things
-            
+            makeNormalBullet(p);
         }
 
         public override Weapon upgradeLeft()

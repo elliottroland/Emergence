@@ -7,14 +7,14 @@ using Microsoft.Xna.Framework;
 using Emergence.Map;
 
 namespace Emergence {
-    class Velocities {
+    public class Velocities {
         public Vector3 persistentVelocity = Vector3.Zero,
             momentumVelocity = Vector3.Zero;
     }
 
     public class PhysicsEngine {
         CoreEngine core;
-        Velocities[] playerVelocities = { new Velocities(), new Velocities(), new Velocities(), new Velocities() };
+        //Velocities[] playerVelocities = { new Velocities(), new Velocities(), new Velocities(), new Velocities() };
 
         public float gravity = 17f;   //units per second
 
@@ -44,16 +44,6 @@ namespace Emergence {
 
         public float signedDistance(Vector3 N, Vector3 p, float D) {
             return Vector3.Dot(N, p) + D;
-        }
-
-        public int planeSign(Vector3 a, Vector3 b, Vector3 c, Vector3 normal) {
-            Vector3 cross = Vector3.Cross(a - b, c - b);
-            //project the cross product onto the normal
-            if (Vector3.Dot(cross, normal) > 0) //if the dot product is positive, then the projected cross product will point in the same direction as the normal
-                return 1;
-            else if (Vector3.Dot(cross, normal) < 0)
-                return -1;
-            return 0;
         }
 
         public class CollisionPackage {
@@ -86,6 +76,9 @@ namespace Emergence {
                     Vector3 N = helperPlane.Normal;
                     N.Normalize();
                     float D = -helperPlane.D;
+
+                    if (Vector3.Dot(N, Vector3.Normalize(velocity)) >= -0.005)
+                        continue;
 
                     float t0, t1;
                     bool embeddedInPlane = false;
@@ -127,15 +120,8 @@ namespace Emergence {
                         if (t1 > 1) t1 = 1;
 
                         //now we find if this point lies on the face
-                        bool inFace = true;
-                        int sign = planeSign(planeIntersectionPoint, eSpaceVerts[0], eSpaceVerts[1], N);
-                        for (int i = 0; i < eSpaceVerts.Count; i++)
-                            if (planeSign(planeIntersectionPoint, eSpaceVerts[i], eSpaceVerts[(i + 1) % eSpaceVerts.Count], N) != sign) {
-                                inFace = false;
-                                break;
-                            }
 
-                        if (inFace) {
+                        if (MapEngine.pointOnFace(planeIntersectionPoint, eSpaceVerts, N)) {
                             //float intersectionDistance = t0 * (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
                             //NEED TO DO SOMETHING HERE--------------------------------------------------------------------------
                             if(face.DiffuseColor == new Vector3(1,1,1))
@@ -266,14 +252,18 @@ namespace Emergence {
 
             return collideWithWorld(moverRadius, newBasePoint, newVelocityVector, recursionDepth + 1);
         }
-        int floor = 0;
 
         public Vector3 applyMovement(GameTime gameTime, PlayerIndex pi, Vector3 velocity) {
-            Player player = core.players[(int)pi];
+            if (!core.clip)
+                return core.players[(int)pi].position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            return applyMovement(gameTime, core.players[(int)pi], velocity);
+        }
+
+        public Vector3 applyMovement(GameTime gameTime, Agent player, Vector3 velocity) {
             BoundingBox playerBoundingBox = player.getBoundingBox();
 
             //update the persistentVelocity
-            Velocities pv = playerVelocities[(int)pi];
+            Velocities pv = player.agentVelocities;
             if(pv.persistentVelocity.Y == 0)
                 pv.persistentVelocity.Y = velocity.Y;
             velocity.Y = 0;
@@ -295,16 +285,86 @@ namespace Emergence {
 
             Vector3 pos = collideWithWorld(playerRadius, basePoint, evelocity, 0);
 
-            Vector3 finalPos = collideWithWorld(playerRadius, pos, toESpace(playerRadius, pv.persistentVelocity), 0);
-            
-            if (Vector3.Distance(finalPos, pos) == 0 || Math.Abs(Vector3.Dot(Vector3.Normalize(pos-finalPos), Vector3.Up)) < 0.5) {
-                Console.WriteLine(pv.persistentVelocity.Y);
+            Vector3 eSpacePersistent = toESpace(playerRadius, pv.persistentVelocity);
+            Vector3 finalPos = collideWithWorld(playerRadius, pos, eSpacePersistent, 0);
+            //Vector3 finalPos = collideWithWorld(playerRadius, pos, Vector3.Zero, 0);
+
+            //check if we're on the floor
+            //this happens if we were moving down and the velocity vector was modified
+            Vector3 eSpaceActualMove = finalPos - pos;
+            //if (Vector3.Distance(finalPos, pos) == 0 || Math.Abs(Vector3.Dot(Vector3.Normalize(pos-finalPos), Vector3.Up)) < 0.5) {
+            if(eSpacePersistent.Y < 0 && eSpaceActualMove.Y - 0.005 > eSpacePersistent.Y)    {
+                //Console.WriteLine(eSpacePersistent.Y + " " + eSpaceActualMove.Y);
                 pv.persistentVelocity.Y = 0;
-                Console.WriteLine(floor++);
+                //Console.WriteLine(floor++);
                 finalPos = pos;
             }
+            if (eSpacePersistent.Y > 0 && eSpaceActualMove.Y + 0.005 < eSpacePersistent.Y)
+            {
+                pv.persistentVelocity.Y = -0.005f;
+            }
+
+            //if (Math.Abs(finalPos.X - pos.X) > 0.005 || Math.Abs(finalPos.Z - pos.Z) > 0.005)finalPos = pos;
 
             return toWorldSpace(playerRadius, finalPos) - offset;
+        }
+
+        public class HitScan {
+            public Vector3 collisionPoint;
+            public Ray ray;
+            public HitScan(Vector3 cp, Vector3 sp, Vector3 d)
+            {
+                collisionPoint = cp;
+                ray = new Ray(sp, d);
+            }
+
+            public HitScan(Vector3 cp, Ray r)
+            {
+                collisionPoint = cp;
+                ray = r;
+            }
+
+            public float Distance()
+            {
+                return Vector3.Distance(ray.Position, collisionPoint);
+            }
+        }
+
+        public HitScan hitscan(Vector3 start, Vector3 dir, List<Brush> ignoreBrushes)
+        {
+            if (ignoreBrushes == null)
+                ignoreBrushes = new List<Brush>();
+            //first check against map geometry first
+            dir = Vector3.Normalize(dir);
+            Ray r = new Ray(start, dir);
+            float closestDist = float.MaxValue;
+            Vector3 closestPoint = Vector3.Zero;
+            bool foundPoint = false;
+            foreach (Brush brush in core.mapEngine.brushes)
+            {
+                if (ignoreBrushes.Contains(brush))
+                    continue;
+                foreach (Face f in brush.faces)
+                {
+                    Nullable<float> dist = r.Intersects(new Microsoft.Xna.Framework.Plane(f.plane.getNormal(), f.plane.getD()));
+                    if (dist != null && (!foundPoint || dist.Value < closestDist))
+                    {
+                        //find that point
+                        Vector3 p = r.Position + r.Direction * dist.Value;
+                        if (MapEngine.pointOnFace(p, f))
+                        {
+                            closestDist = dist.Value;
+                            closestPoint = p;
+                            foundPoint = true;
+                        }
+                    }
+                } // for face
+            } // for brush
+
+            //now check players
+            if(foundPoint)
+                return new HitScan(closestPoint, r);
+            return null;
         }
     }
 }

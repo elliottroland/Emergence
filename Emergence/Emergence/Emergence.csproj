@@ -92,6 +92,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agent.cs" />
+    <Compile Include="AI\AIAgent.cs" />
+    <Compile Include="AI\AIEngine.cs" />
     <Compile Include="Copy of PhysicsEngine.cs" />
     <Compile Include="Map\Brush.cs" />
     <Compile Include="Map\Face.cs" />

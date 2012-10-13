@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Storage;
 using Emergence.Map;
 using Emergence.Weapons;
 using Emergence.Pickup;
+using Emergence.AI;
 
 namespace Emergence.Render
 {
@@ -45,8 +46,6 @@ namespace Emergence.Render
         public Color voidColor = Color.Black;
 
         Matrix [] cameras;
-
-        float testrot = 0;          //0 to 2PI
 
         public RenderEngine(CoreEngine c, Layout l)
         {
@@ -113,9 +112,8 @@ namespace Emergence.Render
                 VertexPositionNormalTexture.VertexElements);
 
             basicEffect = new BasicEffect(core.GraphicsDevice, null);
-            basicEffect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
+            basicEffect.World = Matrix.Identity;
 
-            //basicEffect.View = viewMatrix;
             if(curLayout == Layout.TWO)
                 basicEffect.Projection = halfMatrix;
             else
@@ -132,26 +130,53 @@ namespace Emergence.Render
             cameras[(int)pi] = Matrix.CreateLookAt(p.getEyePosition(), p.getEyePosition() + p.getDirectionVector(), Vector3.Up);
         }
 
+        public void drawLine(Vector3 a, Vector3 b, Vector3 colour)
+        {
+            //draw the face normal for EVERYTHING!!!
+            VertexPositionNormalTexture cent = new VertexPositionNormalTexture(), norm = new VertexPositionNormalTexture();
+            cent.Position = a;
+            norm.Position = b;
+            VertexPositionNormalTexture[] pts = { cent, norm };
+            basicEffect.Texture = null;
+            basicEffect.DiffuseColor = colour;
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Begin();
+                //printList(pointList);
+                core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                    PrimitiveType.LineList,
+                    pts,
+                    0,
+                    2,
+                    new short[] { 0, 1 },
+                    0,
+                    1);
+                pass.End();
+            }
+        }
+
         //Draws the world to each viewport
-        //The passed model and font are for debugging
         public void Draw(GameTime gameTime) {
+
             int cam = 0;
             foreach (Viewport v in ports) {
 
+                basicEffect.View = cameras[cam];
+                //Generate HUD data
+                Weapon equipDebug = core.players[cam].equipped;
+                
                 core.GraphicsDevice.Viewport = v;
                 core.GraphicsDevice.Clear(voidColor);
 
                 core.GraphicsDevice.VertexDeclaration = vertexDecl;
+                //core.GraphicsDevice.VertexShader
 
                 //Pass parameters per viewport
+                core.lighting.CurrentTechnique = core.lighting.Techniques["Lighting"];
                 core.lighting.Parameters["World"].SetValue(Matrix.Identity);
                 core.lighting.Parameters["View"].SetValue(cameras[cam]);
                 core.lighting.Parameters["Projection"].SetValue(basicEffect.Projection);
                 core.lighting.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(Matrix.Invert(basicEffect.World)));
-                core.lighting.Parameters["DifDir"].SetValue(new Vector3(1*(float)Math.Sin(testrot), 0, 1*(float)Math.Cos(testrot)));
-
-                //so I can see
-                core.lighting.Parameters["Ambient"].SetValue(new Vector4(1,1,1,1));
 
                 //Draw each brush with effects
                 //----------------------------------------------------------------------------------------
@@ -160,17 +185,10 @@ namespace Emergence.Render
                     {
                         core.lighting.Begin();
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
-                            /*basicEffect.Texture = face.plane.texture;
-                            //basicEffect.DiffuseColor = new Vector3(1, 1, 1);
-                            basicEffect.DiffuseColor = face.DiffuseColor;
-                            if (face.DiffuseColor == new Vector3(1,1,1) && b.colliding)
-                                basicEffect.DiffuseColor = new Vector3(1, 0, 0);*/
-                            core.lighting.Parameters["tex"].SetValue(face.plane.texture);
-                            //foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+                            core.lighting.Parameters["Tex"].SetValue(face.plane.texture);
                             foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
                                 pass.Begin();
                                 VertexPositionNormalTexture[] pointList = face.getPoints();
-                                //printList(pointList);
                                 short[] indices = new short[pointList.Length];
                                 for (int i = 0; i < pointList.Length; i++)
                                     indices[i] = (short)i;
@@ -187,32 +205,70 @@ namespace Emergence.Render
                         }
 
                         core.lighting.End();
-                        //draw the face normal
-                        /*VertexPositionNormalTexture cent = new VertexPositionNormalTexture(), norm = new VertexPositionNormalTexture();
-                        cent.Position = face.getCenter();
-                        norm.Position = face.plane.getNormal() * 60 + cent.Position;
-                        VertexPositionNormalTexture[] pts = { cent, norm };
-                        basicEffect.Texture = null;
-                        basicEffect.DiffuseColor = new Vector3(1, 0, 0);
-                        foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
-                            pass.Begin();
-                            //printList(pointList);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                PrimitiveType.LineList,
-                                pts,
-                                0,
-                                2,
-                                new short[] {0, 1},
-                                0,
-                                1);
-                            pass.End();
-                        }*/
 
-
-                        //basicEffect.End();
                     }
 
+                //Draw AI info
                 //----------------------------------------------------------------------------------------------------
+
+                basicEffect.Begin();
+
+                Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
+                Vector3 renderLift = new Vector3(0, AIEngine.nodeRenderHeight, 0);
+                foreach (MeshNode m in core.aiEngine.mesh) {
+                    VertexPositionColor[] line = new VertexPositionColor[2];
+                    line[0] = new VertexPositionColor(m.position - antiLift, Color.Red);
+                    line[1] = new VertexPositionColor(m.position - antiLift + renderLift, Color.Blue);
+                    foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+                    {
+                        pass.Begin();
+                        core.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                            PrimitiveType.LineList,
+                            line,
+                            0,
+                            1);
+                        pass.End();
+
+                    }
+                }
+                basicEffect.End();
+                /*
+                //draw the ai agents
+                foreach (AIAgent a in core.aiEngine.agents)
+                {
+                    BoundingBox bb = a.getBoundingBox();
+                    Vector3 size = bb.Max - bb.Min;
+                    Vector3 sizeX = new Vector3(size.X, 0, 0),
+                            sizeY = new Vector3(0, size.Y, 0),
+                            sizeZ = new Vector3(0, 0, size.Z);
+                    drawLine(bb.Min, bb.Min + sizeY, new Vector3(1, 0, 0));
+                    drawLine(bb.Min, bb.Min + sizeZ, new Vector3(1, 0, 0));
+                    drawLine(bb.Min, bb.Min + sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Min + sizeX, bb.Min + sizeZ + sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeY, new Vector3(1, 0, 0));
+                    drawLine(bb.Min + sizeX, bb.Min + sizeY + sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Max, bb.Max - sizeY, new Vector3(1, 0, 0));
+                    drawLine(bb.Max, bb.Max - sizeZ, new Vector3(1, 0, 0));
+                    drawLine(bb.Max, bb.Max - sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Max - sizeZ, bb.Max - sizeZ - sizeX, new Vector3(1, 0, 0));
+                    drawLine(bb.Max - sizeX, bb.Max - sizeX - sizeZ, new Vector3(1, 0, 0));
+
+                    //also draw the path
+                    MeshNode last = null;
+                    foreach (MeshNode m in a.path)
+                    {
+                        if (last == null)
+                        {
+                            last = m;
+                            continue;
+                        }
+                        drawLine(m.position, last.position, new Vector3(1, 0, 0));
+                        last = m;
+                    }
+                }
+
+                basicEffect.End();*/
 
                 //Draw item spawner locations
                 //----------------------------------------------------------------------------------------------------
@@ -238,12 +294,22 @@ namespace Emergence.Render
                     if (gen.held != null)
                     {
 
-                        foreach (ModelMesh mesh in core.debugSphere.Meshes)
-                        {
+                        Model pickUpModel = core.debugSphere;
 
+                        switch (gen.itemType) {
+
+                            case PickUp.PickUpType.HEALTH: pickUpModel = core.medicross; break;
+                            case PickUp.PickUpType.AMMO: pickUpModel = core.ammoUp; break;
+                            default: pickUpModel = core.arrow; break;
+                        
+                        }
+
+                        foreach (ModelMesh mesh in pickUpModel.Meshes)
+                        {
+                            
                             foreach (BasicEffect effect in mesh.Effects)
                             {
-                                effect.World = Matrix.CreateScale(10) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
+                                effect.World = Matrix.CreateScale(5) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
                                 effect.View = cameras[cam];
                                 effect.Projection = basicEffect.Projection;
                                 effect.LightingEnabled = true;
@@ -290,8 +356,8 @@ namespace Emergence.Render
                         core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
                         core.GraphicsDevice.RenderState.DestinationBlend = Blend.One;
                         core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
-                        core.lighting.Parameters["tex"].SetValue(core.bulletTex);
-                        core.lighting.Parameters["Diffuse"].SetValue(new Vector4());
+                        core.lighting.CurrentTechnique = core.lighting.Techniques["Texturing"];
+                        core.lighting.Parameters["Tex"].SetValue(core.bulletTex);
 
                         for (int j = 0; j < bVerts.Length; ++j )
                         {
@@ -320,22 +386,21 @@ namespace Emergence.Render
                         core.GraphicsDevice.RenderState.AlphaBlendEnable = false;
                         core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
                         core.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
-                        core.lighting.Parameters["Diffuse"].SetValue(new Vector4(0,1,0,1));
+
                     }
                 
                 }
 
-                //Weapon equipDebug = core.players[cam].equipped;
+                
 
-                /*core.DrawTextDebug(""+equipDebug.GetType()
+                //Draw HUD
+
+                core.DrawStringDebug("" + equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
 
-                                + "\nAmmo: " + core.players[cam].ammo);*/
+                                + "\nAmmo: " + core.players[cam].ammo);
 
                 cam++;
-                //testrot += 0.1f;
-                //if (testrot > 2 * Math.PI)
-                   // testrot -= 2 * (float)Math.PI;
             
             }
         

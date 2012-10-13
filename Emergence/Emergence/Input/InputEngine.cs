@@ -249,7 +249,7 @@ namespace Emergence
                 Mouse.SetPosition((int)screenCenter.X, (int)screenCenter.Y);
 
                 //test shooting
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed && oldMouse.LeftButton == ButtonState.Released)
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)// && oldMouse.LeftButton == ButtonState.Released)
                     playerActions[0].Add(Actions.Fire);
 
                 //set old state
@@ -257,7 +257,6 @@ namespace Emergence
                 oldMouse = Mouse.GetState();
             }
         }
-
 
         public void UpdateMenuInput()
         {

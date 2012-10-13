@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Graphics="Microsoft.Xna.Framework.Content.Pipeline.Graphics" xmlns:Framework="Microsoft.Xna.Framework">
+  <Asset Type="Graphics:NodeContent">
+    <Name>RootNode</Name>
+    <Identity>
+      <SourceFilename>C:\Users\bdrmun002\Desktop\Emergence+with+AI+Mesh+4\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
+      <SourceTool>FbxImporter</SourceTool>
+    </Identity>
+    <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
+    <Children>
+      <Child Type="Graphics:MeshContent">
+        <Name>Cube</Name>
+        <Transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</Transform>
+        <Animations>
+          <Animation Key="Default Take">
+            <Name>Default Take</Name>
+            <Duration>PT0.042S</Duration>
+            <Channels>
+              <Channel Key="Cube">
+                <Keyframe>
+                  <Time>PT0S</Time>
+                  <Transform>1 0 0 0 0 6.123032E-17 -1 0 0 1 6.123032E-17 0 0 0 0 1</Transform>
+                </Keyframe>
+                <Keyframe>
+                  <Time>PT0.0166666S</Time>
+                  <Transform>1 0 0 0 0 6.123032E-17 -1 0 0 1 6.123032E-17 0 0 0 0 1</Transform>
+                </Keyframe>
+                <Keyframe>
+                  <Time>PT0.0333333S</Time>
+                  <Transform>1 0 0 0 0 6.123032E-17 -1 0 0 1 6.123032E-17 0 0 0 0 1</Transform>
+                </Keyframe>
+              </Channel>
+            </Channels>
+          </Animation>
+        </Animations>
+        <Positions>0.482722 -2.473578 -0.651688 0.477386 -2.452043 0.765217 -0.467384 -2.45737 0.76174 -0.462048 -2.478905 -0.655165 0.455125 2.470488 -0.726935 0.449789 2.492023 0.689969 -0.494981 2.486696 0.686492 -0.489645 2.465161 -0.730413 0.478521 0.702028 -2.489402 0.478521 -0.715146 -2.489402 -0.466262 -0.715146 -2.489402 -0.466262 0.702029 -2.489402 0.478521 0.702028 2.454598 0.478521 -0.715147 2.454598 -0.466262 -0.715146 2.454598 -0.466262 0.702028 2.454598</Positions>
+        <Geometry>
+          <Batch>
+            <Material>#Resource1</Material>
+            <Indices>2 1 0 0 3 2 6 5 4 4 7 6 7 4 0 0 1 7 6 7 1 1 2 6 5 6 2 2 3 5 3 0 4 4 5 3 10 9 8 8 11 10 14 13 12 12 15 14 15 12 8 8 9 15 14 15 9 9 10 14 13 14 10 10 11 13 11 8 12 12 13 11</Indices>
+            <Vertices>
+              <PositionIndices>0 1 2 3 4 7 6 5 8 9 10 11 12 15 14 13</PositionIndices>
+              <Channels>
+                <VertexChannel Name="Normal0" ElementType="Framework:Vector3">0.5827204 -0.582781434 -0.5663625 0.578356266 -0.5652333 0.5881832 -0.576281 -0.5717338 0.583910644 -0.5719169 -0.5892819 -0.570604563 0.576281 0.5717338 -0.583910644 -0.578356266 0.5652333 -0.5881832 -0.5827204 0.582781434 0.5663625 0.5719169 0.5892819 0.570604563 0.5773492 0.5773492 -0.5773492 0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 0.5773492 -0.5773492 0.5773492 0.5773492 0.5773492 -0.5773492 0.5773492 0.5773492 -0.5773492 -0.5773492 0.5773492 0.5773492 -0.5773492 0.5773492</VertexChannel>
+              </Channels>
+            </Vertices>
+          </Batch>
+        </Geometry>
+      </Child>
+    </Children>
+  </Asset>
+  <Resources>
+    <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
+      <Name>Material</Name>
+      <Identity>
+        <SourceFilename>C:\Users\bdrmun002\Desktop\Emergence+with+AI+Mesh+4\Emergence\Emergence\Content\Medicross.fbx</SourceFilename>
+        <SourceTool>FbxImporter</SourceTool>
+      </Identity>
+      <OpaqueData>
+        <Data Key="DiffuseColor" Type="Framework:Vector3">0.640000045 0.640000045 0.640000045</Data>
+        <Data Key="EmissiveColor" Type="Framework:Vector3">0 0 0</Data>
+        <Data Key="Alpha" Type="float">1</Data>
+        <Data Key="SpecularColor" Type="Framework:Vector3">0 0 0</Data>
+      </OpaqueData>
+    </Resource>
+  </Resources>
+</XnaContent>

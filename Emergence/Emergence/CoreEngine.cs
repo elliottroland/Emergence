@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Storage;
 using Emergence.Map;
 using Emergence.Render;
 using Emergence.Pickup;
+using Emergence.AI;
 
 using Nuclex.Fonts;
 using Nuclex.Graphics;
@@ -38,13 +39,16 @@ namespace Emergence {
 
         SpriteFont debugFont;
         public Model debugSphere;
+        public Model medicross;
+        public Model ammoUp;
+        public Model arrow;
 
         public Model cogModel;
         public Texture2D cogTexture;
         public Texture2D bulletTex;
 
         public Effect lighting;
-
+        Dictionary<String, Texture2D> textures;
 
         public MapEngine mapEngine;
         public RenderEngine renderEngine;
@@ -52,6 +56,9 @@ namespace Emergence {
         public PhysicsEngine physicsEngine;
         public MenuEngine menuEngine;
         public PickUpEngine pickupEngine;
+        public AIEngine aiEngine;
+
+        public bool clip = true;
 
         //test item generator locations
         PickUpGen[] tests = { new PickUpGen(new Vector3(20, -320, 20), PickUp.PickUpType.AMMO), new PickUpGen(new Vector3(20, -320, -20), PickUp.PickUpType.HEALTH)
@@ -75,6 +82,7 @@ namespace Emergence {
             renderEngine = new RenderEngine(this, RenderEngine.Layout.ONE);
             inputEngine = new InputEngine(this);
             physicsEngine = new PhysicsEngine(this);
+            aiEngine = new AIEngine(this);
 
             pickupEngine = new PickUpEngine(tests);
 
@@ -97,7 +105,7 @@ namespace Emergence {
             
 
             //load the trextures
-            Dictionary<String, Texture2D> textures = new Dictionary<string, Texture2D>();
+            textures = new Dictionary<string, Texture2D>();
             textures.Add("base_floor/pool_side2", Content.Load<Texture2D>("textures/base_floor/pool_side2"));
             textures.Add("base_wall/atech1_f", Content.Load<Texture2D>("textures/base_wall/atech1_f"));
             textures.Add("sfx/xmetalfloor_wall_5b", Content.Load<Texture2D>("textures/sfx/xmetalfloor_wall_5b"));
@@ -106,23 +114,35 @@ namespace Emergence {
             textures.Add("ctf/pittedrust3stripes_fix", Content.Load<Texture2D>("textures/ctf/pittedrust3stripes_fix"));
             textures.Add("common/caulk", Content.Load<Texture2D>("textures/common/caulk"));
 
-            mapEngine = new MapEngine(this, "Content/maps/test.map", textures);
-
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
             bulletTex = Content.Load<Texture2D>("bullet");
 
             //load shader
-            lighting = Content.Load<Effect>("Lighting");
-            lighting.CurrentTechnique = lighting.Techniques["Technique1"];
+            lighting = Content.Load<Effect>("PointLighting");
 
             VectorFont vectorFont = Content.Load<VectorFont>("menuFont");           
             menuEngine = new MenuEngine(this, vectorFont);
 
             debugFont = Content.Load<SpriteFont>("debugFont");
             debugSphere = Content.Load<Model>("SphereHighPoly");
+            medicross = Content.Load<Model>("Medicross");
+            ammoUp = Content.Load<Model>("bullets");
+            arrow = Content.Load<Model>("arrow");
 
+            loadMap("Content/maps/test2.map");
+
+            //once the map is loaded the player has a position, so take it for the test agent
+            /*for (int i = 0; i < 10; ++i)
+                aiEngine.agents.Add(new AIAgent(this, players[0].position));*/
+
+        }
+
+        public void loadMap(String mapFile)
+        {
+            mapEngine = new MapEngine(this, mapFile, textures);
+            aiEngine.generateAIMesh();
         }
 
         /// <summary>
@@ -148,6 +168,8 @@ namespace Emergence {
                 pickupEngine.Update(gameTime);
                 foreach (Player player in players)
                     player.Update(gameTime);
+
+                aiEngine.Update(gameTime);
             
             }
 
@@ -180,15 +202,48 @@ namespace Emergence {
             base.Draw(gameTime);
         }
 
+        //Debugging methods
 
-        public void DrawTextDebug(String text)
+        public Texture2D GenTextureDebug(String text) {
+
+            int w = (int)debugFont.MeasureString(text).X;
+            int h = (int)debugFont.MeasureString(text).Y;
+
+            RenderTarget2D render = new RenderTarget2D(GraphicsDevice, w, h, 1, GraphicsDevice.DisplayMode.Format
+                                    , GraphicsDevice.PresentationParameters.MultiSampleType
+                                    , GraphicsDevice.PresentationParameters.MultiSampleQuality
+                                    , RenderTargetUsage.DiscardContents);
+
+            GraphicsDevice.SetRenderTarget(0, render);
+
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            spriteBatch.DrawString(debugFont, text, new Vector2(1, 1), Color.Black);
+            spriteBatch.DrawString(debugFont, text, new Vector2(0, 0), Color.White);
+            spriteBatch.End();
+
+            GraphicsDevice.SetRenderTarget(0, null);
+            return render.GetTexture();
+        
+        }
+
+        public void DrawTextureDebug(Texture2D text)
         {
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            spriteBatch.Draw(text, new Rectangle(64, 64, text.Width, text.Height), Color.White);
+            spriteBatch.End();
+
+        }
+
+        public void DrawStringDebug(String text)
+        {
+
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
             spriteBatch.DrawString(debugFont, text, new Vector2(65, 65), Color.Black);
             spriteBatch.DrawString(debugFont, text, new Vector2(64, 64), Color.White);
             spriteBatch.End();
 
         }
+
     }
 }

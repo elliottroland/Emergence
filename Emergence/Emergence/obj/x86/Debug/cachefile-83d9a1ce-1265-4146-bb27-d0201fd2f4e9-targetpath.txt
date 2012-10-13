@@ -1,8 +1,12 @@
 Content\CogAttempt.xnb
+Content\bullets.xnb
+Content\arrow.xnb
+Content\Medicross.xnb
 Content\SphereHighPoly.xnb
 Content\debugFont.xnb
 Content\menuFont.xnb
 Content\Lighting.xnb
+Content\PointLighting.xnb
 Content\textures\common\caulk.xnb
 Content\textures\base_wall\atech1_f.xnb
 Content\textures\ctf\clangdark.xnb

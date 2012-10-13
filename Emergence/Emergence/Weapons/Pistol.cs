@@ -37,13 +37,8 @@ namespace Emergence.Weapons
         public override void fire(Player p) {
 
             base.fire(p);
-           
-            //Do weapon specific things
-            Bullet b = new Bullet();
-            b.pos = p.position + p.getDirectionVector() + new Vector3(0, 60, 0);
-            b.dir = p.getDirectionVector();
-            b.timeLeft = 600;
-            p.bullets.Add(b);
+
+            makeNormalBullet(p);
         
         }
 

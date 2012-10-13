@@ -15,6 +15,26 @@ namespace Emergence.Map {
             vertices = v;
             //Console.WriteLine("Face has " + vertices.Count + " vertices");
             plane = p;
+
+            //fix the plane's first, second and third points
+            Vector3 x = Vector3.Normalize(plane.meshThird - plane.meshSecond),
+                    y = Vector3.Normalize(plane.meshFirst - plane.meshSecond);
+
+            //find the minCorner as a (x,y)
+            Vector2 minCorner = new Vector2(float.MaxValue, float.MaxValue);
+            Vector2 maxCorner = new Vector2(-float.MaxValue, -float.MaxValue);
+            foreach (Vertex c in vertices) {
+                Vector2 cc = new Vector2(Vector3.Dot(c.position - plane.meshSecond, x), Vector3.Dot(c.position - plane.meshSecond, y));
+                minCorner.X = Math.Min(cc.X, minCorner.X);
+                minCorner.Y = Math.Min(cc.Y, minCorner.Y);
+                maxCorner.X = Math.Max(cc.X, maxCorner.X);
+                maxCorner.Y = Math.Max(cc.Y, maxCorner.Y);
+            }
+
+            plane.meshSecond = minCorner.X * x + minCorner.Y * y + plane.meshSecond;
+            plane.meshThird = (maxCorner.X - minCorner.X) * x + plane.meshSecond;
+            plane.meshFirst = (maxCorner.Y - minCorner.Y) * y + plane.meshSecond;
+
             windVertices();
             computeTexCoords();
         }
