@@ -34,9 +34,9 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p)
+        public override void fire(Player p, PhysicsEngine ph)
         {
-            base.fire(p);
+            base.fire(p, ph);
         }
 
         public override Weapon upgradeLeft()

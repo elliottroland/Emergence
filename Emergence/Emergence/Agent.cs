@@ -22,6 +22,7 @@ namespace Emergence {
         public Velocities agentVelocities;
 
         public List<Bullet> bullets = new List<Bullet>();
+        public List<Laser> lasers = new List<Laser>();
 
         public Agent(CoreEngine c, Vector3 position, Vector2 direction) {
             core = c;

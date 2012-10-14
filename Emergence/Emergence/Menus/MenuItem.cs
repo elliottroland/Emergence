@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-using Nuclex.Fonts;
+
 
 namespace Emergence
 {
@@ -20,7 +20,7 @@ namespace Emergence
         public Vector2 position = Vector2.Zero;
         public bool selected = false;
         public MenuState nextMenu;
-        public Text textVar;
+       
 
         public MenuItem(String n, MenuState next)
         {
@@ -28,11 +28,7 @@ namespace Emergence
             label = n;            
         }
 
-        public void set3DText(Text t)
-        {
-            textVar = t;
-        }
-        
+       
 
         public void setPosition(double x, double y)
         {

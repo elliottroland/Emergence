@@ -10,8 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-using Nuclex.Fonts;
-using Nuclex.Graphics;
+
 
 
 namespace Emergence
@@ -30,7 +29,7 @@ namespace Emergence
 
         //Menu Params
         public static float dist = 0;
-        public static float maxDist = 550;
+        public static float maxDist = 560;
         public static float range = 40;
         public static Vector2 selectWheelPos = new Vector2(-100.0f, screenCenter.Y);
         public String type = "nonTitle";
@@ -49,9 +48,12 @@ namespace Emergence
             if (type != "Title")
             {
                 //Get select vector and wheel rotation
+                Console.WriteLine("Core: "+ coreEngine);
+                Console.WriteLine("Input: " + coreEngine.inputEngine);
                 Vector2 ControllerSelect = coreEngine.inputEngine.getMove(PlayerIndex.One) * 250;
+                ControllerSelect.Y = -ControllerSelect.Y;
                 if (ControllerSelect != Vector2.Zero)
-                    ControllerSelect.Y += 250;
+                    ControllerSelect.Y += 450;
                 Vector2 selectVector = coreEngine.inputEngine.getLook() + new Vector2(ControllerSelect.X, ControllerSelect.Y);
                 selectWheelRot = (float)Math.Atan2(selectVector.X, -selectVector.Y);
 
@@ -79,8 +81,10 @@ namespace Emergence
             SelectedStruct x = new SelectedStruct();
             x.repositionItems = reposition(menuItems);
 
-            if (dist <= maxDist)
+            if (dist < maxDist)
                 dist+=20;
+            else if (dist > maxDist)
+                dist -= 20;
             //set selected menuItem       
 
             float selectAngle = (float)Math.Atan2((double)selectVector.Y, (double)selectVector.X);
@@ -97,12 +101,16 @@ namespace Emergence
         {
             if(n>=0&&n<menuItems.Count)
                 selectIndex = n;
+
+            if (selectIndex == 0 || selectIndex == 1) 
+                selectIndex = 1;
+            
         }
 
 
         public List<MenuItem> setSelected(List<MenuItem> menuItems, int index)       
         {
-            if (index < menuItems.Count && index>=0)
+            if (index < menuItems.Count && index>0)
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {

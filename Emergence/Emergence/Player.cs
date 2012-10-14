@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Emergence.Weapons;
 
 namespace Emergence
@@ -20,6 +21,24 @@ namespace Emergence
         
         }
     
+    }
+
+    public struct Laser
+    {
+
+        public VertexPositionNormalTexture[] horizVerts;
+        public VertexPositionNormalTexture[] vertVerts;
+        public int[] indices;
+        public int[] revIndices;
+        public int timeLeft;
+
+        public void update()
+        {
+
+            timeLeft -= 10;
+
+        }
+
     }
 
     public class Player : Agent {
@@ -55,7 +74,7 @@ namespace Emergence
                     jumpVelocity.Y = jump;
                 }
                 else if (a == Actions.Fire) {
-                    equipped.fire(this);
+                    equipped.fire(this, core.physicsEngine);
                 }
                 else if (a == Actions.Downgrade)
                     equipped = equipped.upgradeDown();
@@ -85,6 +104,17 @@ namespace Emergence
                     bullets.Remove(bullets[i]);
 
             }
+
+            for (int i = lasers.Count - 1; i >= 0; --i)
+            {
+                Laser curL = lasers[i];
+                curL.update();
+                lasers[i] = curL;
+                if (lasers[i].timeLeft <= 0)
+                    lasers.Remove(lasers[i]);
+
+            }
+
         }
     }
 }

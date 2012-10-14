@@ -10,8 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-using Nuclex.Fonts;
-using Nuclex.Graphics;
+
 
 
 namespace Emergence
@@ -38,10 +37,11 @@ namespace Emergence
             coreEngine = g;
 
             titleMenu = new TitleScreen(this, g);
-            mainMenu = new MainMenuScreen(this, g);
-            /*
-            singlePlayerMenu = new SinglePlayerScreen(this, g);
+            mainMenu = new MainMenuScreen(this, g);            
+            singlePlayerMenu = new SinglePlayerScreen(this, g);            
             botNumberMenu = new BotNumberMenuScreen(this, g);
+
+            /*
             splitScreenMenu = new SplitScreen(this, g);
             optionsMenu = new OptionsMenuScreen(this, g);
              */

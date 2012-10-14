@@ -11,6 +11,8 @@ float4 lightColours[NUM_LIGHTS];
 int lightRadii[NUM_LIGHTS];
 float4 Amb = float4(1,1,1,0.4);
 
+float Opacity;
+
 texture Tex;
 sampler2D texSampler = sampler_state{
 
@@ -59,7 +61,6 @@ float4 FullPixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 
 	float4 texColour = tex2D(texSampler, input.TexCoord);
-    texColour.a = 1;
 
 	float4 allLightColour = float4(0,0,0,0);
 	for(int i = 0; i < NUM_LIGHTS; ++i){
@@ -82,7 +83,16 @@ float4 TexPixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 
     float4 texColour = tex2D(texSampler, input.TexCoord);
-    texColour.a = 1;
+
+	return texColour;
+   
+}
+
+float4 FadeTexPixelShaderFunction(VertexShaderOutput input) : COLOR0
+{
+
+    float4 texColour = tex2D(texSampler, input.TexCoord);
+    texColour.a *= Opacity;
 
 	return texColour;
    
@@ -92,7 +102,6 @@ technique Lighting
 {
     pass Lighting
     {
-        // TODO: set renderstates here.
 
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 FullPixelShaderFunction();
@@ -106,6 +115,17 @@ technique Texturing{
     
 		VertexShader = compile vs_2_0 VertexShaderFunction();
 		PixelShader = compile ps_2_0 TexPixelShaderFunction(); 
+    
+    }
+
+}
+
+technique FadeTexturing{
+
+	pass FadeTexturing{
+    
+		VertexShader = compile vs_2_0 VertexShaderFunction();
+		PixelShader = compile ps_2_0 FadeTexPixelShaderFunction(); 
     
     }
 
