@@ -52,6 +52,7 @@ namespace Emergence
         public Model cogModel;
         public Texture2D cogTexture;
         public Texture2D bulletTex;
+        public Texture2D beamTex;
 
         public Effect lighting;
         Dictionary<String, Texture2D> textures;
@@ -141,6 +142,7 @@ namespace Emergence
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
             bulletTex = Content.Load<Texture2D>("bullet");
+            beamTex = Content.Load<Texture2D>("beam");
 
             //load shader
             lighting = Content.Load<Effect>("PointLighting");

@@ -34,11 +34,18 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p) {
+        public override void fire(Player p, PhysicsEngine ph) {
 
-            base.fire(p);
+            base.fire(p, ph);
 
-            makeNormalBullet(p);
+            if (curCooldown == cooldown)
+            {
+                PhysicsEngine.HitScan hs = ph.hitscan(p.position+new Vector3(0, 60, 0)+p.getDirectionVector()*10, p.getDirectionVector(), null);
+                if (hs != null)
+                {
+                    makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5);
+                }
+            }
         
         }
 

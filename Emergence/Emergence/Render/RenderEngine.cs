@@ -139,12 +139,16 @@ namespace Emergence.Render
 
         public void drawLine(Vector3 a, Vector3 b, Vector3 colour)
         {
+
+            basicEffect.TextureEnabled = true;
+            basicEffect.Texture = core.beamTex;
+            basicEffect.Begin();
+
             //draw the face normal for EVERYTHING!!!
             VertexPositionNormalTexture cent = new VertexPositionNormalTexture(), norm = new VertexPositionNormalTexture();
             cent.Position = a;
             norm.Position = b;
             VertexPositionNormalTexture[] pts = { cent, norm };
-            basicEffect.Texture = null;
             basicEffect.DiffuseColor = colour;
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
@@ -176,15 +180,15 @@ namespace Emergence.Render
                 core.GraphicsDevice.Clear(voidColor);
                 
                 core.GraphicsDevice.VertexDeclaration = vertexDecl;
-                //core.GraphicsDevice.VertexShader
 
                 //Pass parameters per viewport
-                core.lighting.CurrentTechnique = core.lighting.Techniques["Lighting"];
                 core.lighting.Parameters["World"].SetValue(Matrix.Identity);
                 core.lighting.Parameters["View"].SetValue(cameras[cam]);
                 core.lighting.Parameters["Projection"].SetValue(basicEffect.Projection);
                 core.lighting.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(Matrix.Invert(basicEffect.World)));
 
+                core.lighting.CurrentTechnique = core.lighting.Techniques["Lighting"];
+                
                 //Draw each brush with effects
                 //----------------------------------------------------------------------------------------
                 foreach (Brush b in core.mapEngine.brushes)
@@ -284,73 +288,10 @@ namespace Emergence.Render
 
                 basicEffect.End();
 
-                //Draw item spawner locations
-                //----------------------------------------------------------------------------------------------------
-                foreach (PickUpGen gen in core.pickupEngine.gens)
-                {
-                    foreach(ModelMesh mesh in core.debugSphere.Meshes){
-                    
-                        foreach(BasicEffect effect in mesh.Effects){
-                        
-                            effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.pos);
-                            effect.View = cameras[cam];
-                            effect.Projection = basicEffect.Projection;
-
-                            effect.LightingEnabled = true;
-                            effect.AmbientLightColor = Color.Brown.ToVector3();
-
-                        }
-
-                        mesh.Draw();
-                    
-                    }
-
-                    if (gen.held != null)
-                    {
-
-                        Model pickUpModel = core.debugSphere;
-
-                        switch (gen.itemType) {
-
-                            case PickUp.PickUpType.HEALTH: pickUpModel = core.medicross; break;
-                            case PickUp.PickUpType.AMMO: pickUpModel = core.ammoUp; break;
-                            default: pickUpModel = core.arrow; break;
-                        
-                        }
-
-                        foreach (ModelMesh mesh in pickUpModel.Meshes)
-                        {
-                            
-                            foreach (BasicEffect effect in mesh.Effects)
-                            {
-                                effect.World = Matrix.CreateScale(5) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
-                                effect.View = cameras[cam];
-                                effect.Projection = basicEffect.Projection;
-                                effect.LightingEnabled = true;
-                                
-                                switch (gen.held.type)
-                                {
-
-                                    case PickUp.PickUpType.AMMO: { effect.AmbientLightColor = Color.Crimson.ToVector3(); break; }
-                                    case PickUp.PickUpType.HEALTH: { effect.AmbientLightColor = Color.Green.ToVector3(); break; }
-                                    case PickUp.PickUpType.LEFT: { effect.AmbientLightColor = Color.DarkBlue.ToVector3(); break; }
-                                    case PickUp.PickUpType.RIGHT: { effect.AmbientLightColor = Color.Yellow.ToVector3(); break; }
-
-                                }
-
-                            }
-
-                            mesh.Draw();
-
-                        }
-
-                    }
-                }
-
-                //--------------------------------------------------------------------------------------------
-
                 //Draw each players bullets
                 //--------------------------------------------------------------------------------------------
+                core.lighting.CurrentTechnique = core.lighting.Techniques["Texturing"];
+                core.lighting.Parameters["Tex"].SetValue(core.bulletTex);
                 foreach(Player p in core.players){
 
                     VertexPositionColor[,] bVerts = new VertexPositionColor[p.bullets.Count, 1];
@@ -365,13 +306,6 @@ namespace Emergence.Render
                     //If bullets exist for the player
                     if (bVerts.Length > 0)
                     {
-                        core.GraphicsDevice.RenderState.PointSpriteEnable = true;
-                        core.GraphicsDevice.RenderState.AlphaBlendEnable = true;
-                        core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
-                        core.GraphicsDevice.RenderState.DestinationBlend = Blend.One;
-                        core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
-                        core.lighting.CurrentTechnique = core.lighting.Techniques["Texturing"];
-                        core.lighting.Parameters["Tex"].SetValue(core.bulletTex);
 
                         for (int j = 0; j < bVerts.Length; ++j )
                         {
@@ -379,6 +313,11 @@ namespace Emergence.Render
                             point[0] = bVerts[j,0];
 
                             core.lighting.Begin();
+                            core.GraphicsDevice.RenderState.PointSpriteEnable = true;
+                            core.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+                            core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
+                            core.GraphicsDevice.RenderState.DestinationBlend = Blend.One;
+                            core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
 
                             core.GraphicsDevice.RenderState.PointSize = (64f * 100) / Vector3.Distance(p.position, point[0].Position);
                             foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
@@ -405,7 +344,139 @@ namespace Emergence.Render
                 
                 }
 
-                
+                core.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+                core.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
+                core.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+                core.GraphicsDevice.RenderState.AlphaTestEnable = true;
+                core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
+
+                core.lighting.CurrentTechnique = core.lighting.Techniques["FadeTexturing"];
+                core.lighting.Parameters["Tex"].SetValue(core.beamTex);
+
+                foreach (Player p in core.players)
+                {
+                    foreach (Laser l in p.lasers)
+                    {
+                        core.lighting.Parameters["Opacity"].SetValue(l.timeLeft/600f);
+                        core.lighting.Begin();
+                        foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
+                        {
+
+                            pass.Begin();
+                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                            PrimitiveType.TriangleList,
+                                            l.horizVerts,
+                                            0,
+                                            4,
+                                            l.indices,
+                                            0,
+                                            2);
+                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                            PrimitiveType.TriangleList,
+                                            l.horizVerts,
+                                            0,
+                                            4,
+                                            l.revIndices,
+                                            0,
+                                            2);
+                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                            PrimitiveType.TriangleList,
+                                            l.vertVerts,
+                                            0,
+                                            4,
+                                            l.indices,
+                                            0,
+                                            2);
+                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                            PrimitiveType.TriangleList,
+                                            l.vertVerts,
+                                            0,
+                                            4,
+                                            l.revIndices,
+                                            0,
+                                            2);
+
+                            pass.End();
+
+                        }
+                        core.lighting.End();
+                    }
+                    
+                }
+
+                core.GraphicsDevice.RenderState.DepthBufferWriteEnable = true;
+                core.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+                core.GraphicsDevice.RenderState.SourceBlend = Blend.One;
+                core.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+                core.GraphicsDevice.RenderState.AlphaTestEnable = false;
+
+                //Draw item spawner locations
+                //----------------------------------------------------------------------------------------------------
+                foreach (PickUpGen gen in core.pickupEngine.gens)
+                {
+                    foreach (ModelMesh mesh in core.debugSphere.Meshes)
+                    {
+
+                        foreach (BasicEffect effect in mesh.Effects)
+                        {
+
+                            effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.pos);
+                            effect.View = cameras[cam];
+                            effect.Projection = basicEffect.Projection;
+
+                            effect.LightingEnabled = true;
+                            effect.AmbientLightColor = Color.Brown.ToVector3();
+
+                        }
+
+                        mesh.Draw();
+
+                    }
+
+                    if (gen.held != null)
+                    {
+
+                        Model pickUpModel = core.debugSphere;
+
+                        switch (gen.itemType)
+                        {
+
+                            case PickUp.PickUpType.AMMO: pickUpModel = core.ammoUp; break;
+                            case PickUp.PickUpType.HEALTH: pickUpModel = core.medicross; break;
+                            default: pickUpModel = core.arrow; break;
+
+                        }
+
+                        foreach (ModelMesh mesh in pickUpModel.Meshes)
+                        {
+
+                            foreach (BasicEffect effect in mesh.Effects)
+                            {
+                                effect.World = Matrix.CreateScale(5) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
+                                effect.View = cameras[cam];
+                                effect.Projection = basicEffect.Projection;
+                                effect.LightingEnabled = true;
+
+                                switch (gen.held.type)
+                                {
+
+                                    case PickUp.PickUpType.AMMO: { effect.AmbientLightColor = Color.Crimson.ToVector3(); break; }
+                                    case PickUp.PickUpType.HEALTH: { effect.AmbientLightColor = Color.Green.ToVector3(); break; }
+                                    case PickUp.PickUpType.LEFT: { effect.AmbientLightColor = Color.DarkBlue.ToVector3(); break; }
+                                    case PickUp.PickUpType.RIGHT: { effect.AmbientLightColor = Color.Yellow.ToVector3(); break; }
+
+                                }
+
+                            }
+
+                            mesh.Draw();
+
+                        }
+
+                    }
+                }
+
+                //--------------------------------------------------------------------------------------------
 
                 //Draw HUD
 
@@ -414,6 +485,7 @@ namespace Emergence.Render
 
                                 + "\nAmmo: " + core.players[cam].ammo);
                 */
+
                 cam++;
             
             }

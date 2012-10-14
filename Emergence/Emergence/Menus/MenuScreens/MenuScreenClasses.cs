@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -19,7 +19,6 @@ namespace Emergence
     public class TitleScreen : MenuScreen
     {
 
-      
 
         Vector2 titlePos = new Vector2(100, 100);
         float titleScale = 0.5f;
@@ -81,7 +80,9 @@ namespace Emergence
         public override void Draw()
         {
             //Draw Backgrounds           
+
             //Console.WriteLine(background.Width);
+
             coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
             coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
             coreEngine.spriteBatch.Draw(title, screenCenter, new Rectangle(0, 0, title.Width, title.Height), new Color(new Vector4(Color.White.ToVector3(), titleAlpha)), 0f, new Vector2(title.Width / 2, title.Height / 2), titleScale, SpriteEffects.None, 0);
@@ -110,7 +111,7 @@ namespace Emergence
             menuItems.Add(new MenuItem("Split Screen", MenuState.SplitScreen));
             menuItems.Add(new MenuItem("Options", MenuState.Options));
             menuItems.Add(new MenuItem("Exit", MenuState.Exit));
-           
+
         }
 
 
@@ -118,6 +119,7 @@ namespace Emergence
         public override MenuScreen Update(GameTime g)
         {
             getInput();
+
             //Console.WriteLine("SelectIndex: " + selectIndex);
 
 
@@ -169,7 +171,7 @@ namespace Emergence
     //----------------------------------------------------------------------------------
     public class SinglePlayerScreen : MenuScreen
     {
-      
+
         public SinglePlayerScreen(MenuEngine m, CoreEngine g)
         {
             coreEngine = g;
@@ -198,7 +200,9 @@ namespace Emergence
                 MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
                 if (temp.nextMenu == MenuState.StartGame)
                 {
+
                     coreEngine.startGame("test2", new bool[]{true, false,false,false});
+
                     return this;
                 }
                 if (temp.nextMenu == MenuState.BotOptions) { return menuEngine.botNumberMenu; }
@@ -246,7 +250,6 @@ namespace Emergence
     //----------------------------------------------------------------------------------
     public class BotNumberMenuScreen : MenuScreen
     {
-       
 
 
         public BotNumberMenuScreen(MenuEngine m, CoreEngine g)
@@ -261,13 +264,13 @@ namespace Emergence
             menuItems.Add(new MenuItem("5", MenuState.Null));
             menuItems.Add(new MenuItem("6", MenuState.Null));
             menuItems.Add(new MenuItem("7", MenuState.Null));
-            
 
         }
        
 
         public override MenuScreen Update(GameTime g)
         {
+
             getInput();
 
             if (menuActions.Contains<MenuAction>(MenuAction.Select))
@@ -331,6 +334,7 @@ namespace Emergence
         {
             menuEngine = m;
             coreEngine = g;
+
             menuItems.Add(new MenuItem("Split Screen", MenuState.Null));
           
         }
@@ -338,6 +342,7 @@ namespace Emergence
 
         public override MenuScreen Update(GameTime g)
         {
+
             bool wantToQuit = false;
             //check keyboard join
             //keyboard is player one

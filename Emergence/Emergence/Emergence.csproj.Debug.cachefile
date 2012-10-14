@@ -58,6 +58,11 @@ Content\textures\ctf\metal_b.xnb
 Content\MenuTextures\SelectionWheel2.xnb
 Content\MenuTextures\ButtonTextures\button_a.xnb
 Content\MenuTextures\background.xnb
+Content\MenuTextures\EmergenceIntro.xnb
+Content\MenuTextures\LoadTex.xnb
+Content\MenuTextures\menuLight.xnb
+Content\MenuTextures\SelectionWheel.xnb
+Content\beam.xnb
 Content\bullet.xnb
 Content\textures\emergence\floor_metal.xnb
 Content\maps\test2.map

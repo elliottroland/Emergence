@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -55,8 +55,10 @@ namespace Emergence
             if (type != "Title")
             {
                 //Get select vector and wheel rotation
+
                 //Console.WriteLine("Core: "+ coreEngine);
                 //Console.WriteLine("Input: " + coreEngine.inputEngine);
+
                 Vector2 ControllerSelect = coreEngine.inputEngine.getMove(PlayerIndex.One) * 250;
                 ControllerSelect.Y = -ControllerSelect.Y;
                 if (ControllerSelect != Vector2.Zero)
