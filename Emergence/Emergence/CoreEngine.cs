@@ -65,7 +65,7 @@ namespace Emergence
         public PickUpEngine pickupEngine;
         public AIEngine aiEngine;
 
-        public bool clip = true;
+        public bool clip = false;
 
         //test item generator locations
         PickUpGen[] tests = { new PickUpGen(new Vector3(20, -320, 20), PickUp.PickUpType.AMMO), new PickUpGen(new Vector3(20, -320, -20), PickUp.PickUpType.HEALTH)

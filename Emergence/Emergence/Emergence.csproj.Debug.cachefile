@@ -25,6 +25,14 @@ Content\textures\emergence\floor_scaff3.xnb
 Content\textures\emergence\floor_metal.xnb
 Content\textures\emergence\floor_metal2.xnb
 Content\textures\emergence\floor_metal3.xnb
+Content\MenuTextures\ButtonTextures\button_y.xnb
+Content\MenuTextures\gameIcon.xnb
+Content\MenuTextures\ButtonTextures\dpad_right.xnb
+Content\MenuTextures\EmergenceIntro.xnb
+Content\MenuTextures\ButtonTextures\dpad_down.xnb
+Content\MenuTextures\ButtonTextures\stick_right.xnb
+Content\textures\emergence\floor_tri.xnb
+Content\beam.xnb
 Content\textures\emergence\trim_orange.xnb
 Content\textures\emergence\wall_brown.xnb
 Content\textures\emergence\wall_brown2.xnb
@@ -61,6 +69,9 @@ Content\MenuTextures\gameThumbnail.xnb
 Content\MenuTextures\splitScreenWheel.xnb
 Content\MenuTextures\line.xnb
 Content\MenuTextures\loadWheel.xnb
+Content\bullet.xnb
+Content\textures\emergence\floor_metal.xnb
+Content\maps\test2.map
 Content\textures\common\caulk.tga
 Content\textures\base_wall\atech1_f.tga
 Content\textures\emergence\floor_hex.tga

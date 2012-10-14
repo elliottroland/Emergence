@@ -781,3 +781,4 @@ C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextur
 C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\splitScreenWheel.xnb
 C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\line.xnb
 C:\Users\User\Git\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\loadWheel.xnb
+C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\beam.xnb
