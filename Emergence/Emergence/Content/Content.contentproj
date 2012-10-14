@@ -279,6 +279,9 @@
   <ItemGroup>
     <Compile Include="beam.png">
       <Name>beam</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="MenuTextures\ButtonTextures\bumper_left.png">
       <Name>bumper_left</Name>
       <Importer>TextureImporter</Importer>

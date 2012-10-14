@@ -29,8 +29,9 @@ Content\MenuTextures\gameIcon.xnb
 Content\MenuTextures\ButtonTextures\dpad_right.xnb
 Content\MenuTextures\EmergenceIntro.xnb
 Content\MenuTextures\ButtonTextures\dpad_down.xnb
-Content\textures\emergence\floor_tri.xnb
 Content\MenuTextures\ButtonTextures\stick_right.xnb
+Content\textures\emergence\floor_tri.xnb
+Content\beam.xnb
 Content\textures\emergence\trim_orange.xnb
 Content\MenuTextures\ButtonTextures\button_x.xnb
 Content\textures\emergence\wall_brown.xnb
@@ -58,11 +59,6 @@ Content\textures\ctf\metal_b.xnb
 Content\MenuTextures\SelectionWheel2.xnb
 Content\MenuTextures\ButtonTextures\button_a.xnb
 Content\MenuTextures\background.xnb
-Content\MenuTextures\EmergenceIntro.xnb
-Content\MenuTextures\LoadTex.xnb
-Content\MenuTextures\menuLight.xnb
-Content\MenuTextures\SelectionWheel.xnb
-Content\beam.xnb
 Content\bullet.xnb
 Content\textures\emergence\floor_metal.xnb
 Content\maps\test2.map

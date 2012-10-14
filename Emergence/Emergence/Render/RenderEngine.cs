@@ -139,11 +139,6 @@ namespace Emergence.Render
 
         public void drawLine(Vector3 a, Vector3 b, Vector3 colour)
         {
-
-            basicEffect.TextureEnabled = true;
-            basicEffect.Texture = core.beamTex;
-            basicEffect.Begin();
-
             //draw the face normal for EVERYTHING!!!
             VertexPositionNormalTexture cent = new VertexPositionNormalTexture(), norm = new VertexPositionNormalTexture();
             cent.Position = a;
