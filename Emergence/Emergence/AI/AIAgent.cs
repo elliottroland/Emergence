@@ -12,6 +12,8 @@ namespace Emergence.AI {
         double targetAquisitionDuration = 0;
         List<MeshNode> ignore = new List<MeshNode>();
 
+        MeshNode previousTarget = null;
+
         public AIAgent(CoreEngine c, Vector3 position, Vector2 direction)
             : base(c, position, direction) { }
         public AIAgent(CoreEngine c, Vector3 position)
@@ -35,6 +37,7 @@ namespace Emergence.AI {
 
         //perform A* from the closest node to the target node
         public void setPathTo(MeshNode target, List<MeshNode> ignore) {
+            previousTarget = null;
             path.Clear();
             MeshNode start = findClosestMeshNode(ignore);
             if (start == null)  return;
@@ -75,6 +78,19 @@ namespace Emergence.AI {
             }
         }
 
+        protected void popFromPath() {
+            previousTarget = null;
+            if(path.Count > 0)  {
+                previousTarget = path[0];
+                path.RemoveAt(0);
+            }
+        }
+
+        public void tryJump() {
+            if (agentVelocities.persistentVelocity.Y == 0)
+                agentVelocities.persistentVelocity.Y = jump;
+        }
+
         public void findRoamingPath() {
 
         }
@@ -95,7 +111,7 @@ namespace Emergence.AI {
                                         Math.Abs(target.position.Z - position.Z));
             if (tpos.X < size.X / 3 && tpos.Y < size.Y / 3) {
                 ignore.Clear();
-                path.RemoveAt(0);
+                popFromPath();
                 targetAquisitionDuration = 0;
                 if (path.Count == 0)
                     setPathTo(core.aiEngine.mesh[core.aiEngine.random.Next(core.aiEngine.mesh.Count)], ignore);
@@ -104,19 +120,27 @@ namespace Emergence.AI {
                 target = path[0];
             }
 
+            if (agentVelocities.persistentVelocity != Vector3.Zero)
+                previousTarget = null;
+
             //calculate direction to target -- we need this for the model, this will probably change, but the principles are right
             Vector3 velocity = target.position - position;
             direction = getDirectionFromVector(velocity);
 
             //now calculate the move and actually move
-            velocity.Y = 0;
-            velocity.Normalize();
-
-            Vector3 jumpVelocity = Vector3.Zero;
-            if (core.aiEngine.random.Next(0, 100) < 1)
-                jumpVelocity.Y = jump;
-
-            core.physicsEngine.applyMovement(gameTime, this, speed * velocity + jumpVelocity);
+            //depending on whether we're on the mesh or not, we don't need collision detection
+            //if we've gotten here and there's a previous target then we're on the path
+            if (previousTarget != null) {
+                velocity.Normalize();
+                position = position + velocity * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            //otherwise we need to take care of things the expensive way
+            else {
+                velocity.Y = 0;
+                velocity.Normalize();
+                Console.WriteLine(core.aiEngine.random.Next(10));
+                core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
+            }
 
             targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;
             if (targetAquisitionDuration >= timeout) {

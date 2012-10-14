@@ -218,28 +218,16 @@ namespace Emergence.Render
                 //Draw AI info
                 //----------------------------------------------------------------------------------------------------
 
-                //basicEffect.Begin();
+                basicEffect.Begin();
 
-                /*Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
+                Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
                 Vector3 renderLift = new Vector3(0, AIEngine.nodeRenderHeight, 0);
                 foreach (MeshNode m in core.aiEngine.mesh) {
-                    VertexPositionColor[] line = new VertexPositionColor[2];
-                    line[0] = new VertexPositionColor(m.position - antiLift, Color.Red);
-                    line[1] = new VertexPositionColor(m.position - antiLift + renderLift, Color.Blue);
-                    foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
-                    {
-                        pass.Begin();
-                        core.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
-                            PrimitiveType.LineList,
-                            line,
-                            0,
-                            1);
-                        pass.End();
+                    drawLine(m.position, m.position, new Vector3(1, 1, 1));
+                    foreach(MeshNode m2 in m.neighbours)
+                        drawLine(m2.position, m.position, new Vector3(1, 1, 1));
+                }
 
-                    }
-                }*/
-
-                basicEffect.Begin();
                 //draw the collision grid
                 /*for(int k = 0; k < core.physicsEngine.grid.GetLength(2); k++)
                     for (int j = 0; j < core.physicsEngine.grid.GetLength(1); j++)

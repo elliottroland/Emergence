@@ -23,7 +23,7 @@ namespace Emergence.AI {
                           nodeLift = 0.5f,   //distance above the planes to spawn the mesh nodes
                           nodeHeight = 60f, //the distance above the nodeLift that the node 'sees' from
                           nodeRenderHeight = 10f,
-                          nodeRadius = 100;    //radius of nodes, this is how far they're laid away from walls (kinda) and other nodes
+                          nodeRadius = 80;    //radius of nodes, this is how far they're laid away from walls (kinda) and other nodes
         CoreEngine core;
         public List<MeshNode> mesh;
         public List<AIAgent> agents;
@@ -64,9 +64,9 @@ namespace Emergence.AI {
                                 Vector3 p = f.plane.meshSecond + j * x + i * y + new Vector3(0, nodeLift, 0);
 
                                 //now find if this point is on the face
-                                if (MapEngine.pointOnFace(p, f) && !core.mapEngine.pointInBrush(p))
+                                if (MapEngine.pointOnFace(p, f) && !core.mapEngine.pointInBrush(p) && core.physicsEngine.hitscan(p, Vector3.Up, null) != null)
                                 {
-                                    mesh.Add(new MeshNode(p + new Vector3(0,nodeHeight-nodeLift,0), f));
+                                    mesh.Add(new MeshNode(p, f));
                                 }
                             }
                     } // if "floor"
@@ -74,6 +74,8 @@ namespace Emergence.AI {
             } // for brush
 
             //connect vibes
+            List<MeshNode> meshAdd = new List<MeshNode>();
+            Vector3 heightVec = new Vector3(0, nodeHeight-nodeLift, 0);
             foreach(MeshNode m1 in mesh)   {
                 foreach (MeshNode m2 in mesh)
                 {
@@ -83,8 +85,7 @@ namespace Emergence.AI {
                     if (Vector3.Distance(m1.position, m2.position) > nodeRadius * 2.2)
                         continue;
                     //now check if they are line-of-sight
-                    //DO THIS ----------------------------------------------------------------
-                    PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(m1.position, m2.position - m1.position, null);
+                    PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(m1.position + heightVec, m2.position - m1.position, null);
                     if (hs != null && hs.Distance() < Vector3.Distance(m1.position, m2.position) - 0.005)
                         continue;
 
@@ -101,19 +102,32 @@ namespace Emergence.AI {
                         if (denom == 0)
                             continue;
                         double t = (a.Y * (bd + b.X * ap.X + b.Z * ap.Z) - b.Y * (ad + a.X * ap.X + a.Z * ap.Z)) / denom;
-                        if (0 <= t && t <= 1)
-                        {
+                        if (0 < t && t < 1)   {
+                            //create the intermediate mesh node
+                            Vector3 w = bp - ap;
+                            Vector3 interPoint = ap + (float)t * w;
+                            interPoint.Y = -((float)ad + a.X*interPoint.X + a.Z*interPoint.Z)/a.Y + nodeLift;
+                            MeshNode mi = new MeshNode(interPoint, m1.face);
+                            meshAdd.Add(mi);
+                            m1.neighbours.Add(mi);
+                            m2.neighbours.Add(mi);
+                            mi.neighbours.Add(m1);
+                            mi.neighbours.Add(m2);
+                        }
+                        else if(t == 0 || t == 1) {
                             m1.neighbours.Add(m2);
                             m2.neighbours.Add(m1);
                         }
                     }
-                    else if(Math.Abs(ad-bd) < 0.5)
+                    else if(Math.Abs(ad-bd) < 0.5)  //if the planes are "parallel" then just check their D's
                     {
                         m1.neighbours.Add(m2);
                         m2.neighbours.Add(m1);
                     }
                 }
             }
+            foreach (MeshNode mi in meshAdd)
+                mesh.Add(mi);
         }
 
         public void Update(GameTime gameTime) {
