@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -19,7 +19,6 @@ namespace Emergence
     public class TitleScreen : MenuScreen
     {
 
-        public Texture2D background, title, light;
 
         Vector2 titlePos = new Vector2(100, 100);
         float titleScale = 0.5f;
@@ -40,14 +39,7 @@ namespace Emergence
             coreEngine = g;
             menuEngine = m;
             type = "Title";
-            LoadContent();
-        }
-
-        public override void LoadContent()
-        {
-            title = coreEngine.Content.Load<Texture2D>("MenuTextures/EmergenceIntro2");
-            background = coreEngine.Content.Load<Texture2D>("MenuTextures/background2");
-            light = coreEngine.Content.Load<Texture2D>("MenuTextures/menuLight");
+            
         }
 
 
@@ -88,7 +80,9 @@ namespace Emergence
         public override void Draw()
         {
             //Draw Backgrounds           
-            Console.WriteLine(background.Width);
+
+            //Console.WriteLine(background.Width);
+
             coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
             coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
             coreEngine.spriteBatch.Draw(title, screenCenter, new Rectangle(0, 0, title.Width, title.Height), new Color(new Vector4(Color.White.ToVector3(), titleAlpha)), 0f, new Vector2(title.Width / 2, title.Height / 2), titleScale, SpriteEffects.None, 0);
@@ -108,11 +102,6 @@ namespace Emergence
     public class MainMenuScreen : MenuScreen
     {
 
-        public Texture2D background, light, selectWheel;
-
-
-
-
         public MainMenuScreen(MenuEngine m, CoreEngine g)
         {
             coreEngine = g;
@@ -122,16 +111,7 @@ namespace Emergence
             menuItems.Add(new MenuItem("Split Screen", MenuState.SplitScreen));
             menuItems.Add(new MenuItem("Options", MenuState.Options));
             menuItems.Add(new MenuItem("Exit", MenuState.Exit));
-            LoadContent();
-        }
 
-
-
-        public override void LoadContent()
-        {
-            background = coreEngine.Content.Load<Texture2D>("MenuTextures/background2");
-            light = coreEngine.Content.Load<Texture2D>("MenuTextures/menuLight");
-            selectWheel = coreEngine.Content.Load<Texture2D>("MenuTextures/SelectionWheel2");
         }
 
 
@@ -139,7 +119,8 @@ namespace Emergence
         public override MenuScreen Update(GameTime g)
         {
             getInput();
-            Console.WriteLine("SelectIndex: " + selectIndex);
+
+            //Console.WriteLine("SelectIndex: " + selectIndex);
 
 
             if (menuActions.Contains<MenuAction>(MenuAction.Select))
@@ -172,6 +153,8 @@ namespace Emergence
                 Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
                 0.85f, SpriteEffects.None, 0);
 
+            drawTips();
+
             //Draw Menu Items
             foreach (MenuItem m in menuItems)
                 if (!m.selected)
@@ -188,11 +171,6 @@ namespace Emergence
     //----------------------------------------------------------------------------------
     public class SinglePlayerScreen : MenuScreen
     {
-        //CoreEngine coreEngine;
-        public Texture2D background, light, selectWheel;
-
-
-
 
         public SinglePlayerScreen(MenuEngine m, CoreEngine g)
         {
@@ -203,17 +181,10 @@ namespace Emergence
             menuItems.Add(new MenuItem("Number of Bots: ", MenuState.BotOptions));
             menuItems.Add(new MenuItem("Map Select: ", MenuState.SelectMap));
             //menuItems.Add(new MenuItem("Exit", MenuState.Exit));
-            LoadContent();
+          
         }
 
 
-
-        public override void LoadContent()
-        {
-            background = coreEngine.Content.Load<Texture2D>("MenuTextures/background2");
-            light = coreEngine.Content.Load<Texture2D>("MenuTextures/menuLight");
-            selectWheel = coreEngine.Content.Load<Texture2D>("MenuTextures/SelectionWheel2");
-        }
 
 
 
@@ -229,7 +200,9 @@ namespace Emergence
                 MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
                 if (temp.nextMenu == MenuState.StartGame)
                 {
-                    coreEngine.currentState = GameState.GameScreen;
+
+                    coreEngine.startGame("test2", new bool[]{true, false,false,false});
+
                     return this;
                 }
                 if (temp.nextMenu == MenuState.BotOptions) { return menuEngine.botNumberMenu; }
@@ -259,6 +232,8 @@ namespace Emergence
                 Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
                 0.85f, SpriteEffects.None, 0);
 
+            drawTips();
+
             //Draw Menu Items
             foreach (MenuItem m in menuItems)
                 if (!m.selected)
@@ -275,10 +250,6 @@ namespace Emergence
     //----------------------------------------------------------------------------------
     public class BotNumberMenuScreen : MenuScreen
     {
-        //CoreEngine coreEngine;
-        public Texture2D background, light, selectWheel;
-        //float selectWheelRot = 0;
-
 
 
         public BotNumberMenuScreen(MenuEngine m, CoreEngine g)
@@ -293,19 +264,13 @@ namespace Emergence
             menuItems.Add(new MenuItem("5", MenuState.Null));
             menuItems.Add(new MenuItem("6", MenuState.Null));
             menuItems.Add(new MenuItem("7", MenuState.Null));
-            LoadContent();
 
         }
-        public override void LoadContent()
-        {
-            background = coreEngine.Content.Load<Texture2D>("MenuTextures/background2");
-            selectWheel = coreEngine.Content.Load<Texture2D>("MenuTextures/SelectionWheel2");
-
-        }
-
+       
 
         public override MenuScreen Update(GameTime g)
         {
+
             getInput();
 
             if (menuActions.Contains<MenuAction>(MenuAction.Select))
@@ -341,6 +306,8 @@ namespace Emergence
                 Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
                 0.85f, SpriteEffects.None, 0);
 
+            drawTips();
+
             //Draw Menu Items
             foreach (MenuItem m in menuItems)
                 if (!m.selected)
@@ -356,45 +323,145 @@ namespace Emergence
 
     //----------------------------------------------------------------------------------
     public class SplitScreen : MenuScreen
-    {
+    {      
+        bool[] playerJoined = new bool[4];
+        bool notEnoughPlayers = false;
 
-        public Texture2D background, selectWheel;
-        public Texture2D A_button, B_Button, X_Button, Y_Button;
-        float selectWheelRot = 0;
-
-
+        long initialTime = 0,currentTime = 0;
 
 
         public SplitScreen(MenuEngine m, CoreEngine g)
         {
             menuEngine = m;
             coreEngine = g;
-            menuItems.Add(new MenuItem("Split Screen", MenuState.Null));           
-            LoadContent();
-        }
-        public override void LoadContent()
-        {
-            background = coreEngine.Content.Load<Texture2D>("MenuTextures/background2");
-            selectWheel = coreEngine.Content.Load<Texture2D>("MenuTextures/SelectionWheel2");
-        }
 
+            menuItems.Add(new MenuItem("Split Screen", MenuState.Null));
+          
+        }
+      
 
         public override MenuScreen Update(GameTime g)
         {
-            getInput();
 
-           
+            bool wantToQuit = false;
+            //check keyboard join
+            //keyboard is player one
+            if (coreEngine.inputEngine.getMenuKeys().Contains(MenuAction.Select))
+            {
+                initialTime = currentTime;
+                playerJoined[0] = true;
+            }
+            if (coreEngine.inputEngine.getMenuKeys().Contains(MenuAction.Back))
+            {
+                if (playerJoined[0])
+                    playerJoined[0] = false;
+                else
+                    wantToQuit = true;
+            }
 
+            //Check for controller joins
+            for (int i = 0; i < 4; i++)
+            {
+                if (coreEngine.inputEngine.getMenuButtons((PlayerIndex)i).Contains(MenuAction.Select))
+                    playerJoined[i] = true;
 
+                if (coreEngine.inputEngine.getMenuButtons((PlayerIndex)i).Contains(MenuAction.Back))
+                {
+                    if (playerJoined[i])
+                        playerJoined[i] = false;
+                    else
+                        wantToQuit = true;
+                }
+                if (coreEngine.inputEngine.getMenuButtons((PlayerIndex)i).Contains(MenuAction.Join))
+                {
+                    if (getJoinedCount() < 2)
+                    {
+                        initialTime = currentTime;
+                        notEnoughPlayers = true;
+                    }
+                    else
+                        coreEngine.startGame("test2",playerJoined);
+                }
+            }          
+
+            if (wantToQuit && getJoinedCount() == 0)
+            {
+                dist = 2 * maxDist;
+                return menuEngine.mainMenu;
+            }
 
             return this;
 
         }
 
+        public int getJoinedCount()
+        {
+            int count=0;
+            for (int i = 0; i < 4; i++)
+                if(playerJoined[i])
+                    count++;
+
+            return count;
+        }
+
 
         public override void Draw()
         {
+            //Draw Backgrounds
+            coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
+            //coreEngine.spriteBatch.Draw(selectWheel, selectWheelPos, new Rectangle(0, 0, selectWheel.Width, selectWheel.Height),
+            //  Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
+            //0.85f, SpriteEffects.None, 0);           
 
+
+            Vector2[] pos = new Vector2[4];
+            Vector2 space = new Vector2(110, 0);
+            pos[0] = screenCenter + new Vector2(-screenWidth / 4, -screenHeight / 4)-space;
+            pos[1] = screenCenter + new Vector2(screenWidth / 4, -screenHeight / 4) - space;
+            pos[2] = screenCenter + new Vector2(screenWidth / 4, screenHeight / 4) - space;
+            pos[3] = screenCenter + new Vector2(-screenWidth / 4, screenHeight / 4) - space;
+
+            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Split Screen",new Vector2(screenCenter.X-(coreEngine.debugFont.MeasureString("Split Screen")/2).X, 50), Color.White);
+            /*
+            coreEngine.spriteBatch.Draw(line, screenCenter, new Rectangle(0,0, line.Width, line.Height),
+                       Color.White, 0f, new Vector2(line.Width / 2, line.Height / 2),
+                       1.6f, SpriteEffects.None, 0);
+
+            coreEngine.spriteBatch.Draw(line, screenCenter+new Vector2(0,200), new Rectangle(0,0, line.Width, line.Height),
+                       Color.White, MathHelper.PiOver2, new Vector2(line.Width / 2, line.Height / 2),
+                       1.6f, SpriteEffects.None, 0);
+
+            */
+            coreEngine.spriteBatch.Draw(loadWheel, screenCenter, new Rectangle(0, 0, loadWheel.Width, loadWheel.Height),
+                        Color.White, 0f, new Vector2(loadWheel.Width / 2, loadWheel.Height / 2 + 25),
+                        0.2f, SpriteEffects.None, 0);
+            
+
+            String output = "";
+            for (int i = 0; i < 4; i++)
+                if (playerJoined[i])
+                {
+                    coreEngine.spriteBatch.Draw(splitWheel, screenCenter - new Vector2(3, -2), new Rectangle(0, 0, splitWheel.Width, splitWheel.Height),
+                        Color.White, MathHelper.PiOver2 * i - MathHelper.PiOver4, new Vector2(splitWheel.Width / 2, splitWheel.Height / 2 + 25),
+                        0.2f, SpriteEffects.None, 0);
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Player " + (i+1) + " has joined", pos[i], Color.White);
+                }
+                else
+                {
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Press ", pos[i], Color.White);
+                    coreEngine.spriteBatch.Draw(A_button, pos[i]+new Vector2(coreEngine.debugFont.MeasureString("Press  ").X,-10), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f);
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "to join ", pos[i]+new Vector2(150,0), Color.White);
+                }
+
+
+
+            if (notEnoughPlayers)
+                output += "\nThere are not enough players to start\nAt least 2 required";
+
+
+            coreEngine.spriteBatch.End();
+            coreEngine.DrawStringDebug(output);
 
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -35,14 +35,17 @@ namespace Emergence
         public MenuEngine(CoreEngine g)
         {
             coreEngine = g;
+            MenuScreen.loadButtonTextures(g);
 
             titleMenu = new TitleScreen(this, g);
             mainMenu = new MainMenuScreen(this, g);            
             singlePlayerMenu = new SinglePlayerScreen(this, g);            
-            botNumberMenu = new BotNumberMenuScreen(this, g);
+
+            botNumberMenu = new BotNumberMenuScreen(this, g);            
+            splitScreenMenu = new SplitScreen(this, g);
+
 
             /*
-            splitScreenMenu = new SplitScreen(this, g);
             optionsMenu = new OptionsMenuScreen(this, g);
              */
 

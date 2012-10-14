@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,6 +22,12 @@ namespace Emergence
         public List<MenuAction> menuActions = new List<MenuAction>();
         public CoreEngine coreEngine;
 
+        public static Texture2D A_button, B_button, X_button, Y_button;
+        public static Texture2D LT_button, RT_button, LB_button, RB_button;
+        public static Texture2D LS_button, RS_button;
+
+        public static Texture2D background, light, selectWheel,splitWheel,loadWheel, title, line;
+
         //Screen Params        
         public static int screenWidth = 1024;
         public static int screenHeight = 576;
@@ -31,7 +37,8 @@ namespace Emergence
         public static float dist = 0;
         public static float maxDist = 560;
         public static float range = 40;
-        public static Vector2 selectWheelPos = new Vector2(-100.0f, screenCenter.Y);
+        public static Vector2 selectWheelPos = new Vector2(-300.0f, screenCenter.Y);
+        public static Vector2 selectWheelDesiredPos = new Vector2(-100.0f, screenCenter.Y);
         public String type = "nonTitle";
 
         public float selectWheelRot = 0;
@@ -39,7 +46,7 @@ namespace Emergence
         public int selectIndex = 0;
 
 
-        public abstract void LoadContent();
+      
         public abstract MenuScreen Update(GameTime g);
         public abstract void Draw();
 
@@ -48,8 +55,10 @@ namespace Emergence
             if (type != "Title")
             {
                 //Get select vector and wheel rotation
-                Console.WriteLine("Core: "+ coreEngine);
-                Console.WriteLine("Input: " + coreEngine.inputEngine);
+
+                //Console.WriteLine("Core: "+ coreEngine);
+                //Console.WriteLine("Input: " + coreEngine.inputEngine);
+
                 Vector2 ControllerSelect = coreEngine.inputEngine.getMove(PlayerIndex.One) * 250;
                 ControllerSelect.Y = -ControllerSelect.Y;
                 if (ControllerSelect != Vector2.Zero)
@@ -69,17 +78,45 @@ namespace Emergence
                 List<MenuAction> menuActionsController1 = coreEngine.inputEngine.getMenuButtons(PlayerIndex.One);
                 //Console.WriteLine(selectIndex);
 
-                Console.WriteLine(type);
+                //Console.WriteLine(type);
                 foreach (MenuAction m in menuActionsController1)
                     menuActions.Add(m);
             }
         }
 
+        public static void loadButtonTextures(CoreEngine g)
+        {
+            A_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/button_a");
+            B_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/button_b");
+            X_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/button_x");
+            Y_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/button_y");
+            LT_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/trigger_left");
+            RT_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/trigger_right");
+            LB_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/bumper_left");
+            RB_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/bumper_right");
+            LS_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/stick_left");
+            RS_button = g.Content.Load<Texture2D>("MenuTextures/ButtonTextures/stick_right");
+
+            background = g.Content.Load<Texture2D>("MenuTextures/background2");
+            selectWheel = g.Content.Load<Texture2D>("MenuTextures/SelectionWheel2");
+            title = g.Content.Load<Texture2D>("MenuTextures/EmergenceIntro2");
+            splitWheel = g.Content.Load<Texture2D>("MenuTextures/splitScreenWheel");
+            line = g.Content.Load<Texture2D>("MenuTextures/line");
+            loadWheel = g.Content.Load<Texture2D>("MenuTextures/loadWheel");
+        }
 
         public SelectedStruct updateSelected(List<MenuItem> menuItems, CoreEngine coreEngine, Vector2 selectVector)
         {
             SelectedStruct x = new SelectedStruct();
             x.repositionItems = reposition(menuItems);
+
+            Vector2 wheelDirection = selectWheelDesiredPos - selectWheelPos;
+            if (wheelDirection.LengthSquared() < 20)
+                selectWheelPos += wheelDirection / 100;
+            else
+                selectWheelPos = selectWheelDesiredPos;
+
+
 
             if (dist < maxDist)
                 dist+=20;
@@ -105,6 +142,34 @@ namespace Emergence
             if (selectIndex == 0 || selectIndex == 1) 
                 selectIndex = 1;
             
+        }
+
+        public void drawTips()
+        {
+            
+           
+            coreEngine.spriteBatch.Draw(line, menuItems[0].position + new Vector2(-30, 16), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f); 
+
+            Vector2 startPos = new Vector2(screenWidth-160, screenHeight-145);
+            Vector2 startButton = new Vector2(startPos.X + coreEngine.debugFont.MeasureString("Select").X, startPos.Y-10);
+            Vector2 space = new Vector2(0, 45);
+            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Cursor", startPos, Color.White,0f,Vector2.Zero,0.6f,SpriteEffects.None,1f);
+            coreEngine.spriteBatch.Draw(LS_button, startButton, null,Color.White,0f,Vector2.Zero,0.6f,SpriteEffects.None, 1f);            
+            startPos += space;
+            startButton += space;
+            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Select", startPos, Color.White,0f,Vector2.Zero,0.6f,SpriteEffects.None,1f);
+            coreEngine.spriteBatch.Draw(A_button, startButton, null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f); 
+            startPos += space;
+            startButton += space;
+            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Back ", startPos, Color.White,0f,Vector2.Zero,0.6f,SpriteEffects.None,1f);
+            coreEngine.spriteBatch.Draw(B_button, startButton, null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f); 
+            startPos += space;
+            startButton += space;
+
+
+
+           
+
         }
 
 
@@ -137,9 +202,6 @@ namespace Emergence
 
         }
 
-        public String ToString()
-        {
-            return " ";
-        }
+      
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Emergence.Weapons;
 
 namespace Emergence {
-    abstract public class Agent {
+    abstract public class Agent : ICollidable {
         public Vector3 position;
         public Vector2 direction; //theta, phi -- representing, in spherical coords the direction of a unit vector
         public float speed = 400f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 8f, terminalVelocity = -1000f;
@@ -24,6 +24,8 @@ namespace Emergence {
         public List<Bullet> bullets = new List<Bullet>();
         public List<Laser> lasers = new List<Laser>();
 
+        protected List<CollisionGridCell> collisionCells;
+
         public Agent(CoreEngine c, Vector3 position, Vector2 direction) {
             core = c;
             this.position = position;
@@ -32,6 +34,7 @@ namespace Emergence {
             ammo = 200;
 
             agentVelocities = new Velocities();
+            collisionCells = new List<CollisionGridCell>();
         }
 
         public Vector3 getDirectionVector() {
@@ -56,6 +59,18 @@ namespace Emergence {
 
         public BoundingBox getBoundingBox() {
             return getBoundingBoxFor(position);
+        }
+
+        BoundingBox ICollidable.getBoundingBox() {
+            return getBoundingBox();
+        }
+
+        List<CollisionGridCell> ICollidable.getCollisionCells() {
+            return collisionCells;
+        }
+
+        void ICollidable.setCollisionCells(List<CollisionGridCell> cells) {
+            collisionCells = cells;
         }
 
         protected void clampDirection()   {

@@ -19,7 +19,7 @@ namespace Emergence
         public class Binding
         {
 
-           //Game Controls, keyboard and Controller bindings
+            //Game Controls, keyboard and Controller bindings
 
             public Actions[] gameControls = { Actions.Jump, Actions.Downgrade, Actions.Reload, Actions.Unbound,
                                     Actions.Scoreboard,Actions.Scoreboard, Actions.Unbound, Actions.Sprint,
@@ -27,7 +27,7 @@ namespace Emergence
                                     Actions.Unbound,Actions.Unbound,Actions.Unbound,Actions.Unbound};
 
 
-            public Buttons[] gameButtons   = { Buttons.A, Buttons.B, Buttons.X, Buttons.Y, 
+            public Buttons[] gameButtons = { Buttons.A, Buttons.B, Buttons.X, Buttons.Y, 
                                     Buttons.RightShoulder, Buttons.LeftShoulder, Buttons.RightStick, Buttons.LeftStick,
                                     Buttons.RightTrigger, Buttons.LeftTrigger, Buttons.Start, Buttons.Back,
                                     Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight};
@@ -49,10 +49,10 @@ namespace Emergence
             public Keys[] menuKeys = {Keys.Enter, Keys.Escape, Keys.Space, Keys.Enter,
                                          Keys.Up, Keys.Down                                      
                                      };
-                 
+
             public Binding()
-            {               
-            }          
+            {
+            }
         }
 
 
@@ -91,9 +91,9 @@ namespace Emergence
                 playerBindings[i] = new Binding();
                 playerActions[i] = new List<Actions>();
                 playerMenuActions[i] = new List<MenuAction>();
-            }     
+            }
         }
-        
+
         //triggers-----------------------------------------------------
 
         float getLT()
@@ -121,7 +121,7 @@ namespace Emergence
                 return true;
             }
             return false;
-        }   
+        }
         public bool isDown(Keys key)
         {
             return currentKB.IsKeyDown(key);
@@ -129,7 +129,7 @@ namespace Emergence
         bool isDown(Buttons button)
         {
             return current.IsButtonDown(button);
-        }     
+        }
 
         //Keyboard returns
         public List<Actions> getGameKeys()
@@ -139,7 +139,7 @@ namespace Emergence
         public List<MenuAction> getMenuKeys()
         {
             return playerMenuActions[4];
-        }        
+        }
         public Vector2 getMove()
         {
             double[] move = new double[2];
@@ -169,11 +169,11 @@ namespace Emergence
         }
         public List<MenuAction> getMenuButtons(PlayerIndex p)
         {
-            return playerMenuActions[(int)p];           
+            return playerMenuActions[(int)p];
         }
         public Vector2 getMove(PlayerIndex p)
         {
-            return new Vector2(GamePad.GetState(p).ThumbSticks.Left.X, -GamePad.GetState(p).ThumbSticks.Left.Y);
+            return new Vector2(GamePad.GetState(p).ThumbSticks.Left.X, GamePad.GetState(p).ThumbSticks.Left.Y);
         }
         public Vector2 getLook(PlayerIndex p)
         {
@@ -181,19 +181,22 @@ namespace Emergence
         }
 
         //return the menu owner
-        public int getFirstController(){
+        public int getFirstController()
+        {
             return firstConnected;
         }
 
 
         public void Update()
-        {    
-            if(core.currentState==GameState.MenuScreen){
+        {
+            if (core.currentState == GameState.MenuScreen)
+            {
                 UpdateMenuInput();
             }
-            if(core.currentState==GameState.GameScreen){
+            if (core.currentState == GameState.GameScreen)
+            {
                 UpdateGameInput();
-            }     
+            }
         }
 
 
@@ -215,14 +218,11 @@ namespace Emergence
 
                 old = oldGPStates[pIndex];
 
-                if (current.IsConnected)//Check only if connected
+
+                for (int i = 0; i < playerBindings[0].gameButtons.Length; i++)
                 {
-                    onXBOX = true;
-                    for (int i = 0; i < playerBindings[0].gameButtons.Length; i++)
-                    {
-                        if (isDown(playerBindings[pIndex].gameButtons[i]))//if button is down
-                            playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button
-                    }
+                    if (isDown(playerBindings[pIndex].gameButtons[i]))//if button is down
+                        playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button
                 }
 
                 //set old state (not necessary if only using isDown)
@@ -294,7 +294,7 @@ namespace Emergence
             //keyboard input
             if (!onXBOX)
             {
-               
+
                 currentKB = Keyboard.GetState();
 
                 for (int i = 0; i < playerBindings[0].menuKeys.Length; i++)
@@ -306,8 +306,8 @@ namespace Emergence
 
                 //Update mouse data
                 Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-                mouseOut = new Vector2(200, mousePos.Y-250);
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed && oldMouse.LeftButton==ButtonState.Released)
+                mouseOut = new Vector2(200, mousePos.Y - 450);
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed && oldMouse.LeftButton == ButtonState.Released)
                     playerMenuActions[4].Add(MenuAction.Select);
                 //Mouse.SetPosition((int)screenCenter.X, (int)screenCenter.Y);
 

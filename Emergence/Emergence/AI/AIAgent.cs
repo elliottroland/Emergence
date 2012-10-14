@@ -116,7 +116,7 @@ namespace Emergence.AI {
             if (core.aiEngine.random.Next(0, 100) < 1)
                 jumpVelocity.Y = jump;
 
-            position = core.physicsEngine.applyMovement(gameTime, this, speed * velocity + jumpVelocity);
+            core.physicsEngine.applyMovement(gameTime, this, speed * velocity + jumpVelocity);
 
             targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;
             if (targetAquisitionDuration >= timeout) {
@@ -125,6 +125,8 @@ namespace Emergence.AI {
                 if(path.Count > 0)
                     setPathTo(path[path.Count - 1], ignore);
             }
+
+            core.physicsEngine.updateCollisionCellsFor(this);
         }
     }
 

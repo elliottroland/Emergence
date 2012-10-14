@@ -15,11 +15,11 @@ namespace Emergence.Pickup
         public float rotation;
 
         public PickUp(Vector3 p, PickUpType t) {
-
             pos = p;
             type = t;
-        
         }
+
+        
 
     }
 }

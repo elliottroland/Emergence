@@ -7,6 +7,22 @@ using Microsoft.Xna.Framework;
 using Emergence.Map;
 
 namespace Emergence {
+    public interface ICollidable
+    {
+        BoundingBox getBoundingBox();
+        List<CollisionGridCell> getCollisionCells();
+        void setCollisionCells(List<CollisionGridCell> cells);
+    }
+
+    public class CollisionGridCell
+    {
+        public List<ICollidable> elements;
+
+        public CollisionGridCell() {
+            elements = new List<ICollidable>();
+        }
+    }
+
     public class Velocities {
         public Vector3 persistentVelocity = Vector3.Zero,
             momentumVelocity = Vector3.Zero;
@@ -14,12 +30,68 @@ namespace Emergence {
 
     public class PhysicsEngine {
         CoreEngine core;
+        public CollisionGridCell[,,] grid;
+        public float cellSize = 1;
+        public Vector3 gridOffset = Vector3.Zero;
+        public Vector3 boundingBoxPadding = new Vector3(10, 10, 10);
         //Velocities[] playerVelocities = { new Velocities(), new Velocities(), new Velocities(), new Velocities() };
 
         public float gravity = 17f;   //units per second
 
         public PhysicsEngine(CoreEngine c) {
             core = c;
+            grid = new CollisionGridCell[0,0,0];
+        }
+
+        public void generateCollisionGrid(int cellSize) {
+            //find the bounds of the entire map
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue),
+                    max = -min;
+            foreach (Brush brush in core.mapEngine.brushes) {
+                BoundingBox b = brush.boundingBox;
+                min.X = Math.Min(min.X, b.Min.X);
+                min.Y = Math.Min(min.Y, b.Min.Y);
+                min.Z = Math.Min(min.Z, b.Min.Z);
+                max.X = Math.Max(max.X, b.Max.X);
+                max.Y = Math.Max(max.Y, b.Max.Y);
+                max.Z = Math.Max(max.Z, b.Max.Z);
+            }
+            min -= new Vector3(1, 1, 1) * cellSize;
+            max += new Vector3(1, 1, 1) * cellSize;
+            gridOffset = min;
+
+            //now that we have the bounds, calculate the grid cell bounds
+            grid = new CollisionGridCell[(int)Math.Max(1, Math.Ceiling((max.X - min.X) / cellSize)),
+                                         (int)Math.Max(1, Math.Ceiling((max.Y - min.Y) / cellSize)),
+                                         (int)Math.Max(1, Math.Ceiling((max.Z - min.Z) / cellSize))];
+            for(int k = 0; k < grid.GetLength(2); ++k)
+                for(int j = 0; j < grid.GetLength(1); ++j)
+                    for (int i = 0; i < grid.GetLength(0); ++i)
+                        grid[i, j, k] = new CollisionGridCell();
+            this.cellSize = cellSize;
+            foreach (ICollidable c in core.allCollidables())
+                updateCollisionCellsFor(c);
+        }
+
+        public void updateCollisionCellsFor(ICollidable c) {
+            //first clear the cells the c currently belongs to
+            List<CollisionGridCell> cells = c.getCollisionCells();
+            foreach (CollisionGridCell cell in cells)
+                cell.elements.Remove(c);
+
+            BoundingBox b = c.getBoundingBox();
+            b.Min -= gridOffset;
+            b.Max -= gridOffset;
+            List<CollisionGridCell> collidablesCells = new List<CollisionGridCell>();
+            //get the cell bounds for this
+            for (int k = Math.Max(0, (int)Math.Floor(b.Min.Z / cellSize)); k <= Math.Min(grid.GetLength(2) - 1, (int)Math.Ceiling(b.Max.Z / cellSize)); ++k)
+                for (int j = Math.Max(0, (int)Math.Floor(b.Min.Y / cellSize)); j <= Math.Min(grid.GetLength(1) - 1, (int)Math.Ceiling(b.Max.Y / cellSize)); ++j)
+                    for (int i = Math.Max(0, (int)Math.Floor(b.Min.X / cellSize)); i <= Math.Min(grid.GetLength(0) - 1, (int)Math.Ceiling(b.Max.X / cellSize)); ++i) {
+                        grid[i, j, k].elements.Add(c);
+                        collidablesCells.Add(grid[i, j, k]);
+                    }
+
+            c.setCollisionCells(collidablesCells);
         }
 
         private Vector3 size(BoundingBox b) {
@@ -59,81 +131,124 @@ namespace Emergence {
             }
         }
 
-        public CollisionPackage collides(Vector3 moverRadius, Vector3 basePoint, Vector3 velocity) {
+        private IEnumerable<ICollidable> getCollidablesToCheck(ICollidable c, Vector3 vel) {
+            BoundingBox bb = c.getBoundingBox();
+            Vector3 minA = bb.Min - gridOffset, maxA = bb.Max - gridOffset;
+            Vector3 minB = minA + vel, maxB = maxA + vel;
+            Dictionary<ICollidable, bool> checkedCols = new Dictionary<ICollidable, bool>();
+            for (int k = Math.Max(0, (int)Math.Floor(Math.Min(minA.Z, minB.Z) / cellSize)); k <= Math.Min(grid.GetLength(2) - 1, (int)Math.Ceiling(Math.Max(maxA.Z, maxB.Z) / cellSize)); ++k)
+                for (int j = Math.Max(0, (int)Math.Floor(Math.Min(minA.Y, minB.Y) / cellSize)); j <= Math.Min(grid.GetLength(1) - 1, (int)Math.Ceiling(Math.Max(maxA.Y, maxB.Y) / cellSize)); ++j)
+                    for (int i = Math.Max(0, (int)Math.Floor(Math.Min(minA.X, minB.X) / cellSize)); i <= Math.Min(grid.GetLength(0) - 1, (int)Math.Ceiling(Math.Max(maxA.X, maxB.X) / cellSize)); ++i)
+                        foreach(ICollidable col in grid[i,j,k].elements)
+                            if (!checkedCols.ContainsKey(col)) {
+                                checkedCols.Add(col, true);
+                                yield return col;
+                            }
+        }
+
+        public CollisionPackage collides(Vector3 moverRadius, Vector3 basePoint, Vector3 velocity, ICollidable collider) {
             float closestCollisionTime = 1;
             Vector3 closestCollisionPoint = Vector3.Zero;
-            foreach(Brush brush in core.mapEngine.brushes)    {
-                foreach (Face face in brush.faces) {
-                    face.DiffuseColor = new Vector3(1, 1, 1);
-                    //we want the vertices of this face converted into eSpace
-                    List<Vector3> eSpaceVerts = new List<Vector3>();
-                    foreach (Vertex vert in face.vertices)
-                        eSpaceVerts.Add(toESpace(moverRadius, vert.position));
 
-                    //find the normal of the face's plane in eSpace
-                    Microsoft.Xna.Framework.Plane helperPlane = new Microsoft.Xna.Framework.Plane(toESpace(moverRadius, face.plane.first), toESpace(moverRadius, face.plane.second), toESpace(moverRadius, face.plane.third));
-                    helperPlane.Normal = -helperPlane.Normal;
-                    Vector3 N = helperPlane.Normal;
-                    N.Normalize();
-                    float D = -helperPlane.D;
+            //make colliderBoundingBox a bounding volume over the movement
+            BoundingBox colliderBoundingBox = collider.getBoundingBox();
+            Vector3 worldVel = toWorldSpace(moverRadius, velocity);
+            if (worldVel.X < 0) colliderBoundingBox.Min.X += worldVel.X;
+            else if (worldVel.X > 0) colliderBoundingBox.Max.X += worldVel.X;
+            if (worldVel.Y < 0) colliderBoundingBox.Min.Y += worldVel.Y;
+            else if (worldVel.Y > 0) colliderBoundingBox.Max.Y += worldVel.Y;
+            if (worldVel.Z < 0) colliderBoundingBox.Min.Z += worldVel.Z;
+            else if (worldVel.Z > 0) colliderBoundingBox.Max.Z += worldVel.Z;
 
-                    if (Vector3.Dot(N, Vector3.Normalize(velocity)) >= -0.005)
-                        continue;
+            List<Vector3> eSpaceVerts = new List<Vector3>();
+            bool convertedVerts = false;
+            foreach(ICollidable collidable in getCollidablesToCheck(collider, toWorldSpace(moverRadius, velocity)))    {
+                BoundingBox collidableBoundingBox = collidable.getBoundingBox();
+                collidableBoundingBox.Min -= boundingBoxPadding;
+                collidableBoundingBox.Max += boundingBoxPadding;
+                if (!collidableBoundingBox.Intersects(colliderBoundingBox) || collidable == collider) continue;
+                if(collidable is Brush) {
+                    Brush brush = (Brush)collidable;
+                    bool faceCollide = false;
+                    foreach (Face face in brush.faces) {
+                        if (faceCollide)
+                            break;
+                        convertedVerts = false;
 
-                    float t0, t1;
-                    bool embeddedInPlane = false;
-                    if (Vector3.Dot(N, velocity) != 0) {
-                        t0 = (-1 - signedDistance(N, basePoint, D)) / Vector3.Dot(N, velocity);
-                        t1 = ( 1 - signedDistance(N, basePoint, D)) / Vector3.Dot(N, velocity);
-                        //swap them so that t0 is smallest
-                        if (t0 > t1) {
-                            float temp = t1;
-                            t1 = t0;
-                            t0 = temp;
-                        }
+                        //find the normal of the face's plane in eSpace
+                        Microsoft.Xna.Framework.Plane helperPlane = new Microsoft.Xna.Framework.Plane(toESpace(moverRadius, face.plane.first), toESpace(moverRadius, face.plane.second), toESpace(moverRadius, face.plane.third));
+                        helperPlane.Normal = -helperPlane.Normal;
+                        Vector3 N = helperPlane.Normal;
+                        N.Normalize();
+                        float D = -helperPlane.D;
 
-                        if (t0 < 0 && t1 > 1)
-                            face.DiffuseColor = new Vector3(0, 1, 0);
-
-                        if (t0 > 1 || t1 < 0)
+                        if (Vector3.Dot(N, Vector3.Normalize(velocity)) >= -0.005)
                             continue;
-                    }
-                    else if (Math.Abs(signedDistance(N, basePoint, D)) < 1) {
-                        t0 = 0;
-                        t1 = 1;
-                        embeddedInPlane = true;
-                    }
-                    else  //in this case we can't collide with this face
-                        continue;
-                    
-                    if (!embeddedInPlane) {
-                        //now we find the plane intersection point
-                        //Vector3 planeIntersectionPoint = basePoint - N + t0 * velocity;
-                        Vector3 planeIntersectionPoint = basePoint - N + t0 * velocity;
 
-                        //project this onto the plane
-
-                        //clamp [t0, t1] to [0,1]
-                        if (t0 < 0) t0 = 0;
-                        if (t1 < 0) t1 = 0;
-                        if (t0 > 1) t0 = 1;
-                        if (t1 > 1) t1 = 1;
-
-                        //now we find if this point lies on the face
-
-                        if (MapEngine.pointOnFace(planeIntersectionPoint, eSpaceVerts, N)) {
-                            //float intersectionDistance = t0 * (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
-                            //NEED TO DO SOMETHING HERE--------------------------------------------------------------------------
-                            if(face.DiffuseColor == new Vector3(1,1,1))
-                                face.DiffuseColor = new Vector3(1, 0, 0);
-                            if (t0 < closestCollisionTime) {
-                                closestCollisionTime = t0;
-                                closestCollisionPoint = planeIntersectionPoint;
+                        float t0, t1;
+                        bool embeddedInPlane = false;
+                        if (Vector3.Dot(N, velocity) != 0) {
+                            t0 = (-1 - signedDistance(N, basePoint, D)) / Vector3.Dot(N, velocity);
+                            t1 = (1 - signedDistance(N, basePoint, D)) / Vector3.Dot(N, velocity);
+                            //swap them so that t0 is smallest
+                            if (t0 > t1) {
+                                float temp = t1;
+                                t1 = t0;
+                                t0 = temp;
                             }
-                            //return true;
+
+                            if (t0 < 0 && t1 > 1)
+                                face.DiffuseColor = new Vector3(0, 1, 0);
+
+                            if (t0 > 1 || t1 < 0)
+                                continue;
                         }
-                    }
-                    {  //do the "sweep test"
+                        else if (Math.Abs(signedDistance(N, basePoint, D)) < 1) {
+                            t0 = 0;
+                            t1 = 1;
+                            embeddedInPlane = true;
+                        }
+                        else  //in this case we can't collide with this face
+                            continue;
+
+                        if (!embeddedInPlane) {
+                            //now we find the plane intersection point
+                            //Vector3 planeIntersectionPoint = basePoint - N + t0 * velocity;
+                            Vector3 planeIntersectionPoint = basePoint - N + t0 * velocity;
+
+                            //project this onto the plane
+
+                            //clamp [t0, t1] to [0,1]
+                            if (t0 < 0) t0 = 0;
+                            if (t1 < 0) t1 = 0;
+                            if (t0 > 1) t0 = 1;
+                            if (t1 > 1) t1 = 1;
+
+                            //now we find if this point lies on the face
+                            eSpaceVerts.Clear();
+                            foreach (Vertex vert in face.vertices)
+                                eSpaceVerts.Add(toESpace(moverRadius, vert.position));
+                            convertedVerts = true;
+                            if (MapEngine.pointOnFace(planeIntersectionPoint, eSpaceVerts, N)) {
+                                //float intersectionDistance = t0 * (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
+                                if (face.DiffuseColor == new Vector3(1, 1, 1))
+                                    face.DiffuseColor = new Vector3(1, 0, 0);
+                                if (t0 < closestCollisionTime) {
+                                    closestCollisionTime = t0;
+                                    closestCollisionPoint = planeIntersectionPoint;
+                                    faceCollide = true;
+                                    continue;
+                                }
+                            }
+                        }
+                        if (!convertedVerts) {
+                            eSpaceVerts.Clear();
+                            foreach (Vertex vert in face.vertices)
+                                eSpaceVerts.Add(toESpace(moverRadius, vert.position));
+                            convertedVerts = true;
+                        }
+
+                        //do sweep tests
                         //sweep against the vertices
                         foreach (Vector3 p in eSpaceVerts) {
                             //calculate A, B and C that make up our quadratic equation
@@ -161,14 +276,14 @@ namespace Emergence {
                                 if (r1 > 0 && r1 < closestCollisionTime)
                                     root = r1;
                                 else if (r2 > 0 && r2 < closestCollisionTime)
-                                    root= r2;
-                                //NEED TO DO SOMETHING HERE--------------------------------------------------------------------------
+                                    root = r2;
                                 /* intersectionPoint = p;
                                  * intersectionDistance = x1 * (float)Math.Sqrt(Vector3.Dot( velocity, velocity ));
                                  */
                                 if (root != -1) {
                                     closestCollisionTime = root;
                                     closestCollisionPoint = p;
+                                    faceCollide = true;
                                 }
                             }
                         }
@@ -211,8 +326,42 @@ namespace Emergence {
                                     if (0 <= f0 && f0 <= 1) {
                                         closestCollisionTime = root;
                                         closestCollisionPoint = p1 + f0 * edge;
+                                        faceCollide = true;
                                     }
                                 }
+                            }
+                        }
+                        
+                    }
+                } // if brush
+                else {  //otherwise we need to boundingEllipsoid collisions
+                    continue;
+                    /* we cast a ray from the center of collider to the center of
+                     * collidable. if the collision time is closer (or sufficiently close)
+                     * for collidable then we're colliding
+                     */
+                    BoundingBox otherbb = collidable.getBoundingBox();
+                    Vector3 otherRadius = (otherbb.Max - otherbb.Min) * 0.5f,
+                            otherPos = otherbb.Min + otherRadius;
+
+                    //now convert everything otherESpace so that we can cast using BoundingSpheres
+                    Vector3 basePointInOtherESpace = toESpace(otherRadius, toWorldSpace(moverRadius, basePoint)),
+                            otherPointInOtherESPace = toESpace(otherRadius, otherPos);
+                    Ray r = new Ray(basePointInOtherESpace, Vector3.Normalize(otherPointInOtherESPace - basePointInOtherESpace));
+                    Nullable<float> dist = r.Intersects(new BoundingSphere(otherPointInOtherESPace, 1));
+                    if (dist != null) { //i don't even know what dist == null means in this context
+                        //find the collisionPoint in otherESpace
+                        Vector3 colPoint = r.Position + dist.Value * r.Direction;
+                        //convert it back to normal eSpace (of basePoint)
+                        colPoint = toESpace(moverRadius, toWorldSpace(otherRadius, colPoint));
+                        float colDist = Vector3.Distance(colPoint, basePoint);
+                        Console.WriteLine("colDist: " + colDist);
+                        //if the distance is < 1 + epsilon (the radius of the collider in eSpace) then we've collided
+                        if(colDist < 1 + 0.5)   {
+                            float t = colDist / (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
+                            if (t < closestCollisionTime) {
+                                closestCollisionTime = t;
+                                closestCollisionPoint = colPoint;
                             }
                         }
                     }
@@ -221,11 +370,11 @@ namespace Emergence {
             return new CollisionPackage(basePoint, velocity, closestCollisionTime < 1, closestCollisionPoint, closestCollisionTime * (float)Math.Sqrt(Vector3.Dot(velocity, velocity)));
         }
 
-        public Vector3 collideWithWorld(Vector3 moverRadius, Vector3 pos, Vector3 vel, int recursionDepth) {
+        public Vector3 collideWithWorld(Vector3 moverRadius, Vector3 pos, Vector3 vel, int recursionDepth, ICollidable collidable) {
             if (recursionDepth > 5)
                 return pos;
 
-            CollisionPackage collisionPackage = collides(moverRadius, pos, vel);
+            CollisionPackage collisionPackage = collides(moverRadius, pos, vel, collidable);
             if (!collisionPackage.collision)
                 return pos + vel;
 
@@ -250,16 +399,17 @@ namespace Emergence {
             if (Math.Sqrt(Vector3.Dot(newVelocityVector, newVelocityVector)) < 0.005)
                 return newBasePoint;
 
-            return collideWithWorld(moverRadius, newBasePoint, newVelocityVector, recursionDepth + 1);
+            return collideWithWorld(moverRadius, newBasePoint, newVelocityVector, recursionDepth + 1, collidable);
         }
 
-        public Vector3 applyMovement(GameTime gameTime, PlayerIndex pi, Vector3 velocity) {
+        public void applyMovement(GameTime gameTime, PlayerIndex pi, Vector3 velocity) {
             if (!core.clip)
-                return core.players[(int)pi].position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            return applyMovement(gameTime, core.players[(int)pi], velocity);
+                core.getPlayerForIndex(pi).position = core.getPlayerForIndex(pi).position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                applyMovement(gameTime, core.getPlayerForIndex(pi), velocity);
         }
 
-        public Vector3 applyMovement(GameTime gameTime, Agent player, Vector3 velocity) {
+        public void applyMovement(GameTime gameTime, Agent player, Vector3 velocity) {
             BoundingBox playerBoundingBox = player.getBoundingBox();
 
             //update the persistentVelocity
@@ -283,20 +433,17 @@ namespace Emergence {
             Vector3 basePoint = toESpace(playerRadius, center(playerBoundingBox));
             Vector3 evelocity = toESpace(playerRadius, retMove);
 
-            Vector3 pos = collideWithWorld(playerRadius, basePoint, evelocity, 0);
+            Vector3 pos = collideWithWorld(playerRadius, basePoint, evelocity, 0, player);
 
             Vector3 eSpacePersistent = toESpace(playerRadius, pv.persistentVelocity);
-            Vector3 finalPos = collideWithWorld(playerRadius, pos, eSpacePersistent, 0);
+            Vector3 finalPos = collideWithWorld(playerRadius, pos, eSpacePersistent, 0, player);
             //Vector3 finalPos = collideWithWorld(playerRadius, pos, Vector3.Zero, 0);
 
             //check if we're on the floor
             //this happens if we were moving down and the velocity vector was modified
             Vector3 eSpaceActualMove = finalPos - pos;
-            //if (Vector3.Distance(finalPos, pos) == 0 || Math.Abs(Vector3.Dot(Vector3.Normalize(pos-finalPos), Vector3.Up)) < 0.5) {
             if(eSpacePersistent.Y < 0 && eSpaceActualMove.Y - 0.005 > eSpacePersistent.Y)    {
-                //Console.WriteLine(eSpacePersistent.Y + " " + eSpaceActualMove.Y);
                 pv.persistentVelocity.Y = 0;
-                //Console.WriteLine(floor++);
                 finalPos = pos;
             }
             if (eSpacePersistent.Y > 0 && eSpaceActualMove.Y + 0.005 < eSpacePersistent.Y)
@@ -304,9 +451,7 @@ namespace Emergence {
                 pv.persistentVelocity.Y = -0.005f;
             }
 
-            //if (Math.Abs(finalPos.X - pos.X) > 0.005 || Math.Abs(finalPos.Z - pos.Z) > 0.005)finalPos = pos;
-
-            return toWorldSpace(playerRadius, finalPos) - offset;
+            player.position = toWorldSpace(playerRadius, finalPos) - offset;
         }
 
         public class HitScan {
