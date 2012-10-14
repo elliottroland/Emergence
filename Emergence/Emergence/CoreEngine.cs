@@ -17,10 +17,8 @@ using Emergence.Render;
 using Emergence.Pickup;
 using Emergence.AI;
 
-using Nuclex.Fonts;
-using Nuclex.Graphics;
-
-namespace Emergence {
+namespace Emergence
+{
 
     public struct SelectedStruct
     {
@@ -40,7 +38,8 @@ namespace Emergence {
         ControlsEdit, PauseMenu, Null
     }
 
-    public class CoreEngine : Microsoft.Xna.Framework.Game {
+    public class CoreEngine : Microsoft.Xna.Framework.Game
+    {
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
 
@@ -74,7 +73,8 @@ namespace Emergence {
         public Player[] players;
         public GameState currentState = GameState.MenuScreen;
 
-        public CoreEngine() {
+        public CoreEngine()
+        {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 576;
@@ -87,17 +87,19 @@ namespace Emergence {
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        protected override void Initialize() {
-            renderEngine = new RenderEngine(this, RenderEngine.Layout.ONE);
+        protected override void Initialize()
+        {
+            //renderEngine = new RenderEngine(this, RenderEngine.Layout.ONE);
             inputEngine = new InputEngine(this);
             physicsEngine = new PhysicsEngine(this);
             aiEngine = new AIEngine(this);
 
             pickupEngine = new PickUpEngine();
 
-            players = new Player[1];
+            players = new Player[0];
+            /*players = new Player[3];
             players[0] = new Player(this, PlayerIndex.One, Vector3.Zero);
-            /*players[1] = new Player(this, PlayerIndex.Two, Vector3.Zero);
+            players[1] = new Player(this, PlayerIndex.Two, Vector3.Zero);
             players[2] = new Player(this, PlayerIndex.Three, new Vector3(100, 0, 0));*/
 
             //call the super
@@ -108,10 +110,11 @@ namespace Emergence {
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent() {
+        protected override void LoadContent()
+        {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
 
             //load the trextures
             textures = new Dictionary<string, Texture2D>();
@@ -126,9 +129,10 @@ namespace Emergence {
             using (System.IO.StreamReader sr = System.IO.File.OpenText("Content/textures/texturelist.txt"))
             {
                 string tex = "";
-                while((tex = sr.ReadLine()) != null) {
+                while ((tex = sr.ReadLine()) != null)
+                {
                     tex = tex.Trim();
-                    if(tex.Length > 0 && !tex.StartsWith("//"))
+                    if (tex.Length > 0 && !tex.StartsWith("//"))
                         textures.Add(tex, Content.Load<Texture2D>("textures/" + tex));
                 }
             }
@@ -141,9 +145,9 @@ namespace Emergence {
             //load shader
             lighting = Content.Load<Effect>("PointLighting");
 
-                  
+
             menuEngine = new MenuEngine(this);
-           
+
 
             debugFont = Content.Load<SpriteFont>("debugFont");
             debugSphere = Content.Load<Model>("SphereHighPoly");
@@ -151,11 +155,9 @@ namespace Emergence {
             ammoUp = Content.Load<Model>("bullets");
             arrow = Content.Load<Model>("arrow");
 
-            loadMap("Content/maps/test2.map");
+            //loadMap("Content/maps/test2.map");
+            //startGame("test2", new bool[] { true, false, true, false });
 
-            //once the map is loaded the player has a position, so take it for the test agent
-            /*for (int i = 0; i < 10; ++i)
-                aiEngine.agents.Add(new AIAgent(this, players[0].position));*/
 
         }
 
@@ -163,19 +165,61 @@ namespace Emergence {
         {
             mapEngine = new MapEngine(this, mapFile, textures);
             aiEngine.generateAIMesh();
+            physicsEngine.generateCollisionGrid(500);
+        }
+
+        public void startGame(string mapName, bool[] playersPlaying)
+        {
+
+            loadMap("Content/maps/" + mapName + ".map");
+
+
+            List<PlayerIndex> playerIndicesPlaying = new List<PlayerIndex>();
+            for (int i = 0; i < playersPlaying.Length; ++i)
+                if (playersPlaying[i])
+                    playerIndicesPlaying.Add(PlayerIndex.One + i);
+            players = new Player[playerIndicesPlaying.Count];
+            PlayerIndex[] playerIndices = new PlayerIndex[playerIndicesPlaying.Count];
+            for (int i = 0; i < players.Length; ++i)
+            {
+                players[i] = new Player(this, playerIndicesPlaying[i], mapEngine.playerPoss[aiEngine.random.Next(mapEngine.playerPoss.Count)]);
+                playerIndices[i] = playerIndicesPlaying[i];
+            }
+            renderEngine = new RenderEngine(this, playerIndices);
+
+            //once the map is loaded the player has a position, so take it for the test agent
+            for (int i = 0; i < 10; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
+
+            currentState = GameState.GameScreen;
+        }
+
+        public Player getPlayerForIndex(PlayerIndex pi)
+        {
+            for (int i = 0; i < players.Length; ++i)
+                if (players[i].playerIndex == pi)
+                    return players[i];
+            return null;
         }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
         /// </summary>
-        protected override void UnloadContent() {
-            
+        protected override void UnloadContent()
+        {
+
         }
 
-        protected override void Update(GameTime gameTime) {
+        public IEnumerable<ICollidable> allCollidables()
+        {
+            foreach (Brush b in mapEngine.brushes)
+                yield return b;
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
             // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Home)||GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
+            if (Keyboard.GetState().IsKeyDown(Keys.Home) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
                 this.Exit();
 
             inputEngine.Update();
@@ -190,13 +234,14 @@ namespace Emergence {
                     player.Update(gameTime);
 
                 aiEngine.Update(gameTime);
-            
+
             }
 
             base.Update(gameTime);
         }
 
-        public void printList(VertexPositionNormalTexture[] pts) {
+        public void printList(VertexPositionNormalTexture[] pts)
+        {
             foreach (VertexPositionNormalTexture p in pts)
                 Console.WriteLine(p.Position);
             Console.WriteLine("\n");
@@ -206,7 +251,8 @@ namespace Emergence {
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime) {
+        protected override void Draw(GameTime gameTime)
+        {
             //GraphicsDevice.Clear(Color.DarkGray);
             if (currentState == GameState.GameScreen)
             {
@@ -219,12 +265,15 @@ namespace Emergence {
                 menuEngine.Draw(gameTime);
             }
 
+            DrawStringDebug("" + 1000 / gameTime.ElapsedGameTime.Milliseconds);
+
             base.Draw(gameTime);
         }
 
         //Debugging methods
 
-        public Texture2D GenTextureDebug(String text) {
+        public Texture2D GenTextureDebug(String text)
+        {
 
             int w = (int)debugFont.MeasureString(text).X;
             int h = (int)debugFont.MeasureString(text).Y;
@@ -243,7 +292,7 @@ namespace Emergence {
 
             GraphicsDevice.SetRenderTarget(0, null);
             return render.GetTexture();
-        
+
         }
 
         public void DrawTextureDebug(Texture2D text)

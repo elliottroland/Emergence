@@ -7,11 +7,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\CogAttempt.xnb</Output>
-      <Time>2012-10-13T23:21:45.2129124+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\CogAttempt.xnb</Output>
+      <Time>2012-10-13T23:52:05.5703332+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\CogAttempt_0.xml</Key>
-        <Value>2012-10-13T23:23:34.1321422+02:00</Value>
+        <Value>2012-10-14T18:25:56.1450652+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -20,11 +20,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullets.xnb</Output>
-      <Time>2012-10-13T23:21:45.2289133+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullets.xnb</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\bullets_0.xml</Key>
-        <Value>2012-10-13T23:23:35.5572237+02:00</Value>
+        <Value>2012-10-14T18:25:57.5963209+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -33,11 +33,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\arrow.xnb</Output>
-      <Time>2012-10-13T23:21:45.2259131+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\arrow.xnb</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\arrow_0.xml</Key>
-        <Value>2012-10-13T23:23:36.6342853+02:00</Value>
+        <Value>2012-10-14T18:25:58.6574541+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -46,11 +46,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Medicross.xnb</Output>
-      <Time>2012-10-13T23:21:45.2189127+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Medicross.xnb</Output>
+      <Time>2012-10-13T23:52:05.5859333+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Medicross_0.xml</Key>
-        <Value>2012-10-13T23:23:37.7873513+02:00</Value>
+        <Value>2012-10-14T18:25:59.8590314+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -59,11 +59,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\SphereHighPoly.xnb</Output>
-      <Time>2012-10-13T23:21:45.2249131+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\SphereHighPoly.xnb</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\SphereHighPoly_0.xml</Key>
-        <Value>2012-10-13T23:23:39.4634471+02:00</Value>
+        <Value>2012-10-14T18:26:01.4663361+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -72,8 +72,8 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\debugFont.xnb</Output>
-      <Time>2012-10-13T23:42:21.133603+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\debugFont.xnb</Output>
+      <Time>2012-10-13T23:53:46.6521889+02:00</Time>
     </Item>
     <Item>
       <Source>menuFont.spritefont</Source>
@@ -81,8 +81,8 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>NuclexVectorFontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\menuFont.xnb</Output>
-      <Time>2012-10-13T23:21:45.2539147+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\menuFont.xnb</Output>
+      <Time>2012-10-13T23:52:05.695134+02:00</Time>
     </Item>
     <Item>
       <Source>Lighting.fx</Source>
@@ -90,8 +90,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb</Output>
-      <Time>2012-10-13T23:21:45.2139124+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\Lighting.xnb</Output>
+      <Time>2012-10-13T23:52:05.5703332+02:00</Time>
     </Item>
     <Item>
       <Source>PointLighting.fx</Source>
@@ -99,8 +99,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\PointLighting.xnb</Output>
-      <Time>2012-10-13T23:21:45.2189127+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\PointLighting.xnb</Output>
+      <Time>2012-10-13T23:52:05.6639338+02:00</Time>
     </Item>
     <Item>
       <Source>textures\common\caulk.tga</Source>
@@ -108,8 +108,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\common\caulk.xnb</Output>
-      <Time>2012-10-13T23:21:45.3679212+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\common\caulk.xnb</Output>
+      <Time>2012-10-13T23:52:05.8823352+02:00</Time>
     </Item>
     <Item>
       <Source>textures\base_wall\atech1_f.tga</Source>
@@ -117,8 +117,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_wall\atech1_f.xnb</Output>
-      <Time>2012-10-13T23:21:45.3669212+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_wall\atech1_f.xnb</Output>
+      <Time>2012-10-13T23:52:05.851135+02:00</Time>
     </Item>
     <Item>
       <Source>textures\ctf\clangdark.tga</Source>
@@ -126,8 +126,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\clangdark.xnb</Output>
-      <Time>2012-10-13T23:21:45.3729215+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\clangdark.xnb</Output>
+      <Time>2012-10-13T23:52:05.8979353+02:00</Time>
     </Item>
     <Item>
       <Source>textures\ctf\metal_b.tga</Source>
@@ -135,8 +135,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\metal_b.xnb</Output>
-      <Time>2012-10-13T23:21:45.3759217+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\metal_b.xnb</Output>
+      <Time>2012-10-13T23:52:05.8979353+02:00</Time>
     </Item>
     <Item>
       <Source>textures\ctf\pittedrust3stripes_fix.tga</Source>
@@ -144,8 +144,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb</Output>
-      <Time>2012-10-13T23:21:45.381922+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\ctf\pittedrust3stripes_fix.xnb</Output>
+      <Time>2012-10-13T23:52:05.9291355+02:00</Time>
     </Item>
     <Item>
       <Source>textures\sfx\xmetalfloor_wall_5b.tga</Source>
@@ -153,8 +153,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb</Output>
-      <Time>2012-10-13T23:21:45.4659268+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\sfx\xmetalfloor_wall_5b.xnb</Output>
+      <Time>2012-10-13T23:52:06.0695364+02:00</Time>
     </Item>
     <Item>
       <Source>textures\base_floor\pool_side2.tga</Source>
@@ -162,8 +162,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_floor\pool_side2.xnb</Output>
-      <Time>2012-10-13T23:21:45.3619209+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\base_floor\pool_side2.xnb</Output>
+      <Time>2012-10-13T23:52:05.851135+02:00</Time>
     </Item>
     <Item>
       <Source>line.png</Source>
@@ -171,8 +171,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\line.xnb</Output>
-      <Time>2012-10-13T23:21:45.2299133+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\line.xnb</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
     </Item>
     <Item>
       <Source>bullet.jpg</Source>
@@ -180,8 +180,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb</Output>
-      <Time>2012-10-13T23:21:45.2259131+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\bullet.xnb</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_hex.tga</Source>
@@ -189,8 +189,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_hex.xnb</Output>
-      <Time>2012-10-13T23:21:45.4229244+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_hex.xnb</Output>
+      <Time>2012-10-13T23:52:05.9759358+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_scaff.tga</Source>
@@ -198,8 +198,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff.xnb</Output>
-      <Time>2012-10-13T23:21:45.4289247+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff.xnb</Output>
+      <Time>2012-10-13T23:52:06.007136+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_scaff2.tga</Source>
@@ -207,8 +207,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff2.xnb</Output>
-      <Time>2012-10-13T23:21:45.4299248+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff2.xnb</Output>
+      <Time>2012-10-13T23:52:06.007136+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\wall_beam.tga</Source>
@@ -216,8 +216,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_beam.xnb</Output>
-      <Time>2012-10-13T23:21:45.4469258+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_beam.xnb</Output>
+      <Time>2012-10-13T23:52:06.0383362+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_tri.tga</Source>
@@ -225,8 +225,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_tri.xnb</Output>
-      <Time>2012-10-13T23:21:45.433925+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_tri.xnb</Output>
+      <Time>2012-10-13T23:52:06.0227361+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_scaff3.tga</Source>
@@ -234,8 +234,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff3.xnb</Output>
-      <Time>2012-10-13T23:21:45.4319249+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff3.xnb</Output>
+      <Time>2012-10-13T23:52:06.007136+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_metal.tga</Source>
@@ -243,8 +243,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal.xnb</Output>
-      <Time>2012-10-13T23:21:45.4239244+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal.xnb</Output>
+      <Time>2012-10-13T23:52:05.9759358+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_metal2.tga</Source>
@@ -252,8 +252,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal2.xnb</Output>
-      <Time>2012-10-13T23:21:45.4259246+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal2.xnb</Output>
+      <Time>2012-10-13T23:52:06.007136+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_metal3.tga</Source>
@@ -261,8 +261,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal3.xnb</Output>
-      <Time>2012-10-13T23:21:45.4269246+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_metal3.xnb</Output>
+      <Time>2012-10-13T23:52:06.007136+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\trim_orange.tga</Source>
@@ -270,8 +270,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_orange.xnb</Output>
-      <Time>2012-10-13T23:21:45.4379252+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_orange.xnb</Output>
+      <Time>2012-10-13T23:52:06.0227361+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\wall_brown.tga</Source>
@@ -279,8 +279,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_brown.xnb</Output>
-      <Time>2012-10-13T23:21:45.4539262+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_brown.xnb</Output>
+      <Time>2012-10-13T23:52:06.0539363+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\wall_brown2.tga</Source>
@@ -288,8 +288,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_brown2.xnb</Output>
-      <Time>2012-10-13T23:21:45.4609266+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\wall_brown2.xnb</Output>
+      <Time>2012-10-13T23:52:06.0539363+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\floor_scaff4.tga</Source>
@@ -297,8 +297,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff4.xnb</Output>
-      <Time>2012-10-13T23:21:45.432925+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\floor_scaff4.xnb</Output>
+      <Time>2012-10-13T23:52:06.0227361+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\trim_blue.tga</Source>
@@ -306,8 +306,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_blue.xnb</Output>
-      <Time>2012-10-13T23:21:45.4349251+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_blue.xnb</Output>
+      <Time>2012-10-13T23:52:06.0227361+02:00</Time>
     </Item>
     <Item>
       <Source>textures\emergence\trim_green.tga</Source>
@@ -315,43 +315,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_green.xnb</Output>
-      <Time>2012-10-13T23:21:45.4369252+02:00</Time>
-    </Item>
-    <Item>
-      <Source>CogAttempt.FBX</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\CogAttempt_0.xml</Output>
-      <Time>2012-10-13T23:21:45.2129124+02:00</Time>
-    </Item>
-    <Item>
-      <Source>bullets.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\bullets_0.xml</Output>
-      <Time>2012-10-13T23:21:45.2289133+02:00</Time>
-    </Item>
-    <Item>
-      <Source>arrow.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\arrow_0.xml</Output>
-      <Time>2012-10-13T23:21:45.2259131+02:00</Time>
-    </Item>
-    <Item>
-      <Source>Medicross.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\Medicross_0.xml</Output>
-      <Time>2012-10-13T23:21:45.2189127+02:00</Time>
-    </Item>
-    <Item>
-      <Source>SphereHighPoly.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\SphereHighPoly_0.xml</Output>
-      <Time>2012-10-13T23:21:45.2249131+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\textures\emergence\trim_green.xnb</Output>
+      <Time>2012-10-13T23:52:06.0227361+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\background2.tga</Source>
@@ -359,8 +324,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\background2.xnb</Output>
-      <Time>2012-10-13T23:28:04.7676217+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\background2.xnb</Output>
+      <Time>2012-10-13T22:31:55.0498848+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\EmergenceIntro2.tga</Source>
@@ -368,8 +333,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\EmergenceIntro2.xnb</Output>
-      <Time>2012-10-13T23:28:04.7716219+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\EmergenceIntro2.xnb</Output>
+      <Time>2012-10-13T22:34:01.7861337+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\SelectionWheel2.tga</Source>
@@ -377,8 +342,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\SelectionWheel2.xnb</Output>
-      <Time>2012-10-13T23:28:04.7806224+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\SelectionWheel2.xnb</Output>
+      <Time>2012-10-13T23:01:10.8953134+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\background.png</Source>
@@ -386,8 +351,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\background.xnb</Output>
-      <Time>2012-10-13T23:28:04.7636214+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\background.xnb</Output>
+      <Time>2012-10-13T18:07:11.505398+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\EmergenceIntro.png</Source>
@@ -395,8 +360,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\EmergenceIntro.xnb</Output>
-      <Time>2012-10-13T23:28:04.7686217+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\EmergenceIntro.xnb</Output>
+      <Time>2012-10-13T18:07:11.5404+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\LoadTex.png</Source>
@@ -404,8 +369,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\LoadTex.xnb</Output>
-      <Time>2012-10-13T23:28:04.7726219+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\LoadTex.xnb</Output>
+      <Time>2012-10-13T18:07:11.5584011+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\menuLight.png</Source>
@@ -413,8 +378,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\menuLight.xnb</Output>
-      <Time>2012-10-13T23:28:04.7746221+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\menuLight.xnb</Output>
+      <Time>2012-10-13T18:07:11.5774022+02:00</Time>
     </Item>
     <Item>
       <Source>MenuTextures\SelectionWheel.png</Source>
@@ -422,23 +387,247 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\SelectionWheel.xnb</Output>
-      <Time>2012-10-13T23:28:04.7766222+02:00</Time>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\SelectionWheel.xnb</Output>
+      <Time>2012-10-13T18:07:11.5944031+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\bumper_left.png</Source>
+      <Name>MenuTextures\ButtonTextures\bumper_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\bumper_left.xnb</Output>
+      <Time>2012-10-14T12:40:55.6511695+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\bumper_right.png</Source>
+      <Name>MenuTextures\ButtonTextures\bumper_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\bumper_right.xnb</Output>
+      <Time>2012-10-14T12:40:55.6531696+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_a.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_a</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_a.xnb</Output>
+      <Time>2012-10-14T12:40:55.6551697+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_b.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_b.xnb</Output>
+      <Time>2012-10-14T12:40:55.6571698+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_back.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_back.xnb</Output>
+      <Time>2012-10-14T12:40:55.6581699+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_start.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_start</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_start.xnb</Output>
+      <Time>2012-10-14T12:40:55.66017+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_x.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_x</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_x.xnb</Output>
+      <Time>2012-10-14T12:40:55.6921718+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\button_y.png</Source>
+      <Name>MenuTextures\ButtonTextures\button_y</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\button_y.xnb</Output>
+      <Time>2012-10-14T12:40:55.694172+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\dpad_down.png</Source>
+      <Name>MenuTextures\ButtonTextures\dpad_down</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\dpad_down.xnb</Output>
+      <Time>2012-10-14T12:40:55.6961721+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\dpad_left.png</Source>
+      <Name>MenuTextures\ButtonTextures\dpad_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\dpad_left.xnb</Output>
+      <Time>2012-10-14T12:40:55.6971721+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\dpad_right.png</Source>
+      <Name>MenuTextures\ButtonTextures\dpad_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\dpad_right.xnb</Output>
+      <Time>2012-10-14T12:40:55.6991722+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\dpad_up.png</Source>
+      <Name>MenuTextures\ButtonTextures\dpad_up</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\dpad_up.xnb</Output>
+      <Time>2012-10-14T12:40:55.7001723+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\stick_left.png</Source>
+      <Name>MenuTextures\ButtonTextures\stick_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\stick_left.xnb</Output>
+      <Time>2012-10-14T12:40:55.7261738+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\stick_right.png</Source>
+      <Name>MenuTextures\ButtonTextures\stick_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\stick_right.xnb</Output>
+      <Time>2012-10-14T12:40:55.7271738+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\trigger_left.png</Source>
+      <Name>MenuTextures\ButtonTextures\trigger_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\trigger_left.xnb</Output>
+      <Time>2012-10-14T12:40:55.729174+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\ButtonTextures\trigger_right.png</Source>
+      <Name>MenuTextures\ButtonTextures\trigger_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\ButtonTextures\trigger_right.xnb</Output>
+      <Time>2012-10-14T12:40:55.730174+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\gameIcon.png</Source>
+      <Name>MenuTextures\gameIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\gameIcon.xnb</Output>
+      <Time>2012-10-14T12:12:13.4416647+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\gameThumbnail.png</Source>
+      <Name>MenuTextures\gameThumbnail</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\gameThumbnail.xnb</Output>
+      <Time>2012-10-14T12:20:04.4916073+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\splitScreenWheel.png</Source>
+      <Name>MenuTextures\splitScreenWheel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\splitScreenWheel.xnb</Output>
+      <Time>2012-10-14T15:50:37.6942479+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\line.png</Source>
+      <Name>MenuTextures\line</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\line.xnb</Output>
+      <Time>2012-10-14T14:06:49.7969698+02:00</Time>
+    </Item>
+    <Item>
+      <Source>MenuTextures\loadWheel.png</Source>
+      <Name>MenuTextures\loadWheel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\MenuTextures\loadWheel.xnb</Output>
+      <Time>2012-10-14T15:48:07.7885581+02:00</Time>
+    </Item>
+    <Item>
+      <Source>CogAttempt.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\CogAttempt_0.xml</Output>
+      <Time>2012-10-13T23:52:05.5703332+02:00</Time>
+    </Item>
+    <Item>
+      <Source>bullets.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\bullets_0.xml</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
+    </Item>
+    <Item>
+      <Source>arrow.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\arrow_0.xml</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Medicross.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Medicross_0.xml</Output>
+      <Time>2012-10-13T23:52:05.5859333+02:00</Time>
+    </Item>
+    <Item>
+      <Source>SphereHighPoly.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\SphereHighPoly_0.xml</Output>
+      <Time>2012-10-13T23:52:05.6795339+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
-        <Key>C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Nuclex\Nuclex.Fonts.Content.TrueTypeImporter.dll</Key>
-        <Value>2012-10-13T23:21:45.5159297+02:00</Value>
+        <Key>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Nuclex\Nuclex.Fonts.Content.TrueTypeImporter.dll</Key>
+        <Value>2012-10-13T23:52:06.1319368+02:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
@@ -466,7 +655,7 @@
       </Assembly>
       <Assembly>
         <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2012-03-16T06:31:52.8766667+02:00</Value>
+        <Value>2012-01-15T16:06:41.3561066+02:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

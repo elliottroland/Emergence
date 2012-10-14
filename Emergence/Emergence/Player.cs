@@ -74,7 +74,7 @@ namespace Emergence
 
             //the velocity given to the physics engine is but a request for movement.
             //the final position is decided by that engine, taking into account gravity and collision detection/response
-            position = core.physicsEngine.applyMovement(gameTime, playerIndex, velocity + jumpVelocity);
+            core.physicsEngine.applyMovement(gameTime, playerIndex, velocity + jumpVelocity);
 
             //update all bullet positions
             for (int i = bullets.Count - 1; i >= 0; --i) {
@@ -85,6 +85,8 @@ namespace Emergence
                     bullets.Remove(bullets[i]);
 
             }
+
+            core.physicsEngine.updateCollisionCellsFor(this);
         }
     }
 }

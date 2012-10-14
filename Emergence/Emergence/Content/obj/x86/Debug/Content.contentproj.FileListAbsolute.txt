@@ -12,3 +12,5 @@ G:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.
 C:\Users\bdrmun002\Desktop\Emergence+with+AI+Mesh+4\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Muneeb\Desktop\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\bdrmun002\Desktop\test\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+H:\Emergence\Emergence\Emergence\Content\obj\x86\Debug\ResolveAssemblyReference.cache

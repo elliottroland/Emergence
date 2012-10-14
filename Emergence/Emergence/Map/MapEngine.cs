@@ -28,6 +28,7 @@ namespace Emergence.Map {
         public Dictionary<String, Texture2D> textures;
         public List<Brush> brushes;
         public List<Light> lights;
+        public List<Vector3> playerPoss;
         CoreEngine core;
 
         public MapEngine(CoreEngine c, String filename, Dictionary<String, Texture2D> textures) {
@@ -35,7 +36,7 @@ namespace Emergence.Map {
             this.textures = textures;
             brushes = new List<Brush>();
             lights = new List<Light>();
-            List<Vector3> playerPoss = new List<Vector3>();
+            playerPoss = new List<Vector3>();
 
             //load the map
             using (System.IO.StreamReader sr = System.IO.File.OpenText(filename)) {
@@ -130,12 +131,12 @@ namespace Emergence.Map {
                 }
             }
 
-            if (playerPoss.Count > 0) {
+            /*if (playerPoss.Count > 0) {
                 core.players = new Player[playerPoss.Count];
                 for (int i = 0; i < core.players.Length; i++)
                     core.players[i] = new Player(core, PlayerIndex.One + i, playerPoss[i]);
                 core.renderEngine = new RenderEngine(core, RenderEngine.Layout.ONE + (playerPoss.Count - 1));
-            }
+            }*/
 
             //Send Lights to shader
             Vector3[] poses = new Vector3[lights.Count];

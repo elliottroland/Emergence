@@ -1,2 +1,4 @@
 C:\Users\bdrmun002\Documents\Visual Studio 2008\Projects\Emergence\Emergence\Emergence\Content\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
 C:\Users\Kevin\Desktop\Emergence_muneeb\Emergence\Emergence\Emergence\Content\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+C:\Users\bdrmun002\Desktop\test\Emergence\Emergence\Emergence\Content\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+H:\Emergence\Emergence\Emergence\Content\obj\Xbox 360\Debug\ResolveAssemblyReference.cache

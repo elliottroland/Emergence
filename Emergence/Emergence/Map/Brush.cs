@@ -5,15 +5,17 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Emergence.Map {
-    public class Brush {
+    public class Brush : ICollidable {
         public List<Plane> planes;
         public List<Face> faces;
         public int verts = 0;
         public BoundingBox boundingBox;
         public bool colliding = false;
+        protected List<CollisionGridCell> collisionCells;
 
         public Brush() {
             planes = new List<Plane>();
+            collisionCells = new List<CollisionGridCell>();
         }
 
         public void generateFaces() {
@@ -85,6 +87,18 @@ namespace Emergence.Map {
             //p = -d1 * ( n2.Cross ( n3 ) ) – d2 * ( n3.Cross ( n1 ) ) – d3 * ( n1.Cross ( n2 ) ) / denom;
             Vertex v = new Vertex(Vector3.Multiply(Vector3.Multiply(Vector3.Cross(n2, n3), -d1) + Vector3.Multiply(Vector3.Cross(n3,n1), -d2) + Vector3.Multiply(Vector3.Cross(n1, n2), -d3), 1/denom));
             return v;
+        }
+
+        List<CollisionGridCell> ICollidable.getCollisionCells() {
+            return collisionCells;
+        }
+
+        void ICollidable.setCollisionCells(List<CollisionGridCell> cells) {
+            collisionCells = cells;
+        }
+
+        BoundingBox ICollidable.getBoundingBox() {
+            return boundingBox;
         }
     }
 }

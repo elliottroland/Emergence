@@ -47,12 +47,19 @@ namespace Emergence.Render
 
         Matrix [] cameras;
 
-        public RenderEngine(CoreEngine c, Layout l)
+        Dictionary<PlayerIndex, int> playerMap;
+
+        public RenderEngine(CoreEngine c, PlayerIndex[] players)
         {
             core = c;
+            Layout l = Layout.ONE + (players.Length - 1);
             curLayout = l;
             ports = new Viewport[(int)l];
             Viewport defaultView = core.GraphicsDevice.Viewport;
+            playerMap = new Dictionary<PlayerIndex, int>();
+            int index = 0;
+            foreach (PlayerIndex pi in players)
+                playerMap.Add(pi, index++);
 
             cameras = new Matrix[(int)l];
 
@@ -126,8 +133,8 @@ namespace Emergence.Render
         }*/
 
         public void updateCameraForPlayer(PlayerIndex pi)   {
-            Player p = core.players[(int)pi];
-            cameras[(int)pi] = Matrix.CreateLookAt(p.getEyePosition(), p.getEyePosition() + p.getDirectionVector(), Vector3.Up);
+            Player p = core.players[playerMap[pi]];
+            cameras[playerMap[pi]] = Matrix.CreateLookAt(p.getEyePosition(), p.getEyePosition() + p.getDirectionVector(), Vector3.Up);
         }
 
         public void drawLine(Vector3 a, Vector3 b, Vector3 colour)
@@ -211,9 +218,9 @@ namespace Emergence.Render
                 //Draw AI info
                 //----------------------------------------------------------------------------------------------------
 
-                basicEffect.Begin();
+                //basicEffect.Begin();
 
-                Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
+                /*Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
                 Vector3 renderLift = new Vector3(0, AIEngine.nodeRenderHeight, 0);
                 foreach (MeshNode m in core.aiEngine.mesh) {
                     VertexPositionColor[] line = new VertexPositionColor[2];
@@ -230,9 +237,28 @@ namespace Emergence.Render
                         pass.End();
 
                     }
-                }
-                basicEffect.End();
-                /*
+                }*/
+
+                basicEffect.Begin();
+                //draw the collision grid
+                /*for(int k = 0; k < core.physicsEngine.grid.GetLength(2); k++)
+                    for (int j = 0; j < core.physicsEngine.grid.GetLength(1); j++)
+                        for (int i = 0; i < core.physicsEngine.grid.GetLength(0); i++) {
+                            if (!core.physicsEngine.grid[i, j, k].elements.Contains(core.getPlayerForIndex(PlayerIndex.One)))
+                                continue;
+                            Vector3 center = new Vector3((i + 0.5f) * core.physicsEngine.cellSize,
+                                                         (j + 0.5f) * core.physicsEngine.cellSize,
+                                                         (k + 0.5f) * core.physicsEngine.cellSize);
+                            drawLine(new Vector3(i * core.physicsEngine.cellSize, j * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset,
+                                new Vector3((i + 1) * core.physicsEngine.cellSize, j * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset, new Vector3(0, 1, 0));
+                            drawLine(new Vector3(i * core.physicsEngine.cellSize, j * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset,
+                                new Vector3(i * core.physicsEngine.cellSize, j * core.physicsEngine.cellSize, (k + 1) * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset, new Vector3(0, 1, 0));
+                            drawLine(new Vector3(i * core.physicsEngine.cellSize, j * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset,
+                                new Vector3(i * core.physicsEngine.cellSize, (j + 1) * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset, new Vector3(0, 1, 0));
+                        }*/
+
+               // basicEffect.End();
+
                 //draw the ai agents
                 foreach (AIAgent a in core.aiEngine.agents)
                 {
@@ -268,7 +294,7 @@ namespace Emergence.Render
                     }
                 }
 
-                basicEffect.End();*/
+                basicEffect.End();
 
                 //Draw item spawner locations
                 //----------------------------------------------------------------------------------------------------
