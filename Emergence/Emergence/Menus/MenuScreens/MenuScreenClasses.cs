@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -15,9 +15,49 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Emergence
 {
+    public class LoadScreen : MenuScreen
+    {
+        float wheelRot = 0;
+        public LoadScreen(MenuEngine m, CoreEngine g)
+        {
+            coreEngine = g;
+            menuEngine = m;
+            type = "Title";
+
+        }
+
+
+        public override MenuScreen Update(GameTime time)
+        {
+            Console.WriteLine("Updating loadscreen");
+            return this;
+        }
+        public override void Draw()
+        {
+            //Draw Backgrounds           
+            //Console.WriteLine(background.Width);
+            coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
+           
+            coreEngine.spriteBatch.Draw(selectWheel, selectWheelPos, new Rectangle(0, 0, selectWheel.Width, selectWheel.Height),
+                Color.White, wheelRot+=0.1f, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
+                0.85f, SpriteEffects.None, 0);
+
+         
+            coreEngine.spriteBatch.End();
+
+
+
+        }
+    }
+
+
+
+
     //----------------------------------------------------------------------------------
     public class TitleScreen : MenuScreen
     {
+
 
 
         Vector2 titlePos = new Vector2(100, 100);
@@ -39,7 +79,7 @@ namespace Emergence
             coreEngine = g;
             menuEngine = m;
             type = "Title";
-            
+
         }
 
 
@@ -109,7 +149,7 @@ namespace Emergence
             menuItems.Add(new MenuItem("Main Menu", MenuState.Null));
             menuItems.Add(new MenuItem("Single Player", MenuState.SinglePlayer));
             menuItems.Add(new MenuItem("Split Screen", MenuState.SplitScreen));
-            menuItems.Add(new MenuItem("Options", MenuState.Options));
+            //menuItems.Add(new MenuItem("Options", MenuState.Options));
             menuItems.Add(new MenuItem("Exit", MenuState.Exit));
 
         }
@@ -133,7 +173,7 @@ namespace Emergence
                 MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
                 if (temp.label == "Single Player") { return menuEngine.singlePlayerMenu; }
                 if (temp.label == "Split Screen") { return menuEngine.splitScreenMenu; }
-                if (temp.label == "Options") { return menuEngine.optionsMenu; }
+                //if (temp.label == "Options") { return menuEngine.optionsMenu; }
                 if (temp.label == "Exit") { coreEngine.Exit(); }
             }
 
@@ -149,6 +189,7 @@ namespace Emergence
             //Draw Backgrounds
             coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
             coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
+
             coreEngine.spriteBatch.Draw(selectWheel, selectWheelPos, new Rectangle(0, 0, selectWheel.Width, selectWheel.Height),
                 Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
                 0.85f, SpriteEffects.None, 0);
@@ -181,7 +222,7 @@ namespace Emergence
             menuItems.Add(new MenuItem("Number of Bots: ", MenuState.BotOptions));
             menuItems.Add(new MenuItem("Map Select: ", MenuState.SelectMap));
             //menuItems.Add(new MenuItem("Exit", MenuState.Exit));
-          
+
         }
 
 
@@ -200,8 +241,11 @@ namespace Emergence
                 MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
                 if (temp.nextMenu == MenuState.StartGame)
                 {
+                                   
+
 
                     coreEngine.startGame("test2", new bool[]{true, false,false,false});
+
 
                     return this;
                 }
@@ -265,8 +309,9 @@ namespace Emergence
             menuItems.Add(new MenuItem("6", MenuState.Null));
             menuItems.Add(new MenuItem("7", MenuState.Null));
 
+
         }
-       
+
 
         public override MenuScreen Update(GameTime g)
         {
@@ -323,11 +368,11 @@ namespace Emergence
 
     //----------------------------------------------------------------------------------
     public class SplitScreen : MenuScreen
-    {      
+    {
         bool[] playerJoined = new bool[4];
         bool notEnoughPlayers = false;
 
-        long initialTime = 0,currentTime = 0;
+        long initialTime = 0, currentTime = 0;
 
 
         public SplitScreen(MenuEngine m, CoreEngine g)
@@ -336,9 +381,9 @@ namespace Emergence
             coreEngine = g;
 
             menuItems.Add(new MenuItem("Split Screen", MenuState.Null));
-          
+
         }
-      
+
 
         public override MenuScreen Update(GameTime g)
         {
@@ -380,9 +425,9 @@ namespace Emergence
                         notEnoughPlayers = true;
                     }
                     else
-                        coreEngine.startGame("test2",playerJoined);
+                        coreEngine.startGame("test2", playerJoined);
                 }
-            }          
+            }
 
             if (wantToQuit && getJoinedCount() == 0)
             {
@@ -396,9 +441,9 @@ namespace Emergence
 
         public int getJoinedCount()
         {
-            int count=0;
+            int count = 0;
             for (int i = 0; i < 4; i++)
-                if(playerJoined[i])
+                if (playerJoined[i])
                     count++;
 
             return count;
@@ -417,12 +462,12 @@ namespace Emergence
 
             Vector2[] pos = new Vector2[4];
             Vector2 space = new Vector2(110, 0);
-            pos[0] = screenCenter + new Vector2(-screenWidth / 4, -screenHeight / 4)-space;
+            pos[0] = screenCenter + new Vector2(-screenWidth / 4, -screenHeight / 4) - space;
             pos[1] = screenCenter + new Vector2(screenWidth / 4, -screenHeight / 4) - space;
             pos[2] = screenCenter + new Vector2(screenWidth / 4, screenHeight / 4) - space;
             pos[3] = screenCenter + new Vector2(-screenWidth / 4, screenHeight / 4) - space;
 
-            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Split Screen",new Vector2(screenCenter.X-(coreEngine.debugFont.MeasureString("Split Screen")/2).X, 50), Color.White);
+            coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Split Screen", new Vector2(screenCenter.X - (coreEngine.debugFont.MeasureString("Split Screen") / 2).X, 50), Color.White);
             /*
             coreEngine.spriteBatch.Draw(line, screenCenter, new Rectangle(0,0, line.Width, line.Height),
                        Color.White, 0f, new Vector2(line.Width / 2, line.Height / 2),
@@ -436,7 +481,7 @@ namespace Emergence
             coreEngine.spriteBatch.Draw(loadWheel, screenCenter, new Rectangle(0, 0, loadWheel.Width, loadWheel.Height),
                         Color.White, 0f, new Vector2(loadWheel.Width / 2, loadWheel.Height / 2 + 25),
                         0.2f, SpriteEffects.None, 0);
-            
+
 
             String output = "";
             for (int i = 0; i < 4; i++)
@@ -445,13 +490,13 @@ namespace Emergence
                     coreEngine.spriteBatch.Draw(splitWheel, screenCenter - new Vector2(3, -2), new Rectangle(0, 0, splitWheel.Width, splitWheel.Height),
                         Color.White, MathHelper.PiOver2 * i - MathHelper.PiOver4, new Vector2(splitWheel.Width / 2, splitWheel.Height / 2 + 25),
                         0.2f, SpriteEffects.None, 0);
-                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Player " + (i+1) + " has joined", pos[i], Color.White);
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Player " + (i + 1) + " has joined", pos[i], Color.White);
                 }
                 else
                 {
                     coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "Press ", pos[i], Color.White);
-                    coreEngine.spriteBatch.Draw(A_button, pos[i]+new Vector2(coreEngine.debugFont.MeasureString("Press  ").X,-10), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f);
-                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "to join ", pos[i]+new Vector2(150,0), Color.White);
+                    coreEngine.spriteBatch.Draw(A_button, pos[i] + new Vector2(coreEngine.debugFont.MeasureString("Press  ").X, -10), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 1f);
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, "to join ", pos[i] + new Vector2(150, 0), Color.White);
                 }
 
 
@@ -467,9 +512,9 @@ namespace Emergence
 
     }
 
-    /*
 
-    public class OptionsMenuScreen : MenuScreen
+
+    public class PauseMenu : MenuScreen
     {
         CoreEngine coreEngine;
         public Texture2D background, light, selectWheel;
@@ -477,34 +522,74 @@ namespace Emergence
 
 
 
-        public OptionsMenuScreen(MenuEngine m, CoreEngine g)
+        public PauseMenu(MenuEngine m, CoreEngine g)
         {
             menuEngine = menuEngine;
             coreEngine = g;
+
+
+            menuItems.Add(new MenuItem("Pause Menu", MenuState.Null));
+            menuItems.Add(new MenuItem("Resume Game", MenuState.Null));
+            menuItems.Add(new MenuItem("Main Menu", MenuState.MainMenu));        
+
+
         }
-        public override void LoadContent()
+
+
+        public override MenuScreen Update(GameTime g)
         {
+            getInput();
 
-        }
+            if (menuActions.Contains<MenuAction>(MenuAction.Select))
+            {
+                dist = 0;
+
+                MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
+
+                //save number of bots
+                //coreEngine.numberOfBots = ?;
+                return menuEngine.singlePlayerMenu;
+
+            }
+            if (menuActions.Contains<MenuAction>(MenuAction.Back))
+            {
+                dist = 2 * maxDist;
+                return menuEngine.singlePlayerMenu;
+            }
 
 
-        public override void Update(GameTime g)
-        {
 
-
+            return this;
         }
 
 
         public override void Draw()
         {
+            //Draw Backgrounds
+            coreEngine.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            coreEngine.spriteBatch.Draw(background, new Rectangle(0, 0, background.Width, background.Height), Color.White);
+            coreEngine.spriteBatch.Draw(selectWheel, selectWheelPos, new Rectangle(0, 0, selectWheel.Width, selectWheel.Height),
+                Color.White, selectWheelRot, new Vector2(selectWheel.Width / 2, selectWheel.Height / 2 + 25),
+                0.85f, SpriteEffects.None, 0);
 
+            drawTips();
+
+            //Draw Menu Items
+            foreach (MenuItem m in menuItems)
+                if (!m.selected)
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, m.label, m.position + new Vector2(2, 2), Color.White);
+                else
+                    coreEngine.spriteBatch.DrawString(coreEngine.debugFont, m.label, m.position, Color.Red);
+
+            coreEngine.spriteBatch.End();
 
         }
+
 
     }
 
 
-    */
+
 
 
 }

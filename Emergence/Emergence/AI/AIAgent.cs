@@ -12,6 +12,10 @@ namespace Emergence.AI {
         double targetAquisitionDuration = 0;
         List<MeshNode> ignore = new List<MeshNode>();
 
+        public static double deadReckoningTime = 0.5;       //number of seconds to dead reckon for
+        double deadReckoningTimeStamp = -deadReckoningTime-1;
+        Vector3 deadReckonVel = Vector3.Zero;
+
         MeshNode previousTarget = null;
 
         public AIAgent(CoreEngine c, Vector3 position, Vector2 direction)
@@ -24,6 +28,7 @@ namespace Emergence.AI {
                 ignore = new List<MeshNode>();
             MeshNode closest = null;
             float dist = 0;
+            Vector3 nodeLift = new Vector3(0, AIEngine.nodeHeight, 0);
             foreach (MeshNode m in core.aiEngine.mesh) {
                 if (ignore.Contains(m))
                     continue;
@@ -38,6 +43,7 @@ namespace Emergence.AI {
         //perform A* from the closest node to the target node
         public void setPathTo(MeshNode target, List<MeshNode> ignore) {
             previousTarget = null;
+            targetAquisitionDuration = 0;
             path.Clear();
             MeshNode start = findClosestMeshNode(ignore);
             if (start == null)  return;
@@ -98,7 +104,6 @@ namespace Emergence.AI {
         public override void Update(GameTime gameTime) {
             if (path.Count == 0) {
                 ignore.Clear();     //should we clear ignore here?
-                targetAquisitionDuration = 0;
                 setPathTo(core.aiEngine.mesh[core.aiEngine.random.Next(core.aiEngine.mesh.Count)], ignore);
                 if (path.Count == 0)
                     return;
@@ -136,10 +141,18 @@ namespace Emergence.AI {
             }
             //otherwise we need to take care of things the expensive way
             else {
-                velocity.Y = 0;
-                velocity.Normalize();
-                Console.WriteLine(core.aiEngine.random.Next(10));
-                core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
+                if (gameTime.TotalGameTime.TotalSeconds - deadReckoningTimeStamp > deadReckoningTime) {
+                    velocity.Y = 0;
+                    velocity.Normalize();
+                    Vector3 oldPos = position;
+                    deadReckoningTimeStamp = gameTime.TotalGameTime.TotalSeconds;
+                    core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
+                    deadReckonVel = position - oldPos;
+                    if (deadReckonVel.Y != 0)
+                        deadReckoningTimeStamp = -deadReckoningTime - 1;
+                }
+                else
+                    position += deadReckonVel;
             }
 
             targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;

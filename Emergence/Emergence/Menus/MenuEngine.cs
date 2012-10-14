@@ -21,7 +21,7 @@ namespace Emergence
     {
         public MenuScreen currentMenu;
         private CoreEngine coreEngine;
-        public MenuScreen mainMenu, singlePlayerMenu, botNumberMenu, splitScreenMenu, optionsMenu;
+        public MenuScreen mainMenu, singlePlayerMenu, botNumberMenu, splitScreenMenu, optionsMenu, pauseMenu,loadScreen;
         TitleScreen titleMenu;
 
         List<MenuItem[]> menuStack = new List<MenuItem[]>();
@@ -43,7 +43,8 @@ namespace Emergence
 
             botNumberMenu = new BotNumberMenuScreen(this, g);            
             splitScreenMenu = new SplitScreen(this, g);
-
+            pauseMenu = new PauseMenu(this, g);
+            loadScreen = new LoadScreen(this, g);
 
             /*
             optionsMenu = new OptionsMenuScreen(this, g);

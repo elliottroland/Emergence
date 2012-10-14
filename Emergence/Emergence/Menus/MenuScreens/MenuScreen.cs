@@ -112,7 +112,7 @@ namespace Emergence
 
             Vector2 wheelDirection = selectWheelDesiredPos - selectWheelPos;
             if (wheelDirection.LengthSquared() < 20)
-                selectWheelPos += wheelDirection / 100;
+                selectWheelPos += wheelDirection / 1000;
             else
                 selectWheelPos = selectWheelDesiredPos;
 
