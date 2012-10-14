@@ -65,11 +65,10 @@ namespace Emergence
         public PickUpEngine pickupEngine;
         public AIEngine aiEngine;
 
-        public bool clip = false;
+        public bool clip = true;
 
         //test item generator locations
-        PickUpGen[] tests = { new PickUpGen(new Vector3(20, -320, 20), PickUp.PickUpType.AMMO), new PickUpGen(new Vector3(20, -320, -20), PickUp.PickUpType.HEALTH)
-                            ,new PickUpGen(new Vector3(-20, -320, 20), PickUp.PickUpType.LEFT), new PickUpGen(new Vector3(-20, -320, -20), PickUp.PickUpType.RIGHT)};
+        PickUpGen[] tests = new PickUpGen[4];
 
         public Player[] players;
         public GameState currentState = GameState.MenuScreen;
@@ -95,7 +94,12 @@ namespace Emergence
             physicsEngine = new PhysicsEngine(this);
             aiEngine = new AIEngine(this);
 
-            pickupEngine = new PickUpEngine();
+            pickupEngine = new PickUpEngine(this);
+
+            tests[0] = new PickUpGen(this, new Vector3(20, -320, 20), PickUp.PickUpType.AMMO);
+            tests[1] = new PickUpGen(this, new Vector3(20, -320, -20), PickUp.PickUpType.HEALTH);
+            tests[2] = new PickUpGen(this, new Vector3(-20, -320, 20), PickUp.PickUpType.LEFT);
+            tests[3] = new PickUpGen(this, new Vector3(-20, -320, -20), PickUp.PickUpType.RIGHT);
 
             players = new Player[0];
             /*players = new Player[3];
@@ -216,6 +220,7 @@ namespace Emergence
         {
             foreach (Brush b in mapEngine.brushes)
                 yield return b;
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -267,7 +272,11 @@ namespace Emergence
                 menuEngine.Draw(gameTime);
             }
 
-            DrawStringDebug("" + 1000 / gameTime.ElapsedGameTime.Milliseconds);
+            //DrawStringDebug("" + 1000 / gameTime.ElapsedGameTime.Milliseconds);
+            if(players.Length > 0)
+                DrawStringDebug("health: " + players[0].health
+                                    + "\nammo: " + players[0].ammo
+                                    + "\nweapon: " + players[0].equipped.GetType().Name);
 
             base.Draw(gameTime);
         }

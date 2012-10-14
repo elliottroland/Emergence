@@ -219,13 +219,13 @@ namespace Emergence.Render
 
                 basicEffect.Begin();
 
-                Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
+                /*Vector3 antiLift = new Vector3(0, AIEngine.nodeHeight, 0);
                 Vector3 renderLift = new Vector3(0, AIEngine.nodeRenderHeight, 0);
                 foreach (MeshNode m in core.aiEngine.mesh) {
                     drawLine(m.position, m.position, new Vector3(1, 1, 1));
                     foreach(MeshNode m2 in m.neighbours)
                         drawLine(m2.position, m.position, new Vector3(1, 1, 1));
-                }
+                }*/
 
                 //draw the collision grid
                 /*for(int k = 0; k < core.physicsEngine.grid.GetLength(2); k++)
@@ -268,7 +268,7 @@ namespace Emergence.Render
                     drawLine(bb.Max - sizeX, bb.Max - sizeX - sizeZ, new Vector3(1, 0, 0));
 
                     //also draw the path
-                    MeshNode last = null;
+                    /*MeshNode last = null;
                     foreach (MeshNode m in a.path)
                     {
                         if (last == null)
@@ -278,7 +278,7 @@ namespace Emergence.Render
                         }
                         drawLine(m.position, last.position, new Vector3(1, 0, 0));
                         last = m;
-                    }
+                    }*/
                 }
 
                 basicEffect.End();

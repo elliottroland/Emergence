@@ -30,7 +30,7 @@ namespace Emergence {
             core = c;
             this.position = position;
             this.direction = direction;
-            equipped = new Rifle();
+            equipped = new Pistol();
             ammo = 200;
 
             agentVelocities = new Velocities();

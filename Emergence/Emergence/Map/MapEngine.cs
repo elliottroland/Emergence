@@ -88,22 +88,22 @@ namespace Emergence.Map {
                             else if (keyVals["classname"] == "item_health" && keyVals.ContainsKey("origin"))
                             {
                                 string[] d = Regex.Split(keyVals["origin"], @"\s+");
-                                core.pickupEngine.gens.Add(new PickUpGen(toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.HEALTH));
+                                core.pickupEngine.gens.Add(new PickUpGen(core, toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.HEALTH));
                             }
                             else if (keyVals["classname"] == "item_armor_body" && keyVals.ContainsKey("origin"))
                             {
                                 string[] d = Regex.Split(keyVals["origin"], @"\s+");
-                                core.pickupEngine.gens.Add(new PickUpGen(toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.AMMO));
+                                core.pickupEngine.gens.Add(new PickUpGen(core, toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.AMMO));
                             }
                             else if (keyVals["classname"] == "ammo_bfg" && keyVals.ContainsKey("origin"))
                             {
                                 string[] d = Regex.Split(keyVals["origin"], @"\s+");
-                                core.pickupEngine.gens.Add(new PickUpGen(toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.LEFT));
+                                core.pickupEngine.gens.Add(new PickUpGen(core, toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.LEFT));
                             }
                             else if (keyVals["classname"] == "item_flight" && keyVals.ContainsKey("origin"))
                             {
                                 string[] d = Regex.Split(keyVals["origin"], @"\s+");
-                                core.pickupEngine.gens.Add(new PickUpGen(toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.RIGHT));
+                                core.pickupEngine.gens.Add(new PickUpGen(core, toWorldSpace(new Vector3(float.Parse(d[0]), float.Parse(d[1]), float.Parse(d[2]))), PickUp.PickUpType.RIGHT));
                             }
                             keyVals = new Dictionary<string, string>();
                         }

@@ -199,7 +199,6 @@ namespace Emergence
             }
         }
 
-
         public void UpdateGameInput()
         {
             //Check for PC or XBOX
@@ -221,8 +220,14 @@ namespace Emergence
 
                 for (int i = 0; i < playerBindings[0].gameButtons.Length; i++)
                 {
-                    if (isDown(playerBindings[pIndex].gameButtons[i]))//if button is down
-                        playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button
+                    if (playerBindings[pIndex].gameControls[i] == Actions.Downgrade) {
+                        if (isPressed(playerBindings[pIndex].gameButtons[i]))//if button is down             
+                            playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button   
+                    }
+                    else {
+                        if (isDown(playerBindings[pIndex].gameButtons[i]))//if button is down             
+                            playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button   
+                    }
                 }
 
                 //set old state (not necessary if only using isDown)
@@ -238,8 +243,14 @@ namespace Emergence
 
                 for (int i = 0; i < playerBindings[0].gameKeys.Length; i++)
                 {
-                    if (isDown(playerBindings[4].gameKeys[i]))
-                        playerActions[4].Add(playerBindings[4].gameControls[i]);
+                    if (playerBindings[4].gameControls[i] == Actions.Downgrade) {
+                        if (isPressed(playerBindings[4].gameKeys[i]))
+                            playerActions[4].Add(playerBindings[4].gameControls[i]);
+                    }
+                    else {
+                        if (isDown(playerBindings[4].gameKeys[i]))
+                            playerActions[4].Add(playerBindings[4].gameControls[i]);
+                    }
                 }
 
 

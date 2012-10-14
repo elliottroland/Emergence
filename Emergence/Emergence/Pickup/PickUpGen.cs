@@ -13,10 +13,11 @@ namespace Emergence.Pickup
         public Vector3 pos;
         int genTime;
         public PickUp held;
+        CoreEngine core;
 
-        public PickUpGen(Vector3 p, PickUp.PickUpType t)
+        public PickUpGen(CoreEngine c, Vector3 p, PickUp.PickUpType t)
         {
-
+            core = c;
             pos = p;
             itemType = t;
             held = null;
@@ -47,8 +48,14 @@ namespace Emergence.Pickup
         public void genPickUp(PickUp.PickUpType type)
         {
 
-            held = new PickUp(pos + new Vector3(0, 50, 0), itemType);
-        
+            held = new PickUp(pos + new Vector3(0, 50, 0), itemType, this);
+            core.physicsEngine.updateCollisionCellsFor(held);
+        }
+
+        public void removePickUp() {
+            if (held != null)
+                core.physicsEngine.removeFromCollisionGrid(held);
+            held = null;
         }
 
     }

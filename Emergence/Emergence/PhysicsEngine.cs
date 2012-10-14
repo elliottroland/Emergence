@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Emergence.Map;
+using Emergence.Pickup;
 
 namespace Emergence {
     public interface ICollidable
@@ -75,9 +76,7 @@ namespace Emergence {
 
         public void updateCollisionCellsFor(ICollidable c) {
             //first clear the cells the c currently belongs to
-            List<CollisionGridCell> cells = c.getCollisionCells();
-            foreach (CollisionGridCell cell in cells)
-                cell.elements.Remove(c);
+            removeFromCollisionGrid(c);
 
             BoundingBox b = c.getBoundingBox();
             b.Min -= gridOffset;
@@ -92,6 +91,12 @@ namespace Emergence {
                     }
 
             c.setCollisionCells(collidablesCells);
+        }
+
+        public void removeFromCollisionGrid(ICollidable c) {
+            List<CollisionGridCell> cells = c.getCollisionCells();
+            foreach (CollisionGridCell cell in cells)
+                cell.elements.Remove(c);
         }
 
         private Vector3 size(BoundingBox b) {
@@ -160,9 +165,12 @@ namespace Emergence {
             if (worldVel.Z < 0) colliderBoundingBox.Min.Z += worldVel.Z;
             else if (worldVel.Z > 0) colliderBoundingBox.Max.Z += worldVel.Z;
 
+            List<PickUp> pickedUp = new List<PickUp>();
+
             List<Vector3> eSpaceVerts = new List<Vector3>();
             bool convertedVerts = false;
             foreach(ICollidable collidable in getCollidablesToCheck(collider, toWorldSpace(moverRadius, velocity)))    {
+                if (collidable is Agent)    continue;
                 BoundingBox collidableBoundingBox = collidable.getBoundingBox();
                 collidableBoundingBox.Min -= boundingBoxPadding;
                 collidableBoundingBox.Max += boundingBoxPadding;
@@ -334,8 +342,7 @@ namespace Emergence {
                         
                     }
                 } // if brush
-                else {  //otherwise we need to boundingEllipsoid collisions
-                    continue;
+                else if(collider is Agent && collidable is PickUp) {  //otherwise we need to boundingEllipsoid collisions
                     /* we cast a ray from the center of collider to the center of
                      * collidable. if the collision time is closer (or sufficiently close)
                      * for collidable then we're colliding
@@ -359,13 +366,22 @@ namespace Emergence {
                         //if the distance is < 1 + epsilon (the radius of the collider in eSpace) then we've collided
                         if(colDist < 1 + 0.5)   {
                             float t = colDist / (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
-                            if (t < closestCollisionTime) {
+                            Console.WriteLine("t: " + t + " " + (float)Math.Sqrt(Vector3.Dot(velocity, velocity)));
+                            /*if (t < closestCollisionTime) {
                                 closestCollisionTime = t;
                                 closestCollisionPoint = colPoint;
+                            }*/
+                            if (collidable is PickUp) {
+                                pickedUp.Add((PickUp)collidable);
                             }
                         }
                     }
-                }
+                } // if pickup
+            }
+
+            foreach (PickUp p in pickedUp) {
+                p.pickupGen.removePickUp();
+                p.affect((Agent)collider);
             }
             return new CollisionPackage(basePoint, velocity, closestCollisionTime < 1, closestCollisionPoint, closestCollisionTime * (float)Math.Sqrt(Vector3.Dot(velocity, velocity)));
         }

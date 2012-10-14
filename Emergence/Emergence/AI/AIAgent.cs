@@ -12,9 +12,9 @@ namespace Emergence.AI {
         double targetAquisitionDuration = 0;
         List<MeshNode> ignore = new List<MeshNode>();
 
-        public static double deadReckoningTime = 0.5;       //number of seconds to dead reckon for
-        double deadReckoningTimeStamp = -deadReckoningTime-1;
-        Vector3 deadReckonVel = Vector3.Zero;
+        public static double deadReckoningTimeout = 0.5;       //number of seconds to dead reckon for
+        double deadReckoningTimeStamp = -deadReckoningTimeout-1;
+        Vector3 deadReckoningMove = Vector3.Zero;
 
         MeshNode previousTarget = null;
 
@@ -141,18 +141,18 @@ namespace Emergence.AI {
             }
             //otherwise we need to take care of things the expensive way
             else {
-                if (gameTime.TotalGameTime.TotalSeconds - deadReckoningTimeStamp > deadReckoningTime) {
+                if (gameTime.TotalGameTime.TotalSeconds - deadReckoningTimeStamp >= deadReckoningTimeout) {
                     velocity.Y = 0;
                     velocity.Normalize();
                     Vector3 oldPos = position;
                     deadReckoningTimeStamp = gameTime.TotalGameTime.TotalSeconds;
                     core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
-                    deadReckonVel = position - oldPos;
-                    if (deadReckonVel.Y != 0)
-                        deadReckoningTimeStamp = -deadReckoningTime - 1;
+                    deadReckoningMove = position - oldPos;
+                    if (deadReckoningMove.Y != 0)
+                        deadReckoningTimeStamp = -deadReckoningTimeout - 1;
                 }
                 else
-                    position += deadReckonVel;
+                    position += deadReckoningMove;
             }
 
             targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;

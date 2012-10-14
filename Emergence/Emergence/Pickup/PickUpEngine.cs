@@ -10,13 +10,15 @@ namespace Emergence.Pickup
     {
 
         public List<PickUpGen> gens;
+        CoreEngine core;
 
-        public PickUpEngine()
+        public PickUpEngine(CoreEngine c)
         {
             gens = new List<PickUpGen>();
+            core = c;
         }
 
-        public PickUpEngine(PickUpGen[] g) : this(){
+        public PickUpEngine(CoreEngine c, PickUpGen[] g) : this(c){
             foreach (PickUpGen gg in g)
                 gens.Add(gg);
         }
