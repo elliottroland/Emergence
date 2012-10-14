@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Graphics="Microsoft.Xna.Framework.Content.Pipeline.Graphics" xmlns:Framework="Microsoft.Xna.Framework">
   <Asset Type="Graphics:MeshContent">
     <Name>Sphere01</Name>
     <Identity>
       <SourceFilename>C:\Users\User\Git\Emergence\Emergence\Emergence\Content\SphereHighPoly.fbx</SourceFilename>
-      <SourceFilename>C:\Users\bdrmun002\Desktop\Emergence\Emergence\Emergence\Content\SphereHighPoly.fbx</SourceFilename>
       <SourceTool>FbxImporter</SourceTool>
     </Identity>
     <Transform>2.54 0 0 0 0 1.55525E-16 -2.54 0 0 2.54 1.55525E-16 0 0 0 0 1</Transform>
