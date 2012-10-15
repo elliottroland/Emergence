@@ -16,8 +16,8 @@ namespace Emergence {
         protected Vector3 size = new Vector3(32,88,32);
        
         public Weapon equipped;
-        public int health;
-        public int ammo;
+        public int health = 100;
+        public int ammo = 200;
 
         public Velocities agentVelocities;
 
@@ -31,7 +31,6 @@ namespace Emergence {
             this.position = position;
             this.direction = direction;
             equipped = new Pistol();
-            ammo = 200;
 
             agentVelocities = new Velocities();
             collisionCells = new List<CollisionGridCell>();

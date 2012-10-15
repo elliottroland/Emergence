@@ -151,6 +151,61 @@ namespace Emergence {
                             }
         }
 
+        public bool collidesWithPickup(Vector3 moverRadius, Vector3 basePoint, Vector3 velocity, PickUp collidable) {
+            /* we cast a ray from the center of collider to the center of
+             * collidable. if the collision time is closer (or sufficiently close)
+             * for collidable then we're colliding
+             */
+            BoundingBox otherbb = ((ICollidable)collidable).getBoundingBox();
+            Vector3 otherRadius = (otherbb.Max - otherbb.Min) * 0.5f,
+                    otherPos = otherbb.Min + otherRadius;
+
+            //now convert everything otherESpace so that we can cast using BoundingSpheres
+            Vector3 basePointInOtherESpace = toESpace(otherRadius, toWorldSpace(moverRadius, basePoint)),
+                    otherPointInOtherESPace = toESpace(otherRadius, otherPos);
+            Ray r = new Ray(basePointInOtherESpace, Vector3.Normalize(otherPointInOtherESPace - basePointInOtherESpace));
+            Nullable<float> dist = r.Intersects(new BoundingSphere(otherPointInOtherESPace, 1));
+            if (dist != null) { //i don't even know what dist == null means in this context
+                //find the collisionPoint in otherESpace
+                Vector3 colPoint = r.Position + dist.Value * r.Direction;
+                //convert it back to normal eSpace (of basePoint)
+                colPoint = toESpace(moverRadius, toWorldSpace(otherRadius, colPoint));
+                float colDist = Vector3.Distance(colPoint, basePoint);
+                //if the distance is < 1 + epsilon (the radius of the collider in eSpace) then we've collided
+                if (colDist < 1 + 0.5) {
+                    float t = colDist / (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //picks up and applies any pickups the agent will take in the next move
+        public void applySimpleMovement(GameTime gameTime, Agent a, Vector3 velocity) {
+            BoundingBox agentBoundingBox = a.getBoundingBox();
+            Vector3 agentRadius = size(agentBoundingBox) * 0.5f;
+            Vector3 agentPoint = agentBoundingBox.Min + agentRadius;
+            velocity = velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Vector3 agentVelocity = toESpace(agentRadius, velocity);
+            List<PickUp> pickedUp = new List<PickUp>();
+
+            foreach(ICollidable collidable in getCollidablesToCheck(a, velocity))
+                if (collidable is PickUp) {
+                    PickUp p = (PickUp)collidable;
+                    if (collidesWithPickup(agentRadius, agentPoint, agentVelocity, p)) {
+                        Console.WriteLine("picked up");
+                        pickedUp.Add(p);
+                    }
+                }
+
+            foreach (PickUp p in pickedUp) {
+                p.pickupGen.removePickUp();
+                p.affect(a);
+            }
+
+            a.position += velocity;
+        }
+
         public CollisionPackage collides(Vector3 moverRadius, Vector3 basePoint, Vector3 velocity, ICollidable collider) {
             float closestCollisionTime = 1;
             Vector3 closestCollisionPoint = Vector3.Zero;
@@ -343,39 +398,9 @@ namespace Emergence {
                     }
                 } // if brush
                 else if(collider is Agent && collidable is PickUp) {  //otherwise we need to boundingEllipsoid collisions
-                    /* we cast a ray from the center of collider to the center of
-                     * collidable. if the collision time is closer (or sufficiently close)
-                     * for collidable then we're colliding
-                     */
-                    BoundingBox otherbb = collidable.getBoundingBox();
-                    Vector3 otherRadius = (otherbb.Max - otherbb.Min) * 0.5f,
-                            otherPos = otherbb.Min + otherRadius;
-
-                    //now convert everything otherESpace so that we can cast using BoundingSpheres
-                    Vector3 basePointInOtherESpace = toESpace(otherRadius, toWorldSpace(moverRadius, basePoint)),
-                            otherPointInOtherESPace = toESpace(otherRadius, otherPos);
-                    Ray r = new Ray(basePointInOtherESpace, Vector3.Normalize(otherPointInOtherESPace - basePointInOtherESpace));
-                    Nullable<float> dist = r.Intersects(new BoundingSphere(otherPointInOtherESPace, 1));
-                    if (dist != null) { //i don't even know what dist == null means in this context
-                        //find the collisionPoint in otherESpace
-                        Vector3 colPoint = r.Position + dist.Value * r.Direction;
-                        //convert it back to normal eSpace (of basePoint)
-                        colPoint = toESpace(moverRadius, toWorldSpace(otherRadius, colPoint));
-                        float colDist = Vector3.Distance(colPoint, basePoint);
-                        Console.WriteLine("colDist: " + colDist);
-                        //if the distance is < 1 + epsilon (the radius of the collider in eSpace) then we've collided
-                        if(colDist < 1 + 0.5)   {
-                            float t = colDist / (float)Math.Sqrt(Vector3.Dot(velocity, velocity));
-                            Console.WriteLine("t: " + t + " " + (float)Math.Sqrt(Vector3.Dot(velocity, velocity)));
-                            /*if (t < closestCollisionTime) {
-                                closestCollisionTime = t;
-                                closestCollisionPoint = colPoint;
-                            }*/
-                            if (collidable is PickUp) {
-                                pickedUp.Add((PickUp)collidable);
-                            }
-                        }
-                    }
+                    PickUp p = (PickUp)collidable;
+                    if (collidesWithPickup(moverRadius, basePoint, velocity, p))
+                        pickedUp.Add(p);
                 } // if pickup
             }
 

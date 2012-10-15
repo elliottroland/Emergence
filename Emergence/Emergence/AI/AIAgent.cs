@@ -137,7 +137,7 @@ namespace Emergence.AI {
             //if we've gotten here and there's a previous target then we're on the path
             if (previousTarget != null) {
                 velocity.Normalize();
-                position = position + velocity * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                core.physicsEngine.applySimpleMovement(gameTime, this, velocity * speed);
             }
             //otherwise we need to take care of things the expensive way
             else {

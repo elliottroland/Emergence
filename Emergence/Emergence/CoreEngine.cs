@@ -16,6 +16,7 @@ using Emergence.Map;
 using Emergence.Render;
 using Emergence.Pickup;
 using Emergence.AI;
+using Emergence.Weapons;
 
 namespace Emergence
 {
@@ -72,6 +73,8 @@ namespace Emergence
 
         public Player[] players;
         public GameState currentState = GameState.MenuScreen;
+
+        public Dictionary<Type, Texture2D> weaponIcons;
 
         public CoreEngine()
         {
