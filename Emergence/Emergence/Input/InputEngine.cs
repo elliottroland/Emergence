@@ -23,7 +23,7 @@ namespace Emergence
 
             public Actions[] gameControls = { Actions.Jump, Actions.Downgrade, Actions.Reload, Actions.Unbound,
                                     Actions.Scoreboard,Actions.Scoreboard, Actions.Unbound, Actions.Sprint,
-                                    Actions.Aim, Actions.Fire, Actions.Pause, Actions.Unbound,
+                                    Actions.Fire, Actions.Aim, Actions.Pause, Actions.Unbound,
                                     Actions.Unbound,Actions.Unbound,Actions.Unbound,Actions.Unbound};
 
 

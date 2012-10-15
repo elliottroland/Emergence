@@ -102,6 +102,7 @@ namespace Emergence.AI {
         }
 
         public override void Update(GameTime gameTime) {
+            equipped.Update(gameTime);
             if (path.Count == 0) {
                 ignore.Clear();     //should we clear ignore here?
                 setPathTo(core.aiEngine.mesh[core.aiEngine.random.Next(core.aiEngine.mesh.Count)], ignore);
@@ -114,12 +115,12 @@ namespace Emergence.AI {
             //find the target's position relative to the position
             Vector2 tpos = new Vector2(Math.Abs(target.position.X - position.X),
                                         Math.Abs(target.position.Z - position.Z));
-            if (tpos.X < size.X / 3 && tpos.Y < size.Y / 3) {
+            if (tpos.X < size.X / 6 && tpos.Y < size.Y / 6) {
                 ignore.Clear();
                 popFromPath();
                 targetAquisitionDuration = 0;
                 if (path.Count == 0)
-                    setPathTo(core.aiEngine.mesh[core.aiEngine.random.Next(core.aiEngine.mesh.Count)], ignore);
+                    setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
                 if (path.Count == 0)
                     return;
                 target = path[0];

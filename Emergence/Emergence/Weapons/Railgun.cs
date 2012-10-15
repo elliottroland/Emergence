@@ -22,7 +22,7 @@ namespace Emergence.Weapons
         public Railgun()
         {
 
-            cooldown = 150;
+            cooldown = 1.75f;
             damage = 999999;
             ammoUsed = 40;
 
@@ -36,6 +36,13 @@ namespace Emergence.Weapons
         public override void fire(Player p, PhysicsEngine ph)
         {
             base.fire(p, ph);
+
+            if (curCooldown == cooldown) {
+                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                if (hs != null) {
+                    makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 10, 10);
+                }
+            }
         }
 
         public override Weapon upgradeLeft()

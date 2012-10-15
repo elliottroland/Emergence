@@ -41,6 +41,28 @@ namespace Emergence
 
     }
 
+    public class Projectile {
+        public float size, speed;
+        public Vector3 position, dir;
+        public VertexPositionNormalTexture[] a, b, c;
+        public int[] indices;
+        public int[] revIndices;
+        public float collisionDist;
+
+        public Projectile() { }
+
+        public void update(GameTime gameTime) {
+            Vector3 move = dir * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position += move;
+            collisionDist -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //update the vertices
+            for (int i = 0; i < a.Length; i++ ) a[i].Position += move;
+            for (int i = 0; i < b.Length; i++) b[i].Position += move;
+            for (int i = 0; i < c.Length; i++) c[i].Position += move;
+        }
+    }
+
     public class Player : Agent {
         public PlayerIndex playerIndex;
 
@@ -113,6 +135,12 @@ namespace Emergence
                 if (lasers[i].timeLeft <= 0)
                     lasers.Remove(lasers[i]);
 
+            }
+
+            for (int i = 0; i < projectiles.Count; ++i) {
+                projectiles[i].update(gameTime);
+                if (projectiles[i].collisionDist <= 0)
+                    projectiles.RemoveAt(i--);
             }
 
             core.physicsEngine.updateCollisionCellsFor(this);

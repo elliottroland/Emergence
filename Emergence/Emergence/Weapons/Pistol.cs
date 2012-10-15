@@ -23,7 +23,7 @@ namespace Emergence.Weapons
         public Pistol()
         {
 
-            cooldown = 30;
+            cooldown = 0.75f;
             ammoUsed = 0;
             damage = 5;
 

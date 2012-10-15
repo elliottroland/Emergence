@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emergence", "Emergence\Emergence.csproj", "{7B7EC61E-A173-4C72-A1C1-84916EAB725D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of Emergence", "Emergence\Xbox 360 Copy of Emergence.csproj", "{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -29,6 +31,20 @@ Global
 		{83D9A1CE-1265-4146-BB27-D0201FD2F4E9}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{83D9A1CE-1265-4146-BB27-D0201FD2F4E9}.Release|x86.ActiveCfg = Release|x86
 		{83D9A1CE-1265-4146-BB27-D0201FD2F4E9}.Release|Xbox 360.ActiveCfg = Release|x86
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Mixed Platforms.ActiveCfg = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Mixed Platforms.Build.0 = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Mixed Platforms.Deploy.0 = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|x86.ActiveCfg = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Xbox 360.ActiveCfg = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Xbox 360.Build.0 = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Debug|Xbox 360.Deploy.0 = Debug|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Mixed Platforms.ActiveCfg = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Mixed Platforms.Build.0 = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Mixed Platforms.Deploy.0 = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|x86.ActiveCfg = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Xbox 360.ActiveCfg = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Xbox 360.Build.0 = Release|Xbox 360
+		{F7A75DD5-F28A-477E-A638-AC3BC28C8C71}.Release|Xbox 360.Deploy.0 = Release|Xbox 360
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,10 +19,12 @@ namespace Emergence.Weapons
     /// </summary>
     public class Rifle : Weapon
     {
+        float inaccuracy = 0, inaccruacyJump = 0.05f, maxInaccuracy = 0.125f, inaccuracyCooldownTime = 1, inaccuracyCurCooldown = 0;
+
         public Rifle()
         {
             ammoUsed = 5;
-            cooldown = 20;
+            cooldown = 0.15f;
             damage = 20;
             // TODO: Construct any child components here
         }
@@ -30,13 +32,31 @@ namespace Emergence.Weapons
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            inaccuracyCurCooldown = (float)Math.Min(inaccuracyCooldownTime, inaccuracyCurCooldown + gameTime.ElapsedGameTime.TotalSeconds);
+            if(inaccuracyCurCooldown == inaccuracyCooldownTime)
+                inaccuracy = Math.Max(inaccuracy - inaccruacyJump / 2, 0);
         }
 
         public override void fire(Player p, PhysicsEngine ph)
         {
             base.fire(p, ph);
-            //Do weapon specific things
-            makeNormalBullet(p);
+
+            if (curCooldown == cooldown) {
+                Random rand = new Random();
+                Vector3 dir = Vector3.Normalize(p.getDirectionVector());
+                Vector3 right = Vector3.Cross(dir, Vector3.Up);
+                Vector3 up = Vector3.Cross(dir, right);
+                up *= inaccuracy;
+                right *= inaccuracy;
+                dir = dir + (float)(rand.NextDouble() * 2 - 1) * up + (float)(rand.NextDouble() * 2 - 1) * right;
+                inaccuracy = Math.Min(maxInaccuracy, inaccruacyJump + inaccuracy);
+                inaccuracyCurCooldown = 0;
+
+                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, null);
+                if (hs != null) {
+                    makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5);
+                }
+            }
         }
 
         public override Weapon upgradeLeft()

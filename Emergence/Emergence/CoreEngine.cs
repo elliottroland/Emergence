@@ -149,7 +149,7 @@ namespace Emergence
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
             bulletTex = Content.Load<Texture2D>("bullet");
-            beamTex = Content.Load<Texture2D>("beam");
+            beamTex = Content.Load<Texture2D>("bullet_trail");
 
             //load shader
             lighting = Content.Load<Effect>("PointLighting");
@@ -197,7 +197,7 @@ namespace Emergence
             renderEngine = new RenderEngine(this, playerIndices);
 
             //once the map is loaded the player has a position, so take it for the test agent
-            for (int i = 0; i < 10; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
+            for (int i = 0; i < 2; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
 
             currentState = GameState.GameScreen;
         }

@@ -23,6 +23,7 @@ namespace Emergence {
 
         public List<Bullet> bullets = new List<Bullet>();
         public List<Laser> lasers = new List<Laser>();
+        public List<Projectile> projectiles = new List<Projectile>();
 
         protected List<CollisionGridCell> collisionCells;
 

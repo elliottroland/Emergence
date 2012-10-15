@@ -498,6 +498,8 @@ namespace Emergence {
         public class HitScan {
             public Vector3 collisionPoint;
             public Ray ray;
+            public Face collisionFace = null;
+
             public HitScan(Vector3 cp, Vector3 sp, Vector3 d)
             {
                 collisionPoint = cp;
@@ -508,6 +510,11 @@ namespace Emergence {
             {
                 collisionPoint = cp;
                 ray = r;
+            }
+
+            public HitScan(Vector3 cp, Ray r, Face b)
+                : this(cp, r) {
+                collisionFace = b;
             }
 
             public float Distance()
@@ -525,6 +532,7 @@ namespace Emergence {
             Ray r = new Ray(start, dir);
             float closestDist = float.MaxValue;
             Vector3 closestPoint = Vector3.Zero;
+            Face closestFace = null;
             bool foundPoint = false;
             foreach (Brush brush in core.mapEngine.brushes)
             {
@@ -541,6 +549,7 @@ namespace Emergence {
                         {
                             closestDist = dist.Value;
                             closestPoint = p;
+                            closestFace = f;
                             foundPoint = true;
                         }
                     }
@@ -549,7 +558,7 @@ namespace Emergence {
 
             //now check players
             if(foundPoint)
-                return new HitScan(closestPoint, r);
+                return new HitScan(closestPoint, r, closestFace);
             return null;
         }
     }

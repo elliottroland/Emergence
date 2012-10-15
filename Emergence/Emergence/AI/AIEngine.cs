@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Emergence.Map;
+using Emergence.Pickup;
 
 namespace Emergence.AI {
     public class MeshNode {
@@ -26,12 +27,14 @@ namespace Emergence.AI {
                           nodeRadius = 80;    //radius of nodes, this is how far they're laid away from walls (kinda) and other nodes
         CoreEngine core;
         public List<MeshNode> mesh;
+        public List<MeshNode> pickupNodes;
         public List<AIAgent> agents;
         public Random random;           //a random for AI agents to use
 
         public AIEngine(CoreEngine core) {
             this.core = core;
             mesh = new List<MeshNode>();
+            pickupNodes = new List<MeshNode>();
             agents = new List<AIAgent>();
             random = new Random();
         }
@@ -73,9 +76,23 @@ namespace Emergence.AI {
                 } // for face
             } // for brush
 
+            //add meshnodes for the pickups
+            Vector3 heightVec = new Vector3(0, nodeHeight, 0);
+            foreach (PickUpGen g in core.pickupEngine.gens) {
+                Vector3 gh = g.pos + heightVec;
+                //cast a ray down
+                PhysicsEngine.HitScan h = core.physicsEngine.hitscan(gh, -Vector3.Up, null);
+                if (h != null && h.collisionFace != null) {
+                    gh = h.collisionPoint + new Vector3(0, nodeLift, 0);
+                    MeshNode m = new MeshNode(gh, h.collisionFace);
+                    mesh.Add(m);
+                    pickupNodes.Add(m);
+                }
+            }
+
             //connect vibes
             List<MeshNode> meshAdd = new List<MeshNode>();
-            Vector3 heightVec = new Vector3(0, nodeHeight-nodeLift, 0);
+            heightVec = new Vector3(0, nodeHeight-nodeLift, 0);
             foreach(MeshNode m1 in mesh)   {
                 foreach (MeshNode m2 in mesh)
                 {

@@ -22,7 +22,7 @@ namespace Emergence.Weapons
         public ShockRifle()
         {
             ammoUsed = 5;
-            cooldown = 10;
+            cooldown = 1f;
             damage = 5;
         }
 
@@ -34,6 +34,13 @@ namespace Emergence.Weapons
         public override void fire(Player p, PhysicsEngine ph)
         {
             base.fire(p, ph);
+
+            if (curCooldown == cooldown) {
+                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                if (hs != null) {
+                    makeProjectile(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 60, 600);
+                }
+            }
         }
 
         public override Weapon upgradeLeft()
