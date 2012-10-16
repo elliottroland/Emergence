@@ -22,7 +22,7 @@ namespace Emergence.Weapons
         public RocketLauncher()
         {
             ammoUsed = 30;
-            cooldown = 100;
+            cooldown = 0.75f;
             damage = 70;
         }
 
@@ -32,19 +32,25 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p, PhysicsEngine ph)
+        public override void fire(Agent p, PhysicsEngine ph)
         {
             base.fire(p, ph);
+            if (curCooldown == cooldown) {
+                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                if (hs != null) {
+                    makeRocket(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 1200, 40);
+                }
+            }
         }
 
         public override Weapon upgradeLeft()
         {
-            return new FastRocket();
+            return this;
         }
 
         public override Weapon upgradeRight()
         {
-            return new TripleRocket();
+            return this;
         }
 
         public override Weapon upgradeDown()

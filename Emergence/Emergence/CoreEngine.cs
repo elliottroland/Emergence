@@ -57,6 +57,7 @@ namespace Emergence
 
         public Effect lighting;
         Dictionary<String, Texture2D> textures;
+        public Dictionary<String, Texture2D> weaponTrailTextures;
 
         public MapEngine mapEngine;
         public RenderEngine renderEngine;
@@ -145,11 +146,20 @@ namespace Emergence
                 }
             }
 
+            //load trails for weapons
+            weaponTrailTextures = new Dictionary<string, Texture2D>();
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("Content/weaponTrails/weapontraillist.txt")) {
+                string tex = "";
+                while ((tex = sr.ReadLine()) != null) {
+                    tex = tex.Trim();
+                    string[] split = Regex.Split(tex, @"\s+");
+                    weaponTrailTextures.Add(split[0], Content.Load<Texture2D>("weaponTrails/" + split[1]));
+                }
+            }
+
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
-            bulletTex = Content.Load<Texture2D>("bullet");
-            beamTex = Content.Load<Texture2D>("bullet_trail");
 
             //load shader
             lighting = Content.Load<Effect>("PointLighting");
@@ -179,7 +189,6 @@ namespace Emergence
 
         public void startGame(string mapName, bool[] playersPlaying)
         {
-
             loadMap("Content/maps/" + mapName + ".map");
 
 
@@ -197,9 +206,26 @@ namespace Emergence
             renderEngine = new RenderEngine(this, playerIndices);
 
             //once the map is loaded the player has a position, so take it for the test agent
-            for (int i = 0; i < 2; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
+            for (int i = 0; i < 1; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
 
             currentState = GameState.GameScreen;
+        }
+
+        public void spawnPlayer(Agent p) {
+            //find the spawn point furthest from other agents
+            float maxDist = -float.MaxValue;
+            Vector3 minPoint = Vector3.Zero;
+            foreach (Vector3 pos in mapEngine.playerPoss) {
+                float dist = 0;
+                foreach (Agent a in allAgents())
+                    dist += Vector3.Distance(a.position, pos);
+                if (dist > maxDist) {
+                    maxDist = dist;
+                    minPoint = pos;
+                }
+            }
+
+            p.position = minPoint;
         }
 
         public Player getPlayerForIndex(PlayerIndex pi)
@@ -223,7 +249,15 @@ namespace Emergence
         {
             foreach (Brush b in mapEngine.brushes)
                 yield return b;
+            foreach(Agent a in allAgents())
+                yield return a;
+        }
 
+        public IEnumerable<Agent> allAgents() {
+            foreach (Agent a in players)
+                yield return a;
+            foreach(Agent a in aiEngine.agents)
+                yield return a;
         }
 
         protected override void Update(GameTime gameTime)
@@ -244,7 +278,7 @@ namespace Emergence
                     player.Update(gameTime);
 
                 aiEngine.Update(gameTime);
-
+                renderEngine.Update(gameTime);
             }
 
             base.Update(gameTime);

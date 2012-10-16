@@ -31,14 +31,14 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p, PhysicsEngine ph)
+        public override void fire(Agent p, PhysicsEngine ph)
         {
             base.fire(p, ph);
 
             if (curCooldown == cooldown) {
                 PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
                 if (hs != null) {
-                    makeProjectile(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 60, 600);
+                    makeProjectile(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 60, 1000, 50, "ShockRifle");
                 }
             }
         }

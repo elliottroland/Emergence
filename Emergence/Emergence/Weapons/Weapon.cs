@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 
+using Emergence.Render;
 
 namespace Emergence.Weapons
 {
@@ -36,7 +37,7 @@ namespace Emergence.Weapons
                 curCooldown = (float)Math.Max(0, curCooldown - gameTime.ElapsedGameTime.TotalSeconds);
         }
 
-        public virtual void fire(Player p, PhysicsEngine ph){
+        public virtual void fire(Agent p, PhysicsEngine ph){
 
             if (curCooldown > 0 || p.ammo < ammoUsed)
                 return;
@@ -55,8 +56,7 @@ namespace Emergence.Weapons
         //Revert to more basic weapon
         public abstract Weapon upgradeDown();
 
-        public void makeNormalBullet(Player p){
-
+        /*public void makeNormalBullet(Player p){
             if (curCooldown == cooldown)
             {
                 //Do weapon specific things
@@ -64,15 +64,12 @@ namespace Emergence.Weapons
                 b.pos = p.position + p.getDirectionVector() + new Vector3(0, 60, 0);
                 b.dir = p.getDirectionVector();
                 b.timeLeft = 600;
-                p.bullets.Add(b);
+                p.core.renderEngine.bullets.Add(b);
             }
         
-        }
+        }*/
 
-        public void makeLaser(Player p, Ray r, float distance, int width, int height){
-
-            if (curCooldown == cooldown)
-            {
+        public static void makeLaser(Agent p, Ray r, float distance, int width, int height, String weaponClass) {
                 Laser l = new Laser();
                 l.horizVerts = new VertexPositionNormalTexture[4];
                 l.vertVerts = new VertexPositionNormalTexture[4];
@@ -143,23 +140,23 @@ namespace Emergence.Weapons
 
                 // Set vert position and texture coordinates
                 l.vertVerts[0].Position = LowerLeft;
-                l.vertVerts[0].TextureCoordinate = textureLowerLeft;
+                l.vertVerts[0].TextureCoordinate = textureLowerRight;
                 l.vertVerts[1].Position = UpperLeft;
-                l.vertVerts[1].TextureCoordinate = textureUpperLeft;
+                l.vertVerts[1].TextureCoordinate = textureLowerLeft;
                 l.vertVerts[2].Position = LowerRight;
-                l.vertVerts[2].TextureCoordinate = textureLowerRight;
+                l.vertVerts[2].TextureCoordinate = textureUpperRight;
                 l.vertVerts[3].Position = UpperRight;
-                l.vertVerts[3].TextureCoordinate = textureUpperRight;
+                l.vertVerts[3].TextureCoordinate = textureUpperLeft;
 
                 l.timeLeft = 600;
 
-                p.lasers.Add(l);
-            }
+                l.texture = p.core.weaponTrailTextures[weaponClass];
+
+                p.core.renderEngine.lasers.Add(l);
         
         }
 
-        public void makeProjectile(Player p, Ray r, float distance, int width, float speed) {
-            if (curCooldown == cooldown) {
+        public static void makeProjectile(Agent p, Ray r, float distance, int width, float speed, float damage, string weaponClass) {
                 Projectile l = new Projectile();
                 l.a = new VertexPositionNormalTexture[4];
                 l.b = new VertexPositionNormalTexture[4];
@@ -261,11 +258,26 @@ namespace Emergence.Weapons
                 l.position = orig;
                 l.speed = speed;
                 l.size = width;
+                l.texture = p.core.weaponTrailTextures[weaponClass];
+                l.damage = damage;
 
-                p.projectiles.Add(l);
-            }
+                p.core.renderEngine.projectiles.Add(l);
 
         }
 
+        public static void makeRocket(Agent p, Ray r, float distance, float speed, float damage) {
+            Rocket rocket = new Rocket();
+            rocket.position = r.Position;
+            rocket.dir = r.Direction;
+            rocket.collisionDist = distance;
+            rocket.speed = speed;
+            rocket.p = p;
+            rocket.trailDist = 5;
+            rocket.curTrailDist = 0;
+            rocket.size = 60;
+            rocket.damage = damage;
+
+            p.core.renderEngine.rockets.Add(rocket);
+        }
     }
 }

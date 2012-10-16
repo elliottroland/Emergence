@@ -523,6 +523,13 @@ namespace Emergence {
             }
         }
 
+        public class AgentHitScan : HitScan {
+            public Agent agent = null;
+            public AgentHitScan(Vector3 cp, Ray rae, Agent a) : base(cp, rae, null) {
+                this.agent = a;
+            }
+        }
+
         public HitScan hitscan(Vector3 start, Vector3 dir, List<Brush> ignoreBrushes)
         {
             if (ignoreBrushes == null)
@@ -559,6 +566,57 @@ namespace Emergence {
             //now check players
             if(foundPoint)
                 return new HitScan(closestPoint, r, closestFace);
+            return null;
+        }
+
+        public AgentHitScan agentHitscan(Vector3 start, Vector3 dir, List<Agent> ignoreAgents) {
+            if (ignoreAgents == null)
+                ignoreAgents = new List<Agent>();
+            //first check against map geometry first
+            dir = Vector3.Normalize(dir);
+            Ray r = new Ray(start, dir);
+            float closestDist = float.MaxValue;
+            Vector3 closestPoint = Vector3.Zero;
+            Agent closestAgent = null;
+            bool foundPoint = false;
+            foreach (Agent a in core.allAgents()) {
+                if (a.spawnTime > 0) continue;
+                if (ignoreAgents.Contains(a)) continue;
+                /*BoundingBox bb = a.getBoundingBox();
+                Vector3 radius = (bb.Max - bb.Min) * 0.5f;
+                Ray ar = new Ray(toESpace(radius, start), toESpace(radius, dir));
+                Nullable<float> dist = ar.Intersects(new BoundingSphere(toESpace(radius, bb.Min + radius), 1));
+                if (dist != null && (!foundPoint || dist.Value < closestDist)) {
+                    //find that point
+                    Vector3 p = toWorldSpace(radius, ar.Position + ar.Direction * dist.Value);
+                    closestDist = Vector3.Distance(p, start);
+                    closestPoint = p;
+                    closestAgent = a;
+                    foundPoint = true;
+                }*/
+                Nullable<float> dist = r.Intersects(a.getBoundingBox());
+                if (dist != null && (!foundPoint || dist.Value < closestDist)) {
+                    //find that point
+                    Vector3 p = r.Position + r.Direction * dist.Value;
+                    closestDist = dist.Value;
+                    closestPoint = p;
+                    closestAgent = a;
+                    foundPoint = true;
+                }
+            } // for brush
+
+            //now check players
+            if (foundPoint)
+                return new AgentHitScan(closestPoint, r, closestAgent);
+            return null;
+        }
+
+        public Agent findAgentIntersection(BoundingBox bb) {
+            foreach (Agent a in core.allAgents()) {
+                if (a.spawnTime > 0) continue;
+                if (a.getBoundingBox().Intersects(bb))
+                    return a;
+            }
             return null;
         }
     }

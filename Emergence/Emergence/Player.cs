@@ -8,61 +8,6 @@ using Emergence.Weapons;
 
 namespace Emergence
 {
-    public struct Bullet{
-    
-        public Vector3 pos;
-        public Vector3 dir;
-        public int timeLeft;
-
-        public void update() {
-
-            pos = pos + dir * 50;
-            timeLeft -= 10;
-        
-        }
-    
-    }
-
-    public struct Laser
-    {
-
-        public VertexPositionNormalTexture[] horizVerts;
-        public VertexPositionNormalTexture[] vertVerts;
-        public int[] indices;
-        public int[] revIndices;
-        public int timeLeft;
-
-        public void update()
-        {
-
-            timeLeft -= 10;
-
-        }
-
-    }
-
-    public class Projectile {
-        public float size, speed;
-        public Vector3 position, dir;
-        public VertexPositionNormalTexture[] a, b, c;
-        public int[] indices;
-        public int[] revIndices;
-        public float collisionDist;
-
-        public Projectile() { }
-
-        public void update(GameTime gameTime) {
-            Vector3 move = dir * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            position += move;
-            collisionDist -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //update the vertices
-            for (int i = 0; i < a.Length; i++ ) a[i].Position += move;
-            for (int i = 0; i < b.Length; i++) b[i].Position += move;
-            for (int i = 0; i < c.Length; i++) c[i].Position += move;
-        }
-    }
-
     public class Player : Agent {
         public PlayerIndex playerIndex;
 
@@ -75,7 +20,21 @@ namespace Emergence
             : this(c, playerIndex, position, new Vector2(0, (float)MathHelper.PiOver2)) { }
 
         public override void Update(GameTime gameTime) {
-
+            if (spawnTime > 0) {
+                spawnTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (spawnTime <= 0) {
+                    spawnTime = 0;
+                    health = 100;
+                    ammo = 200;
+                    equipped = new Pistol();
+                    core.spawnPlayer(this);
+                }
+                return;
+            }
+            else if (health < 0) {
+                spawnTime = spawnDelay;
+                return;
+            }
             equipped.Update(gameTime);
 
             //ping the input engine for move
@@ -90,7 +49,7 @@ namespace Emergence
             clampDirection();
 
             Vector3 jumpVelocity = Vector3.Zero;
-
+            
             foreach (Actions a in actions)
                 if (a == Actions.Jump) {
                     jumpVelocity.Y = jump;
@@ -117,34 +76,7 @@ namespace Emergence
             //the final position is decided by that engine, taking into account gravity and collision detection/response
             core.physicsEngine.applyMovement(gameTime, playerIndex, velocity + jumpVelocity);
 
-            //update all bullet positions
-            for (int i = bullets.Count - 1; i >= 0; --i) {
-                Bullet curB = bullets[i];
-                curB.update();
-                bullets[i] = curB;
-                if (bullets[i].timeLeft <= 0)
-                    bullets.Remove(bullets[i]);
-
-            }
-
-            for (int i = lasers.Count - 1; i >= 0; --i)
-            {
-                Laser curL = lasers[i];
-                curL.update();
-                lasers[i] = curL;
-                if (lasers[i].timeLeft <= 0)
-                    lasers.Remove(lasers[i]);
-
-            }
-
-            for (int i = 0; i < projectiles.Count; ++i) {
-                projectiles[i].update(gameTime);
-                if (projectiles[i].collisionDist <= 0)
-                    projectiles.RemoveAt(i--);
-            }
-
             core.physicsEngine.updateCollisionCellsFor(this);
-
         }
     }
 }

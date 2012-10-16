@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Emergence.Weapons;
 //git is awesome
 namespace Emergence.AI {
     public class AIAgent : Agent {
@@ -17,6 +18,8 @@ namespace Emergence.AI {
         Vector3 deadReckoningMove = Vector3.Zero;
 
         MeshNode previousTarget = null;
+
+        float checkTime = 4f, curCheckTime = 0;
 
         public AIAgent(CoreEngine c, Vector3 position, Vector2 direction)
             : base(c, position, direction) { }
@@ -102,6 +105,21 @@ namespace Emergence.AI {
         }
 
         public override void Update(GameTime gameTime) {
+            if (spawnTime > 0) {
+                spawnTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (spawnTime <= 0) {
+                    spawnTime = 0;
+                    health = 100;
+                    ammo = 200;
+                    equipped = new Pistol();
+                    core.spawnPlayer(this);
+                }
+                return;
+            }
+            else if (health < 0) {
+                spawnTime = spawnDelay;
+                return;
+            }
             equipped.Update(gameTime);
             if (path.Count == 0) {
                 ignore.Clear();     //should we clear ignore here?
@@ -165,6 +183,21 @@ namespace Emergence.AI {
             }
 
             core.physicsEngine.updateCollisionCellsFor(this);
+            curCheckTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (curCheckTime <= 0) {
+                curCheckTime = checkTime;
+                Vector3 cent = getCenter();
+                foreach (Agent a in core.allAgents()) {
+                    if (a.spawnTime > 0) continue;
+                    Vector3 aCent = a.getCenter();
+                    if (Vector3.Dot(cent, aCent) > 0.5 && core.physicsEngine.hitscan(cent, aCent - cent, null) != null) {
+                        direction = getDirectionFromVector(Vector3.Normalize(aCent - cent));
+                        direction += new Vector2((float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 4)), (float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 8)));
+                        clampDirection();
+                        equipped.fire(this, core.physicsEngine);
+                    }
+                }
+            }
         }
     }
 

@@ -32,7 +32,7 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p, PhysicsEngine ph)
+        public override void fire(Agent p, PhysicsEngine ph)
         {
             base.fire(p, ph);
 
@@ -50,9 +50,18 @@ namespace Emergence.Weapons
                 dirs[4] = dirs[0] - (float)rand.NextDouble() * right + (float)rand.NextDouble() * up;
 
                 foreach(Vector3 dir in dirs)    {
-                    PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, null);
-                    if (hs != null) {
-                        makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5);
+                    List<Agent> l = new List<Agent>();
+                    l.Add(p);
+                    PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, l);
+                    if (ahs != null) {
+                        ahs.agent.health -= damage;
+                        makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 5, 5, "Shotgun");
+                    }
+                    else {
+                        PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, null);
+                        if (hs != null) {
+                            makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5, "Shotgun");
+                        }
                     }
                 }
             }

@@ -277,7 +277,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="beam.png">
+    <Compile Include="weaponTrails\beam.png">
       <Name>beam</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -397,8 +397,33 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bullet_trail.png">
+    <Compile Include="weaponTrails\shock_ball.png">
+      <Name>shock_ball</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="weaponTrails\weapontraillist.txt">
+      <Name>weapontraillist</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="weaponTrails\bullet_trail.png">
       <Name>bullet_trail</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="weaponTrails\rail_beam.png">
+      <Name>rail_beam</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="weaponTrails\rocket_trail.png">
+      <Name>rocket_trail</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

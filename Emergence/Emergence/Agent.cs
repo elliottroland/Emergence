@@ -19,11 +19,9 @@ namespace Emergence {
         public int health = 100;
         public int ammo = 200;
 
-        public Velocities agentVelocities;
+        public float spawnTime = 0, spawnDelay = 5;
 
-        public List<Bullet> bullets = new List<Bullet>();
-        public List<Laser> lasers = new List<Laser>();
-        public List<Projectile> projectiles = new List<Projectile>();
+        public Velocities agentVelocities;
 
         protected List<CollisionGridCell> collisionCells;
 
@@ -50,6 +48,10 @@ namespace Emergence {
 
         public Vector3 getEyePosition() {
             return position + new Vector3(0, size.Y-8, 0);
+        }
+
+        public Vector3 getCenter() {
+            return getBoundingBox().Min + size * 0.5f;
         }
 
         public BoundingBox getBoundingBoxFor(Vector3 pos) {

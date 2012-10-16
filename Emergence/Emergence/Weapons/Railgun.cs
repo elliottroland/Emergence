@@ -33,14 +33,23 @@ namespace Emergence.Weapons
             base.Update(gameTime);
         }
 
-        public override void fire(Player p, PhysicsEngine ph)
+        public override void fire(Agent p, PhysicsEngine ph)
         {
             base.fire(p, ph);
 
             if (curCooldown == cooldown) {
-                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
-                if (hs != null) {
-                    makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 10, 10);
+                List<Agent> l = new List<Agent>();
+                l.Add(p);
+                PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), l);
+                if (ahs != null) {
+                    ahs.agent.health -= damage;
+                    makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 10, 10, "Railgun");
+                }
+                else {
+                    PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                    if (hs != null) {
+                        makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 10, 10, "Railgun");
+                    }
                 }
             }
         }
@@ -52,12 +61,12 @@ namespace Emergence.Weapons
 
         public override Weapon upgradeRight()
         {
-            return new BFG(this);
+            return this;
         }
 
         public override Weapon upgradeDown()
         {
-            return new SniperRifle();
+            return new Rifle();
         }
 
     }

@@ -25,7 +25,7 @@ namespace Emergence.Weapons
         {
             ammoUsed = 5;
             cooldown = 0.15f;
-            damage = 20;
+            damage = 5;
             // TODO: Construct any child components here
         }
 
@@ -37,7 +37,7 @@ namespace Emergence.Weapons
                 inaccuracy = Math.Max(inaccuracy - inaccruacyJump / 2, 0);
         }
 
-        public override void fire(Player p, PhysicsEngine ph)
+        public override void fire(Agent p, PhysicsEngine ph)
         {
             base.fire(p, ph);
 
@@ -52,16 +52,25 @@ namespace Emergence.Weapons
                 inaccuracy = Math.Min(maxInaccuracy, inaccruacyJump + inaccuracy);
                 inaccuracyCurCooldown = 0;
 
-                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, null);
-                if (hs != null) {
-                    makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5);
+                List<Agent> l = new List<Agent>();
+                l.Add(p);
+                PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, l);
+                if (ahs != null) {
+                    ahs.agent.health -= damage;
+                    makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 5, 5, "Rifle");
+                }
+                else {
+                    PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, dir, null);
+                    if (hs != null) {
+                        makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5, "Rifle");
+                    }
                 }
             }
         }
 
         public override Weapon upgradeLeft()
         {
-            return new SniperRifle();
+            return new Railgun();
         }
 
         public override Weapon upgradeRight()

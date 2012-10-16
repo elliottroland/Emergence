@@ -22,6 +22,78 @@ using Emergence.AI;
 
 namespace Emergence.Render
 {
+    public struct Bullet {
+
+        public Vector3 pos;
+        public Vector3 dir;
+        public int timeLeft;
+
+        public void update() {
+
+            pos = pos + dir * 50;
+            timeLeft -= 10;
+
+        }
+
+    }
+
+    public struct Laser {
+
+        public VertexPositionNormalTexture[] horizVerts;
+        public VertexPositionNormalTexture[] vertVerts;
+        public int[] indices;
+        public int[] revIndices;
+        public int timeLeft;
+        public Texture2D texture;
+
+        public void update() {
+            timeLeft -= 10;
+        }
+
+    }
+
+    public class Projectile {
+        public float size, speed, damage;
+        public Vector3 position, dir;
+        public VertexPositionNormalTexture[] a, b, c;
+        public int[] indices;
+        public int[] revIndices;
+        public float collisionDist;
+        public Texture2D texture;
+
+        public Projectile() { }
+
+        public void update(GameTime gameTime) {
+            Vector3 move = dir * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position += move;
+            collisionDist -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //update the vertices
+            for (int i = 0; i < a.Length; i++) a[i].Position += move;
+            for (int i = 0; i < b.Length; i++) b[i].Position += move;
+            for (int i = 0; i < c.Length; i++) c[i].Position += move;
+        }
+    }
+
+    public class Rocket {
+        public float speed, size, trailDist, curTrailDist, collisionDist, damage;
+        public Vector3 position, dir;
+        public Agent p;
+
+        public Rocket() { }
+
+        public void update(GameTime gameTime) {
+            Vector3 move = dir * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position += move;
+            curTrailDist += speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            collisionDist -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (curTrailDist > trailDist) {
+                Weapon.makeLaser(p, new Ray(position, -dir), curTrailDist, 20, 20, "RocketLauncher");
+                curTrailDist = 0;
+            }
+        }
+    }
+
     /// <summary>
     /// Handles viewports based on player number
     /// </summary>
@@ -49,9 +121,16 @@ namespace Emergence.Render
 
         Dictionary<PlayerIndex, int> playerMap;
 
+        public List<Laser> lasers;
+        public List<Projectile> projectiles;
+        public List<Rocket> rockets;
+
         public RenderEngine(CoreEngine c, PlayerIndex[] players)
         {
             core = c;
+            lasers = new List<Laser>();
+            projectiles = new List<Projectile>();
+            rockets = new List<Rocket>();
             Layout l = Layout.ONE + (players.Length - 1);
             curLayout = l;
             ports = new Viewport[(int)l];
@@ -161,6 +240,25 @@ namespace Emergence.Render
             }
         }
 
+        public void drawBoundingBox(BoundingBox bb, Vector3 colour) {
+            Vector3 size = bb.Max - bb.Min;
+            Vector3 sizeX = new Vector3(size.X, 0, 0),
+                    sizeY = new Vector3(0, size.Y, 0),
+                    sizeZ = new Vector3(0, 0, size.Z);
+            drawLine(bb.Min, bb.Min + sizeY, colour);
+            drawLine(bb.Min, bb.Min + sizeZ, colour);
+            drawLine(bb.Min, bb.Min + sizeX, colour);
+            drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeX, colour);
+            drawLine(bb.Min + sizeX, bb.Min + sizeZ + sizeX, colour);
+            drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeY, colour);
+            drawLine(bb.Min + sizeX, bb.Min + sizeY + sizeX, colour);
+            drawLine(bb.Max, bb.Max - sizeY, colour);
+            drawLine(bb.Max, bb.Max - sizeZ, colour);
+            drawLine(bb.Max, bb.Max - sizeX, colour);
+            drawLine(bb.Max - sizeZ, bb.Max - sizeZ - sizeX, colour);
+            drawLine(bb.Max - sizeX, bb.Max - sizeX - sizeZ, colour);
+        }
+
         //Draws the world to each viewport
         public void Draw(GameTime gameTime) {
 
@@ -249,23 +347,9 @@ namespace Emergence.Render
                 //draw the ai agents
                 foreach (AIAgent a in core.aiEngine.agents)
                 {
+                    if (a.spawnTime > 0) continue;
                     BoundingBox bb = a.getBoundingBox();
-                    Vector3 size = bb.Max - bb.Min;
-                    Vector3 sizeX = new Vector3(size.X, 0, 0),
-                            sizeY = new Vector3(0, size.Y, 0),
-                            sizeZ = new Vector3(0, 0, size.Z);
-                    drawLine(bb.Min, bb.Min + sizeY, new Vector3(1, 0, 0));
-                    drawLine(bb.Min, bb.Min + sizeZ, new Vector3(1, 0, 0));
-                    drawLine(bb.Min, bb.Min + sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Min + sizeX, bb.Min + sizeZ + sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Min + sizeZ, bb.Min + sizeZ + sizeY, new Vector3(1, 0, 0));
-                    drawLine(bb.Min + sizeX, bb.Min + sizeY + sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Max, bb.Max - sizeY, new Vector3(1, 0, 0));
-                    drawLine(bb.Max, bb.Max - sizeZ, new Vector3(1, 0, 0));
-                    drawLine(bb.Max, bb.Max - sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Max - sizeZ, bb.Max - sizeZ - sizeX, new Vector3(1, 0, 0));
-                    drawLine(bb.Max - sizeX, bb.Max - sizeX - sizeZ, new Vector3(1, 0, 0));
+                    drawBoundingBox(bb, new Vector3(1, 0, 0));
 
                     //also draw the path
                     MeshNode last = null;
@@ -281,11 +365,16 @@ namespace Emergence.Render
                     }
                 }
 
+                foreach (Player p in core.players) {
+                    if (p.spawnTime > 0) continue;
+                    drawBoundingBox(p.getBoundingBox(), new Vector3(0, 1, 0));
+                }
+
                 basicEffect.End();
 
                 //Draw each players bullets
                 //--------------------------------------------------------------------------------------------
-                core.lighting.CurrentTechnique = core.lighting.Techniques["Texturing"];
+                /*core.lighting.CurrentTechnique = core.lighting.Techniques["Texturing"];
                 core.lighting.Parameters["Tex"].SetValue(core.bulletTex);
                 foreach(Player p in core.players){
 
@@ -336,8 +425,7 @@ namespace Emergence.Render
                         core.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
 
                     }
-                
-                }
+                }*/
 
                 core.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                 core.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
@@ -346,117 +434,116 @@ namespace Emergence.Render
                 core.GraphicsDevice.RenderState.DepthBufferWriteEnable = false;
 
                 core.lighting.CurrentTechnique = core.lighting.Techniques["FadeTexturing"];
-                core.lighting.Parameters["Tex"].SetValue(core.beamTex);
 
-                foreach (Player p in core.players)
+                foreach (Laser l in lasers)
                 {
-                    foreach (Laser l in p.lasers)
+                    if (l.texture == null)  continue;
+                    core.lighting.Parameters["Tex"].SetValue(l.texture);
+                    core.lighting.Parameters["Opacity"].SetValue(l.timeLeft/600f);
+                    core.lighting.Begin();
+                    foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
                     {
-                        core.lighting.Parameters["Opacity"].SetValue(l.timeLeft/600f);
-                        core.lighting.Begin();
-                        foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
-                        {
 
-                            pass.Begin();
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.horizVerts,
-                                            0,
-                                            4,
-                                            l.indices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.horizVerts,
-                                            0,
-                                            4,
-                                            l.revIndices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.vertVerts,
-                                            0,
-                                            4,
-                                            l.indices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.vertVerts,
-                                            0,
-                                            4,
-                                            l.revIndices,
-                                            0,
-                                            2);
+                        pass.Begin();
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.horizVerts,
+                                        0,
+                                        4,
+                                        l.indices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.horizVerts,
+                                        0,
+                                        4,
+                                        l.revIndices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.vertVerts,
+                                        0,
+                                        4,
+                                        l.indices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.vertVerts,
+                                        0,
+                                        4,
+                                        l.revIndices,
+                                        0,
+                                        2);
 
-                            pass.End();
+                        pass.End();
 
-                        }
-                        core.lighting.End();
                     }
-                    core.lighting.Parameters["Opacity"].SetValue(1);
-                    foreach (Projectile l in p.projectiles) {
-                        core.lighting.Begin();
-                        foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
+                    core.lighting.End();
+                }
+                core.lighting.Parameters["Opacity"].SetValue(1);
+                foreach (Projectile l in projectiles) {
+                    if (l.texture == null) continue;
+                    core.lighting.Parameters["Tex"].SetValue(l.texture);
+                    core.lighting.Begin();
+                    foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
 
-                            pass.Begin();
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.a,
-                                            0,
-                                            4,
-                                            l.indices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.a,
-                                            0,
-                                            4,
-                                            l.revIndices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.b,
-                                            0,
-                                            4,
-                                            l.indices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.b,
-                                            0,
-                                            4,
-                                            l.revIndices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.c,
-                                            0,
-                                            4,
-                                            l.indices,
-                                            0,
-                                            2);
-                            core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                                            PrimitiveType.TriangleList,
-                                            l.c,
-                                            0,
-                                            4,
-                                            l.revIndices,
-                                            0,
-                                            2);
+                        pass.Begin();
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.a,
+                                        0,
+                                        4,
+                                        l.indices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.a,
+                                        0,
+                                        4,
+                                        l.revIndices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.b,
+                                        0,
+                                        4,
+                                        l.indices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.b,
+                                        0,
+                                        4,
+                                        l.revIndices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.c,
+                                        0,
+                                        4,
+                                        l.indices,
+                                        0,
+                                        2);
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                                        PrimitiveType.TriangleList,
+                                        l.c,
+                                        0,
+                                        4,
+                                        l.revIndices,
+                                        0,
+                                        2);
 
-                            pass.End();
+                        pass.End();
 
-                        }
-                        core.lighting.End();
                     }
-                    
+                    core.lighting.End();
                 }
 
                 core.GraphicsDevice.RenderState.DepthBufferWriteEnable = true;
@@ -531,6 +618,25 @@ namespace Emergence.Render
                     }
                 }
 
+                //draw rockets
+                foreach (Rocket gen in rockets) {
+                    foreach (ModelMesh mesh in core.debugSphere.Meshes) {
+
+                        foreach (BasicEffect effect in mesh.Effects) {
+
+                            effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.position);
+                            effect.View = cameras[cam];
+                            effect.Projection = basicEffect.Projection;
+
+                            effect.LightingEnabled = true;
+                            effect.AmbientLightColor = Color.Brown.ToVector3();
+
+                        }
+
+                        mesh.Draw();
+                    }
+                }
+
                 //--------------------------------------------------------------------------------------------
 
                 //Draw HUD
@@ -539,14 +645,68 @@ namespace Emergence.Render
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
 
                                 + "\nAmmo: " + core.players[cam].ammo);
+                
                 */
+
+                core.spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Immediate, SaveStateMode.SaveState);
+                core.spriteBatch.Draw(MenuScreen.selectWheel, new Vector2(v.Width/2,v.Height/2), new Rectangle(0, 0, MenuScreen.selectWheel.Width, MenuScreen.selectWheel.Height),
+               Color.White, 0, new Vector2(MenuScreen.selectWheel.Width / 2, MenuScreen.selectWheel.Height / 2 + 25),
+               0.05f, SpriteEffects.None, 0);
+
+
+                core.spriteBatch.End();
+                
+
+
+
 
                 cam++;
             
             }
         
-        }        
+        }
 
+        public void Update(GameTime gameTime) {
+            //update all bullet positions
+            /*for (int i = bullets.Count - 1; i >= 0; --i) {
+                Bullet curB = bullets[i];
+                curB.update();
+                bullets[i] = curB;
+                if (bullets[i].timeLeft <= 0)
+                    bullets.Remove(bullets[i]);
+
+            }*/
+
+            for (int i = 0; i < rockets.Count; ++i) {
+                rockets[i].update(gameTime);
+                Vector3 radius = new Vector3(1,1,1) * rockets[i].size/2;
+                BoundingBox b = new BoundingBox(rockets[i].position - radius, rockets[i].position + radius);
+                Agent a = core.physicsEngine.findAgentIntersection(b);
+                if (a != null)
+                    a.health -= (int)rockets[i].damage;
+                else if (a != null || rockets[i].collisionDist <= 0)
+                    rockets.RemoveAt(i--);
+            }
+
+            for (int i = lasers.Count - 1; i >= 0; --i) {
+                Laser curL = lasers[i];
+                curL.update();
+                lasers[i] = curL;
+                if (lasers[i].timeLeft <= 0)
+                    lasers.Remove(lasers[i]);
+            }
+
+            for (int i = 0; i < projectiles.Count; ++i) {
+                projectiles[i].update(gameTime);
+                Vector3 radius = new Vector3(1, 1, 1) * rockets[i].size / 2;
+                BoundingBox b = new BoundingBox(projectiles[i].position - radius, projectiles[i].position + radius);
+                Agent a = core.physicsEngine.findAgentIntersection(b);
+                if (a != null)
+                    a.health -= (int)projectiles[i].damage;
+                if (a != null || projectiles[i].collisionDist <= 0)
+                    projectiles.RemoveAt(i--);
+            }
+        }
     }
 
 }
