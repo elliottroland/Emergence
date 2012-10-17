@@ -1,0 +1,7 @@
+Pistol bullet_trail
+Rifle bullet_trail
+Railgun rail_beam
+Shotgun bullet_trail
+FlakkCannon beam
+RocketLauncher rocket_trail
+ShockRifle shock_ball

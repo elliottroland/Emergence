@@ -34,7 +34,8 @@ namespace Emergence
 
 
             public Keys[] gameKeys = { Keys.Space, Keys.Q, Keys.R, Keys.T, 
-                                    Keys.Tab, Keys.Tab, Keys.T, Keys.LeftShift};
+                                    Keys.Tab, Keys.Tab, Keys.T, Keys.LeftShift,
+                                    Keys.ImeConvert,Keys.ImeConvert,Keys.Escape};
 
 
             //Menu Controls, Keyboard and controller bindings

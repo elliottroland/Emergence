@@ -13,44 +13,58 @@ namespace Emergence.AI {
         double targetAquisitionDuration = 0;
         List<MeshNode> ignore = new List<MeshNode>();
 
-        public static double deadReckoningTimeout = 0.5;       //number of seconds to dead reckon for
-        double deadReckoningTimeStamp = -deadReckoningTimeout-1;
-        Vector3 deadReckoningMove = Vector3.Zero;
-
         MeshNode previousTarget = null;
+        Agent agentTarget = null;           //the agent we're currently targetting
+        float lastShotTimeLimit = 5;        //the seconds that we give up after not having shot at them
+        float timeSinceLastShot = 5;        //the time since we last shot at the agent because we could see them
 
-        float checkTime = 4f, curCheckTime = 0;
+        float checkTime = 0.1f, curCheckTime = 0;
 
         public AIAgent(CoreEngine c, Vector3 position, Vector2 direction)
-            : base(c, position, direction) { }
+            : base(c, position, direction) {
+            speed = 200f;
+        }
         public AIAgent(CoreEngine c, Vector3 position)
-            : base(c, position, new Vector2(1, 0)) { }
+            : this(c, position, new Vector2(1, 0)) { }
 
         protected MeshNode findClosestMeshNode(List<MeshNode> ignore) {
-            if (ignore == null)
-                ignore = new List<MeshNode>();
-            MeshNode closest = null;
-            float dist = 0;
-            Vector3 nodeLift = new Vector3(0, AIEngine.nodeHeight, 0);
-            foreach (MeshNode m in core.aiEngine.mesh) {
-                if (ignore.Contains(m))
-                    continue;
-                if (Vector3.Distance(m.position, position) < dist || closest == null) {
-                    closest = m;
-                    dist = Vector3.Distance(m.position, position);
-                }
-            }
-            return closest;
+            return core.aiEngine.findClosestMeshNode(position, 0, ignore);
         }
 
         //perform A* from the closest node to the target node
         public void setPathTo(MeshNode target, List<MeshNode> ignore) {
-            previousTarget = null;
+            //previousTarget = null;
             targetAquisitionDuration = 0;
             path.Clear();
             MeshNode start = findClosestMeshNode(ignore);
             if (start == null)  return;
-            
+
+            path = pathFrom(start, target, ignore);
+        }
+
+        public void addToPath(MeshNode target, List<MeshNode> ignore) {
+            if (path.Count == 0)
+                setPathTo(target, ignore);
+            else if (path[path.Count - 1] == target) {
+                Console.WriteLine("nevermind");
+                return;
+            }
+            else if (path.Contains(target)) {
+                int index = path.IndexOf(target);
+                path.RemoveRange(index + 1, path.Count - index - 1);
+            }
+            else {
+                List<MeshNode> pathAdd = pathFrom(path[path.Count - 1], target, ignore);
+                if (pathAdd.Count > 0) {
+                    pathAdd.RemoveAt(0);
+                    path.AddRange(pathAdd);
+                }
+            }
+        }
+
+        protected List<MeshNode> pathFrom(MeshNode start, MeshNode target, List<MeshNode> ignore) {
+            if (ignore == null) ignore = new List<MeshNode>();
+            List<MeshNode> path = new List<MeshNode>();
             AStarHeap q = new AStarHeap();
             //{node: (path length, previous node)}
             Dictionary<MeshNode, KeyValuePair<float, MeshNode>> distances = new Dictionary<MeshNode, KeyValuePair<float, MeshNode>>();
@@ -60,7 +74,7 @@ namespace Emergence.AI {
                 AStarHeapNode n = q.pop();
                 if (n.node == target)
                     break;
-                
+
                 //try and expand from this node to shortest paths
                 foreach (MeshNode m in n.node.neighbours) {
                     if (ignore.Contains(m))
@@ -85,6 +99,7 @@ namespace Emergence.AI {
                     m = distances[m].Value;
                 }
             }
+            return path;
         }
 
         protected void popFromPath() {
@@ -100,11 +115,10 @@ namespace Emergence.AI {
                 agentVelocities.persistentVelocity.Y = jump;
         }
 
-        public void findRoamingPath() {
-
-        }
-
         public override void Update(GameTime gameTime) {
+            /* If we're dead then wait until we can spawn ourselves
+             * again.
+             */
             if (spawnTime > 0) {
                 spawnTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (spawnTime <= 0) {
@@ -120,24 +134,76 @@ namespace Emergence.AI {
                 spawnTime = spawnDelay;
                 return;
             }
+
+            //update the weapon
             equipped.Update(gameTime);
+
+            //check if we can look for and find an enemy agent
+            //if we aren't already targetting an agent, or it's time to give up, find a new target, if we can
+            if (timeSinceLastShot >= lastShotTimeLimit) {
+                agentTarget = null;
+                timeSinceLastShot = 0;
+                Console.WriteLine("giving up");
+            }
+            else if(agentTarget != null)
+                timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (agentTarget == null) {
+                agentTarget = null;
+                float closestFeasibleTargetDist = float.MaxValue;
+                Vector3 eye = getEyePosition(),
+                    dir = getDirectionVector();
+                foreach (Agent a in core.allAgents()) {
+                    if (a.spawnTime > 0) continue;  //if the agent is not in the level, then you can't see them
+                    Vector3 aCent = a.getCenter();
+                    float dist = Vector3.Distance(eye, aCent);
+                    if ( dist < closestFeasibleTargetDist    //we're only concerned in closer enemies
+                            && Vector3.Dot(dir, Vector3.Normalize(aCent - eye)) > 0.2) {   //if they're infront of us
+                        PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(eye, aCent - eye, null);
+                        if (hs == null || hs.Distance() > dist) {
+                            agentTarget = a;
+                            closestFeasibleTargetDist = Vector3.Distance(eye, aCent);
+                            /*direction = getDirectionFromVector(Vector3.Normalize(aCent - eye));
+                            direction += new Vector2((float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 4)), (float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 8)));
+                            clampDirection();
+                            equipped.fire(this, core.physicsEngine);*/
+                        }
+                    }
+                }
+                if (agentTarget != null) {
+                    //plot a path towards the target, the actual movement of this will be taken care of later
+                    setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+                    Console.WriteLine("setting path");
+                }
+            }
+            else {  //if we're here we need to try shoot at the target
+                //setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+                Console.WriteLine("adding to path");
+                addToPath(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+            }
+
+
+            //if we're not moving towards something then stop ignoring nodes and find a pickup to go to
             if (path.Count == 0) {
+                Console.WriteLine("here");
                 ignore.Clear();     //should we clear ignore here?
-                setPathTo(core.aiEngine.mesh[core.aiEngine.random.Next(core.aiEngine.mesh.Count)], ignore);
+                setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
                 if (path.Count == 0)
                     return;
             }
 
+            //try move to the latest point in the path
             MeshNode target = path[0];
-            //if we're sufficiently close to the target switch it
-            //find the target's position relative to the position
+            /* if we're sufficiently close to the target switch it
+             * find the target's position relative to the position
+             */
             Vector2 tpos = new Vector2(Math.Abs(target.position.X - position.X),
                                         Math.Abs(target.position.Z - position.Z));
             if (tpos.X < size.X / 6 && tpos.Y < size.Y / 6) {
                 ignore.Clear();
                 popFromPath();
                 targetAquisitionDuration = 0;
-                if (path.Count == 0)
+                if (path.Count == 0 && agentTarget == null)
                     setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
                 if (path.Count == 0)
                     return;
@@ -151,29 +217,25 @@ namespace Emergence.AI {
             Vector3 velocity = target.position - position;
             direction = getDirectionFromVector(velocity);
 
-            //now calculate the move and actually move
-            //depending on whether we're on the mesh or not, we don't need collision detection
-            //if we've gotten here and there's a previous target then we're on the path
-            if (previousTarget != null) {
+            /* now calculate the move and actually move
+             * depending on whether we're on the mesh or not, we don't need collision detection
+             * if we've gotten here and there's a previous target then we're on the path
+             */
+            if (true || previousTarget != null) {
                 velocity.Normalize();
                 core.physicsEngine.applySimpleMovement(gameTime, this, velocity * speed);
             }
             //otherwise we need to take care of things the expensive way
             else {
-                if (gameTime.TotalGameTime.TotalSeconds - deadReckoningTimeStamp >= deadReckoningTimeout) {
-                    velocity.Y = 0;
-                    velocity.Normalize();
-                    Vector3 oldPos = position;
-                    deadReckoningTimeStamp = gameTime.TotalGameTime.TotalSeconds;
-                    core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
-                    deadReckoningMove = position - oldPos;
-                    if (deadReckoningMove.Y != 0)
-                        deadReckoningTimeStamp = -deadReckoningTimeout - 1;
-                }
-                else
-                    position += deadReckoningMove;
+                velocity.Y = 0;
+                velocity.Normalize();
+                core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
             }
 
+            /* the targetAquisitionDuration variable helps us keep track of the time taken
+             * to move between two nodes. if it's taking too long the we give up on that node
+             * and try a different path to our target node (path[-1])
+             */
             targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;
             if (targetAquisitionDuration >= timeout) {
                 ignore.Add(target);
@@ -183,21 +245,6 @@ namespace Emergence.AI {
             }
 
             core.physicsEngine.updateCollisionCellsFor(this);
-            curCheckTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (curCheckTime <= 0) {
-                curCheckTime = checkTime;
-                Vector3 cent = getCenter();
-                foreach (Agent a in core.allAgents()) {
-                    if (a.spawnTime > 0) continue;
-                    Vector3 aCent = a.getCenter();
-                    if (Vector3.Dot(cent, aCent) > 0.5 && core.physicsEngine.hitscan(cent, aCent - cent, null) != null) {
-                        direction = getDirectionFromVector(Vector3.Normalize(aCent - cent));
-                        direction += new Vector2((float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 4)), (float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 8)));
-                        clampDirection();
-                        equipped.fire(this, core.physicsEngine);
-                    }
-                }
-            }
         }
     }
 

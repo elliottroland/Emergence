@@ -516,20 +516,15 @@ namespace Emergence
 
     public class PauseMenu : MenuScreen
     {
-        CoreEngine coreEngine;
-        public Texture2D background, light, selectWheel;
-        float selectWheelRot = 0;
-
-
-
+     
+        
         public PauseMenu(MenuEngine m, CoreEngine g)
         {
-            menuEngine = menuEngine;
+            menuEngine = m;
             coreEngine = g;
 
-
             menuItems.Add(new MenuItem("Pause Menu", MenuState.Null));
-            menuItems.Add(new MenuItem("Resume Game", MenuState.Null));
+            menuItems.Add(new MenuItem("Resume Game", MenuState.ResumeGame));
             menuItems.Add(new MenuItem("Main Menu", MenuState.MainMenu));        
 
 
@@ -546,16 +541,16 @@ namespace Emergence
 
                 MenuItem temp = menuItems.ElementAt<MenuItem>(selectIndex);
 
+                if (temp.nextMenu == MenuState.ResumeGame)
+                    coreEngine.currentState = GameState.GameScreen;
+
+                if (temp.nextMenu == MenuState.MainMenu)
+                    return menuEngine.mainMenu;
                 //save number of bots
                 //coreEngine.numberOfBots = ?;
-                return menuEngine.singlePlayerMenu;
+                //return menuEngine.singlePlayerMenu;
 
-            }
-            if (menuActions.Contains<MenuAction>(MenuAction.Back))
-            {
-                dist = 2 * maxDist;
-                return menuEngine.singlePlayerMenu;
-            }
+            }         
 
 
 

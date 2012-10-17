@@ -151,5 +151,24 @@ namespace Emergence.AI {
             foreach (AIAgent a in agents)
                 a.Update(gameTime);
         }
+
+        public MeshNode findClosestMeshNode(Vector3 position, float withinDist, List<MeshNode> ignore) {
+            if (ignore == null)
+                ignore = new List<MeshNode>();
+            MeshNode closest = null;
+            float dist = 0;
+            Vector3 nodeLift = new Vector3(0, AIEngine.nodeHeight, 0);
+            foreach (MeshNode m in core.aiEngine.mesh) {
+                if (ignore.Contains(m))
+                    continue;
+                if (Vector3.Distance(m.position, position) < dist || closest == null) {
+                    closest = m;
+                    dist = Vector3.Distance(m.position, position);
+                    if (dist <= withinDist)
+                        break;
+                }
+            }
+            return closest;
+        }
     }
 }

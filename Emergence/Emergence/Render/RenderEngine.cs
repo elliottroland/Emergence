@@ -268,10 +268,10 @@ namespace Emergence.Render
                 basicEffect.View = cameras[cam];
                 //Generate HUD data
                 Weapon equipDebug = core.players[cam].equipped;
-                
+
                 core.GraphicsDevice.Viewport = v;
                 core.GraphicsDevice.Clear(voidColor);
-                
+
                 core.GraphicsDevice.VertexDeclaration = vertexDecl;
 
                 //Pass parameters per viewport
@@ -281,12 +281,11 @@ namespace Emergence.Render
                 core.lighting.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(Matrix.Invert(basicEffect.World)));
 
                 core.lighting.CurrentTechnique = core.lighting.Techniques["Lighting"];
-                
+
                 //Draw each brush with effects
                 //----------------------------------------------------------------------------------------
                 foreach (Brush b in core.mapEngine.brushes)
-                    foreach (Face face in b.faces)
-                    {
+                    foreach (Face face in b.faces) {
                         core.lighting.Begin();
                         if (face.plane.texture != core.mapEngine.textures["common/caulk"]) {
                             core.lighting.Parameters["Tex"].SetValue(face.plane.texture);
@@ -342,21 +341,18 @@ namespace Emergence.Render
                                 new Vector3(i * core.physicsEngine.cellSize, (j + 1) * core.physicsEngine.cellSize, k * core.physicsEngine.cellSize) + core.physicsEngine.gridOffset, new Vector3(0, 1, 0));
                         }*/
 
-               // basicEffect.End();
+                // basicEffect.End();
 
                 //draw the ai agents
-                foreach (AIAgent a in core.aiEngine.agents)
-                {
+                foreach (AIAgent a in core.aiEngine.agents) {
                     if (a.spawnTime > 0) continue;
                     BoundingBox bb = a.getBoundingBox();
                     drawBoundingBox(bb, new Vector3(1, 0, 0));
 
                     //also draw the path
                     MeshNode last = null;
-                    foreach (MeshNode m in a.path)
-                    {
-                        if (last == null)
-                        {
+                    foreach (MeshNode m in a.path) {
+                        if (last == null) {
                             last = m;
                             continue;
                         }
@@ -435,17 +431,15 @@ namespace Emergence.Render
 
                 core.lighting.CurrentTechnique = core.lighting.Techniques["FadeTexturing"];
 
-                foreach (Laser l in lasers)
-                {
-                    if (l.texture == null)  continue;
+                foreach (Laser l in lasers) {
+                    if (l.texture == null) continue;
                     core.lighting.Parameters["Tex"].SetValue(l.texture);
-                    core.lighting.Parameters["Opacity"].SetValue(l.timeLeft/600f);
+                    core.lighting.Parameters["Opacity"].SetValue(l.timeLeft / 600f);
                     core.lighting.Begin();
-                    foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes)
-                    {
+                    foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
 
                         pass.Begin();
-                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                        /*core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
                                         PrimitiveType.TriangleList,
                                         l.horizVerts,
                                         0,
@@ -476,7 +470,7 @@ namespace Emergence.Render
                                         4,
                                         l.revIndices,
                                         0,
-                                        2);
+                                        2);*/
 
                         pass.End();
 
@@ -554,13 +548,10 @@ namespace Emergence.Render
 
                 //Draw item spawner locations
                 //----------------------------------------------------------------------------------------------------
-                foreach (PickUpGen gen in core.pickupEngine.gens)
-                {
-                    foreach (ModelMesh mesh in core.debugSphere.Meshes)
-                    {
+                foreach (PickUpGen gen in core.pickupEngine.gens) {
+                    foreach (ModelMesh mesh in core.debugSphere.Meshes) {
 
-                        foreach (BasicEffect effect in mesh.Effects)
-                        {
+                        foreach (BasicEffect effect in mesh.Effects) {
 
                             effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(gen.pos);
                             effect.View = cameras[cam];
@@ -575,13 +566,11 @@ namespace Emergence.Render
 
                     }
 
-                    if (gen.held != null)
-                    {
+                    if (gen.held != null) {
 
                         Model pickUpModel = core.debugSphere;
 
-                        switch (gen.itemType)
-                        {
+                        switch (gen.itemType) {
 
                             case PickUp.PickUpType.AMMO: pickUpModel = core.ammoUp; break;
                             case PickUp.PickUpType.HEALTH: pickUpModel = core.medicross; break;
@@ -589,18 +578,15 @@ namespace Emergence.Render
 
                         }
 
-                        foreach (ModelMesh mesh in pickUpModel.Meshes)
-                        {
+                        foreach (ModelMesh mesh in pickUpModel.Meshes) {
 
-                            foreach (BasicEffect effect in mesh.Effects)
-                            {
+                            foreach (BasicEffect effect in mesh.Effects) {
                                 effect.World = Matrix.CreateScale(5) * Matrix.CreateRotationY(gen.held.rotation) * Matrix.CreateTranslation(gen.held.pos);
                                 effect.View = cameras[cam];
                                 effect.Projection = basicEffect.Projection;
                                 effect.LightingEnabled = true;
 
-                                switch (gen.held.type)
-                                {
+                                switch (gen.held.type) {
 
                                     case PickUp.PickUpType.AMMO: { effect.AmbientLightColor = Color.Crimson.ToVector3(); break; }
                                     case PickUp.PickUpType.HEALTH: { effect.AmbientLightColor = Color.Green.ToVector3(); break; }
@@ -639,33 +625,119 @@ namespace Emergence.Render
 
                 //--------------------------------------------------------------------------------------------
 
+                //--------------------------------------------------------------------------------------------
+
                 //Draw HUD
 
                 /*core.DrawStringDebug("" + equipDebug.GetType()
                                 + "\nCooldown: " + equipDebug.curCooldown + "/" + equipDebug.cooldown
 
                                 + "\nAmmo: " + core.players[cam].ammo);
-                
                 */
+                //Texture2D weaponIcon = core.
 
-                core.spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Immediate, SaveStateMode.SaveState);
-                core.spriteBatch.Draw(MenuScreen.selectWheel, new Vector2(v.Width/2,v.Height/2), new Rectangle(0, 0, MenuScreen.selectWheel.Width, MenuScreen.selectWheel.Height),
-               Color.White, 0, new Vector2(MenuScreen.selectWheel.Width / 2, MenuScreen.selectWheel.Height / 2 + 25),
-               0.05f, SpriteEffects.None, 0);
+                foreach (AIAgent ai in core.aiEngine.agents)
+                    //foreach (ModelMesh mesh in core.steve.Meshes) {
+
+                        foreach (ModelMesh mesh in core.medicross.Meshes) {
+
+                            foreach (BasicEffect effect in mesh.Effects) {
+
+                                effect.World = Matrix.CreateScale(10) * Matrix.CreateTranslation(core.players[0].position);
+                                effect.View = cameras[cam];
+                                effect.Projection = basicEffect.Projection;
+
+                                //effect.LightingEnabled = true;
+                                //effect.AmbientLightColor = Color.Brown.ToVector3();
+
+                            }
+
+                            mesh.Draw();
+                        }
 
 
-                core.spriteBatch.End();
-                
+
+                        Player player = core.players[cam];
+                        Texture2D weaponIcon = core.weaponIcons[player.equipped.GetType()];
+                        core.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+
+                        Vector2 screenCenter = new Vector2(v.Width / 2, v.Height / 2);
+
+                        Vector2 ammoPos = new Vector2(screenCenter.X, v.Height - 80);
+                        core.spriteBatch.Draw(weaponIcon, ammoPos, Color.White);
+                        core.spriteBatch.DrawString(core.debugFont, player.ammo.ToString(), new Vector2(ammoPos.X + weaponIcon.Width, ammoPos.Y + weaponIcon.Height / 3), Color.White);
+
+
+                        Vector2 hpPos = new Vector2(screenCenter.X, v.Height - 80);
+                        core.spriteBatch.Draw(core.hudIcons["Health"], hpPos -= new Vector2(core.hudIcons["Health"].Width, 0), Color.White);
+                        core.spriteBatch.DrawString(core.debugFont, player.health.ToString(), new Vector2(hpPos.X - core.debugFont.MeasureString(player.health.ToString()).X, hpPos.Y + weaponIcon.Height / 3), Color.White);
+
+
+                        String mins = "" + Math.Floor(core.roundTime / 60);
+                        String secs = "" + Math.Round(core.roundTime % 60);
+                        core.spriteBatch.DrawString(core.debugFont, mins + ":" + secs, new Vector2(screenCenter.X, 80) - (core.debugFont.MeasureString(mins + ":" + secs) / 2), Color.White);
 
 
 
 
-                cam++;
-            
+                        if (core.players[cam].drawUpgradePath) {
+                            Texture2D downGradeTexture = MenuScreen.selectWheel;
+                            Vector2 wheelCenter = new Vector2(screenCenter.X, v.Height - player.currentPathsWheelHeight + downGradeTexture.Height / 2);
+
+                            core.spriteBatch.Draw(downGradeTexture, wheelCenter, new Rectangle(0, 0, downGradeTexture.Width, downGradeTexture.Height),
+                                Color.White, MathHelper.PiOver4, new Vector2(downGradeTexture.Width / 2, downGradeTexture.Height / 2 + 25),
+                                0.5f, SpriteEffects.None, 0);
+
+                            Texture2D leftWeaponIcon = core.weaponIcons[player.equipped.upgradeLeft().GetType()];
+                            Texture2D rightWeaponIcon = core.weaponIcons[player.equipped.upgradeRight().GetType()];
+
+                            Vector2 rightPos = new Vector2(wheelCenter.X + v.Width / 4, wheelCenter.Y - 280);
+                            core.spriteBatch.Draw(rightWeaponIcon, rightPos - new Vector2(rightWeaponIcon.Width, 0), Color.White);
+                            String right = player.equipped.upgradeRight().GetType().ToString();
+                            core.spriteBatch.DrawString(core.debugFont, right.Substring(right.LastIndexOf(".") + 1), new Vector2(rightPos.X, rightPos.Y + rightWeaponIcon.Height / 3), Color.White);
+
+                            Vector2 leftPos = new Vector2(wheelCenter.X - v.Width / 4, wheelCenter.Y - 280);
+                            core.spriteBatch.Draw(leftWeaponIcon, leftPos, Color.White);
+                            String left = player.equipped.upgradeLeft().GetType().ToString();
+                            core.spriteBatch.DrawString(core.debugFont, left.Substring(left.LastIndexOf(".") + 1), new Vector2(leftPos.X - core.debugFont.MeasureString(left.Substring(left.LastIndexOf(".") + 1)).X, leftPos.Y + leftWeaponIcon.Height / 3), Color.White);
+
+
+                        }
+
+
+
+
+
+
+                        core.spriteBatch.End();
+
+                        /*foreach(Player p in core.players)
+                            foreach (ModelMesh mesh in core.steve.Meshes) {
+
+                                foreach (BasicEffect effect in mesh.Effects) {
+
+                                    effect.World = Matrix.CreateScale(0.001)*Matrix.CreateTranslation(p.position);
+                                    effect.View = cameras[cam];
+                                    effect.Projection = basicEffect.Projection;
+
+                                    //effect.LightingEnabled = true;
+                                    //effect.AmbientLightColor = Color.Brown.ToVector3();
+
+                                }
+
+                                mesh.Draw();
+                            }
+                        */
+
+
+
+
+                        cam++;
+
+                    }
+
             }
         
-        }
-
         public void Update(GameTime gameTime) {
             //update all bullet positions
             /*for (int i = bullets.Count - 1; i >= 0; --i) {
@@ -698,7 +770,7 @@ namespace Emergence.Render
 
             for (int i = 0; i < projectiles.Count; ++i) {
                 projectiles[i].update(gameTime);
-                Vector3 radius = new Vector3(1, 1, 1) * rockets[i].size / 2;
+                Vector3 radius = new Vector3(1, 1, 1) * projectiles[i].size / 2;
                 BoundingBox b = new BoundingBox(projectiles[i].position - radius, projectiles[i].position + radius);
                 Agent a = core.physicsEngine.findAgentIntersection(b);
                 if (a != null)

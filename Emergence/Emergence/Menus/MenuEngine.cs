@@ -45,6 +45,7 @@ namespace Emergence
             splitScreenMenu = new SplitScreen(this, g);
             pauseMenu = new PauseMenu(this, g);
             loadScreen = new LoadScreen(this, g);
+            pauseMenu = new PauseMenu(this, g);
 
             /*
             optionsMenu = new OptionsMenuScreen(this, g);

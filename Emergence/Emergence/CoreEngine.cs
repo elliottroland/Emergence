@@ -36,7 +36,7 @@ namespace Emergence
         MainMenu,
         SinglePlayer, SplitScreen, Options, Exit,
         StartGame, SelectMap, BotOptions,
-        ControlsEdit, PauseMenu, Null
+        ControlsEdit, PauseMenu, Null,ResumeGame
     }
 
     public class CoreEngine : Microsoft.Xna.Framework.Game
@@ -49,6 +49,7 @@ namespace Emergence
         public Model medicross;
         public Model ammoUp;
         public Model arrow;
+        public Model steve;
 
         public Model cogModel;
         public Texture2D cogTexture;
@@ -76,6 +77,11 @@ namespace Emergence
         public GameState currentState = GameState.MenuScreen;
 
         public Dictionary<Type, Texture2D> weaponIcons;
+        public Dictionary<string, Texture2D> hudIcons;
+
+        public float initialRoundTime = 300;
+        public float roundStartTime = 0;
+        public float roundTime = 0;
 
         public CoreEngine()
         {
@@ -157,6 +163,19 @@ namespace Emergence
                 }
             }
 
+            //load weapon icons
+            weaponIcons = new Dictionary<Type, Texture2D>();
+            weaponIcons[new Weapons.FlakCannon().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_flakk");
+            weaponIcons[new Weapons.Pistol().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_pistol");
+            weaponIcons[new Weapons.Railgun().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_railgun");
+            weaponIcons[new Weapons.Rifle().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_rifle");
+            weaponIcons[new Weapons.RocketLauncher().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_rocket");
+            weaponIcons[new Weapons.ShockRifle().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_shock");
+            weaponIcons[new Weapons.Shotgun().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_shotgun");
+
+            hudIcons = new Dictionary<string, Texture2D>();
+            hudIcons["Health"] = Content.Load<Texture2D>("WeaponIcons/icon_health");
+
             //load menu content
             cogModel = Content.Load<Model>("CogAttempt");
             cogTexture = Content.Load<Texture2D>("line");
@@ -173,6 +192,7 @@ namespace Emergence
             medicross = Content.Load<Model>("Medicross");
             ammoUp = Content.Load<Model>("bullets");
             arrow = Content.Load<Model>("arrow");
+            steve = Content.Load<Model>("Steve");
 
             //loadMap("Content/maps/test2.map");
             //startGame("test2", new bool[] { true, false, true, false });
@@ -187,10 +207,11 @@ namespace Emergence
             physicsEngine.generateCollisionGrid(500);
         }
 
-        public void startGame(string mapName, bool[] playersPlaying)
-        {
+        public void startGame(string mapName, bool[] playersPlaying)    {
+            initialRoundTime = 300;
+            GameTime gameTime = new GameTime();
+            roundStartTime = gameTime.TotalGameTime.Seconds;
             loadMap("Content/maps/" + mapName + ".map");
-
 
             List<PlayerIndex> playerIndicesPlaying = new List<PlayerIndex>();
             for (int i = 0; i < playersPlaying.Length; ++i)

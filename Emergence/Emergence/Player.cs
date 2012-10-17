@@ -10,6 +10,8 @@ namespace Emergence
 {
     public class Player : Agent {
         public PlayerIndex playerIndex;
+        public bool drawUpgradePath = false, showScoreboard = false;
+        public float maxPathsWheelHeight = 475, currentPathsWheelHeight = 200;
 
         public Player(CoreEngine c, PlayerIndex playerIndex, Vector3 position, Vector2 direction)
             : base(c, position, direction) {
@@ -38,7 +40,8 @@ namespace Emergence
             equipped.Update(gameTime);
 
             //ping the input engine for move
-            List<Actions> actions = core.inputEngine.getGameKeys();
+            List<Actions> actions = new List<Actions>();
+            actions.AddRange(core.inputEngine.getGameKeys());
             actions.AddRange(core.inputEngine.getGameButtons(playerIndex));
 
             Vector2 move = core.inputEngine.getMove() + core.inputEngine.getMove(playerIndex);
@@ -59,6 +62,21 @@ namespace Emergence
                 }
                 else if (a == Actions.Downgrade)
                     equipped = equipped.upgradeDown();
+                else if (a == Actions.Scoreboard) { }
+                else if (a == Actions.Reload) {
+                    if (currentPathsWheelHeight < maxPathsWheelHeight)
+                        currentPathsWheelHeight += 30;
+                    drawUpgradePath = true;
+                }
+                else if(actions.Contains(Actions.Pause)){
+                    core.currentState=GameState.MenuScreen;
+                    core.menuEngine.currentMenu=core.menuEngine.pauseMenu;
+                    }
+
+            if (!actions.Contains(Actions.Reload)) {
+                currentPathsWheelHeight = 0;
+                drawUpgradePath = false;
+            }
 
             Vector3 velocity = Vector3.Zero;
             Vector3 forward = getDirectionVector();
