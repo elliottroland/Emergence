@@ -611,9 +611,10 @@ namespace Emergence {
             return null;
         }
 
-        public Agent findAgentIntersection(BoundingBox bb) {
+        public Agent findAgentIntersection(BoundingBox bb, Agent ignore) {
             foreach (Agent a in core.allAgents()) {
                 if (a.spawnTime > 0) continue;
+                if (ignore == a) continue;
                 if (a.getBoundingBox().Intersects(bb))
                     return a;
             }

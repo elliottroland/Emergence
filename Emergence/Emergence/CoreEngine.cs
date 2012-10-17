@@ -59,6 +59,7 @@ namespace Emergence
         public Effect lighting;
         Dictionary<String, Texture2D> textures;
         public Dictionary<String, Texture2D> weaponTrailTextures;
+        public Dictionary<String, Texture2D> explosionTextures;
 
         public MapEngine mapEngine;
         public RenderEngine renderEngine;
@@ -133,6 +134,9 @@ namespace Emergence
 
             //load the trextures
             textures = new Dictionary<string, Texture2D>();
+            explosionTextures = new Dictionary<string, Texture2D>();
+            explosionTextures["rocket"] = Content.Load<Texture2D>("weaponTrails/shock_ball");
+            explosionTextures["shock"] = Content.Load<Texture2D>("weaponTrails/shock_ball");
             /*textures.Add("base_floor/pool_side2", Content.Load<Texture2D>("textures/base_floor/pool_side2"));
             textures.Add("base_wall/atech1_f", Content.Load<Texture2D>("textures/base_wall/atech1_f"));
             textures.Add("sfx/xmetalfloor_wall_5b", Content.Load<Texture2D>("textures/sfx/xmetalfloor_wall_5b"));

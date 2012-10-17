@@ -53,13 +53,14 @@ namespace Emergence.Render
     }
 
     public class Projectile {
-        public float size, speed, damage;
+        public float size, speed, damage, explosionSize;
         public Vector3 position, dir;
         public VertexPositionNormalTexture[] a, b, c;
         public int[] indices;
         public int[] revIndices;
         public float collisionDist;
-        public Texture2D texture;
+        public Texture2D texture, explosionTexture;
+        public Agent p;
 
         public Projectile() { }
 
@@ -75,10 +76,26 @@ namespace Emergence.Render
         }
     }
 
+    public class Explosion : Projectile {
+        public void update2(GameTime gameTime) {
+            size += speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            collisionDist -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Console.WriteLine(collisionDist);
+
+            for (int i = 0; i < a.Length; i++)
+                a[i].Position = Vector3.Normalize(a[i].Position - position) * size + position;
+            for (int i = 0; i < b.Length; i++)
+                b[i].Position = Vector3.Normalize(b[i].Position - position) * size + position;
+            for (int i = 0; i < c.Length; i++)
+                c[i].Position = Vector3.Normalize(c[i].Position - position) * size + position;
+        }
+    }
+
     public class Rocket {
-        public float speed, size, trailDist, curTrailDist, collisionDist, damage;
+        public float speed, size, trailDist, curTrailDist, collisionDist, damage, explosionSize;
         public Vector3 position, dir;
         public Agent p;
+        public Texture2D explosionTexture;
 
         public Rocket() { }
 
@@ -124,12 +141,21 @@ namespace Emergence.Render
         public List<Laser> lasers;
         public List<Projectile> projectiles;
         public List<Rocket> rockets;
+        public List<Explosion> explosions;
+
+        public IEnumerable<Projectile> projectilesAndExplosions() {
+            foreach (Projectile p in projectiles)
+                yield return p;
+            foreach (Projectile p in explosions)
+                yield return p;
+        }
 
         public RenderEngine(CoreEngine c, PlayerIndex[] players)
         {
             core = c;
             lasers = new List<Laser>();
             projectiles = new List<Projectile>();
+            explosions = new List<Explosion>();
             rockets = new List<Rocket>();
             Layout l = Layout.ONE + (players.Length - 1);
             curLayout = l;
@@ -439,7 +465,7 @@ namespace Emergence.Render
                     foreach (EffectPass pass in core.lighting.CurrentTechnique.Passes) {
 
                         pass.Begin();
-                        /*core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                        core.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
                                         PrimitiveType.TriangleList,
                                         l.horizVerts,
                                         0,
@@ -470,7 +496,7 @@ namespace Emergence.Render
                                         4,
                                         l.revIndices,
                                         0,
-                                        2);*/
+                                        2);
 
                         pass.End();
 
@@ -478,7 +504,7 @@ namespace Emergence.Render
                     core.lighting.End();
                 }
                 core.lighting.Parameters["Opacity"].SetValue(1);
-                foreach (Projectile l in projectiles) {
+                foreach (Projectile l in projectilesAndExplosions()) {
                     if (l.texture == null) continue;
                     core.lighting.Parameters["Tex"].SetValue(l.texture);
                     core.lighting.Begin();
@@ -623,6 +649,9 @@ namespace Emergence.Render
                     }
                 }
 
+                //draw explosions
+                
+
                 //--------------------------------------------------------------------------------------------
 
                 //--------------------------------------------------------------------------------------------
@@ -753,11 +782,19 @@ namespace Emergence.Render
                 rockets[i].update(gameTime);
                 Vector3 radius = new Vector3(1,1,1) * rockets[i].size/2;
                 BoundingBox b = new BoundingBox(rockets[i].position - radius, rockets[i].position + radius);
-                Agent a = core.physicsEngine.findAgentIntersection(b);
+                Agent a = core.physicsEngine.findAgentIntersection(b, rockets[i].p);
                 if (a != null)
                     a.health -= (int)rockets[i].damage;
-                else if (a != null || rockets[i].collisionDist <= 0)
+                if (a != null || rockets[i].collisionDist <= 0) {
+                    Weapon.makeExplosion(rockets[i].p, rockets[i].position, rockets[i].explosionSize/2, rockets[i].explosionSize, rockets[i].explosionTexture);
                     rockets.RemoveAt(i--);
+                }
+            }
+
+            for (int i = 0; i < explosions.Count; ++i) {
+                explosions[i].update2(gameTime);
+                if (explosions[i].collisionDist <= 0)
+                    explosions.RemoveAt(i--);
             }
 
             for (int i = lasers.Count - 1; i >= 0; --i) {
@@ -772,11 +809,13 @@ namespace Emergence.Render
                 projectiles[i].update(gameTime);
                 Vector3 radius = new Vector3(1, 1, 1) * projectiles[i].size / 2;
                 BoundingBox b = new BoundingBox(projectiles[i].position - radius, projectiles[i].position + radius);
-                Agent a = core.physicsEngine.findAgentIntersection(b);
+                Agent a = core.physicsEngine.findAgentIntersection(b, projectiles[i].p);
                 if (a != null)
                     a.health -= (int)projectiles[i].damage;
-                if (a != null || projectiles[i].collisionDist <= 0)
+                if (a != null || projectiles[i].collisionDist <= 0) {
+                    Weapon.makeExplosion(projectiles[i].p, projectiles[i].position, projectiles[i].explosionSize/2, projectiles[i].explosionSize, projectiles[i].explosionTexture);
                     projectiles.RemoveAt(i--);
+                }
             }
         }
     }

@@ -43,19 +43,24 @@ namespace Emergence.AI {
         }
 
         public void addToPath(MeshNode target, List<MeshNode> ignore) {
-            if (path.Count == 0)
+            if (path.Count == 0) {
+                Console.WriteLine("setting path");
                 setPathTo(target, ignore);
+            }
             else if (path[path.Count - 1] == target) {
                 Console.WriteLine("nevermind");
                 return;
             }
             else if (path.Contains(target)) {
+                Console.WriteLine("truncating path");
                 int index = path.IndexOf(target);
                 path.RemoveRange(index + 1, path.Count - index - 1);
             }
             else {
+                Console.WriteLine("adding path");
                 List<MeshNode> pathAdd = pathFrom(path[path.Count - 1], target, ignore);
                 if (pathAdd.Count > 0) {
+                    Console.WriteLine("added");
                     pathAdd.RemoveAt(0);
                     path.AddRange(pathAdd);
                 }
@@ -142,6 +147,7 @@ namespace Emergence.AI {
             //if we aren't already targetting an agent, or it's time to give up, find a new target, if we can
             if (timeSinceLastShot >= lastShotTimeLimit) {
                 agentTarget = null;
+                path.Clear();
                 timeSinceLastShot = 0;
                 Console.WriteLine("giving up");
             }
@@ -154,7 +160,7 @@ namespace Emergence.AI {
                 Vector3 eye = getEyePosition(),
                     dir = getDirectionVector();
                 foreach (Agent a in core.allAgents()) {
-                    if (a.spawnTime > 0) continue;  //if the agent is not in the level, then you can't see them
+                    if (a.spawnTime > 0 || a == this) continue;  //if the agent is not in the level, then you can't see them
                     Vector3 aCent = a.getCenter();
                     float dist = Vector3.Distance(eye, aCent);
                     if ( dist < closestFeasibleTargetDist    //we're only concerned in closer enemies
@@ -172,14 +178,16 @@ namespace Emergence.AI {
                 }
                 if (agentTarget != null) {
                     //plot a path towards the target, the actual movement of this will be taken care of later
+                    ignore.Clear();
                     setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
                     Console.WriteLine("setting path");
                 }
             }
-            else {  //if we're here we need to try shoot at the target
+            else if(path.Count == 0) {  //if we're here we need to try shoot at the target
                 //setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
-                Console.WriteLine("adding to path");
-                addToPath(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+                //Console.WriteLine("adding to path");
+                //addToPath(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+                setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
             }
 
 
@@ -188,63 +196,67 @@ namespace Emergence.AI {
                 Console.WriteLine("here");
                 ignore.Clear();     //should we clear ignore here?
                 setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
-                if (path.Count == 0)
+                if (path.Count == 0) {
+                    Console.WriteLine("no path");
                     return;
+                }
             }
 
-            //try move to the latest point in the path
-            MeshNode target = path[0];
-            /* if we're sufficiently close to the target switch it
-             * find the target's position relative to the position
-             */
-            Vector2 tpos = new Vector2(Math.Abs(target.position.X - position.X),
-                                        Math.Abs(target.position.Z - position.Z));
-            if (tpos.X < size.X / 6 && tpos.Y < size.Y / 6) {
-                ignore.Clear();
-                popFromPath();
-                targetAquisitionDuration = 0;
-                if (path.Count == 0 && agentTarget == null)
-                    setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
-                if (path.Count == 0)
-                    return;
-                target = path[0];
+            if (path.Count > 0) {
+
+                //try move to the latest point in the path
+                MeshNode target = path[0];
+                /* if we're sufficiently close to the target switch it
+                 * find the target's position relative to the position
+                 */
+                Vector2 tpos = new Vector2(Math.Abs(target.position.X - position.X),
+                                            Math.Abs(target.position.Z - position.Z));
+                if (tpos.X < size.X / 6 && tpos.Y < size.Y / 6) {
+                    ignore.Clear();
+                    popFromPath();
+                    targetAquisitionDuration = 0;
+                    //if (path.Count == 0 && agentTarget == null)setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
+                    if (path.Count == 0)
+                        return;
+                    target = path[0];
+                }
+
+                if (agentVelocities.persistentVelocity != Vector3.Zero)
+                    previousTarget = null;
+
+                //calculate direction to target -- we need this for the model, this will probably change, but the principles are right
+                Vector3 velocity = target.position - position;
+                direction = getDirectionFromVector(velocity);
+
+                /* now calculate the move and actually move
+                 * depending on whether we're on the mesh or not, we don't need collision detection
+                 * if we've gotten here and there's a previous target then we're on the path
+                 */
+                if (true || previousTarget != null) {
+                    velocity.Normalize();
+                    core.physicsEngine.applySimpleMovement(gameTime, this, velocity * speed);
+                }
+                //otherwise we need to take care of things the expensive way
+                else {
+                    velocity.Y = 0;
+                    velocity.Normalize();
+                    core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
+                }
+
+                /* the targetAquisitionDuration variable helps us keep track of the time taken
+                 * to move between two nodes. if it's taking too long the we give up on that node
+                 * and try a different path to our target node (path[-1])
+                 */
+                targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;
+                if (targetAquisitionDuration >= timeout) {
+                    ignore.Add(target);
+                    targetAquisitionDuration = 0;
+                    if (path.Count > 0)
+                        setPathTo(path[path.Count - 1], ignore);
+                }
+
+                core.physicsEngine.updateCollisionCellsFor(this);
             }
-
-            if (agentVelocities.persistentVelocity != Vector3.Zero)
-                previousTarget = null;
-
-            //calculate direction to target -- we need this for the model, this will probably change, but the principles are right
-            Vector3 velocity = target.position - position;
-            direction = getDirectionFromVector(velocity);
-
-            /* now calculate the move and actually move
-             * depending on whether we're on the mesh or not, we don't need collision detection
-             * if we've gotten here and there's a previous target then we're on the path
-             */
-            if (true || previousTarget != null) {
-                velocity.Normalize();
-                core.physicsEngine.applySimpleMovement(gameTime, this, velocity * speed);
-            }
-            //otherwise we need to take care of things the expensive way
-            else {
-                velocity.Y = 0;
-                velocity.Normalize();
-                core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
-            }
-
-            /* the targetAquisitionDuration variable helps us keep track of the time taken
-             * to move between two nodes. if it's taking too long the we give up on that node
-             * and try a different path to our target node (path[-1])
-             */
-            targetAquisitionDuration += gameTime.ElapsedGameTime.TotalSeconds;
-            if (targetAquisitionDuration >= timeout) {
-                ignore.Add(target);
-                targetAquisitionDuration = 0;
-                if(path.Count > 0)
-                    setPathTo(path[path.Count - 1], ignore);
-            }
-
-            core.physicsEngine.updateCollisionCellsFor(this);
         }
     }
 

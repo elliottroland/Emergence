@@ -153,116 +153,120 @@ namespace Emergence.Weapons
                 l.texture = p.core.weaponTrailTextures[weaponClass];
 
                 p.core.renderEngine.lasers.Add(l);
-        
+        }
+
+        private static Projectile createProjectile(Vector3 orig, int width, Projectile l) {            
+            l.a = new VertexPositionNormalTexture[4];
+            l.b = new VertexPositionNormalTexture[4];
+            l.c = new VertexPositionNormalTexture[4];
+            l.indices = new int[6];
+            l.revIndices = new int[6];
+
+            // Set the index buffer for each vertex
+            l.indices[0] = 0;
+            l.indices[1] = 1;
+            l.indices[2] = 2;
+            l.indices[3] = 2;
+            l.indices[4] = 1;
+            l.indices[5] = 3;
+
+            l.revIndices[0] = 2;
+            l.revIndices[1] = 1;
+            l.revIndices[2] = 0;
+            l.revIndices[3] = 3;
+            l.revIndices[4] = 1;
+            l.revIndices[5] = 2;
+
+            //texture coordinates
+            Vector2 textureUpperLeft = new Vector2(0.0f, 0.0f);
+            Vector2 textureUpperRight = new Vector2(1.0f, 0.0f);
+            Vector2 textureLowerLeft = new Vector2(0.0f, 1.0f);
+            Vector2 textureLowerRight = new Vector2(1.0f, 1.0f);
+
+            //normal for vertical quads
+            Vector3 aNorm = Vector3.Forward;
+
+            //normal for horizontal quads
+            Vector3 bNorm = Vector3.Up;
+
+            Vector3 cNorm = Vector3.Right;
+
+            // normals for vertices
+            for (int i = 0; i < l.a.Length; i++) {
+                l.a[i].Normal = aNorm;
+                l.b[i].Normal = bNorm;
+                l.c[i].Normal = cNorm;
+            }
+
+            //get horiz corners
+            Vector3 uppercenter = (cNorm * width / 2) + orig;
+            Vector3 UpperLeft = uppercenter + (bNorm * width / 2);
+            Vector3 UpperRight = uppercenter - (bNorm * width / 2);
+            Vector3 LowerLeft = UpperLeft - (cNorm * width);
+            Vector3 LowerRight = UpperRight - (cNorm * width);
+
+            // Set horiz position and texture coordinates
+            l.a[0].Position = LowerLeft;
+            l.a[0].TextureCoordinate = textureLowerLeft;
+            l.a[1].Position = UpperLeft;
+            l.a[1].TextureCoordinate = textureUpperLeft;
+            l.a[2].Position = LowerRight;
+            l.a[2].TextureCoordinate = textureLowerRight;
+            l.a[3].Position = UpperRight;
+            l.a[3].TextureCoordinate = textureUpperRight;
+
+            //get vert corners
+            uppercenter = (aNorm * width / 2) + orig;
+            UpperLeft = uppercenter + (cNorm * width / 2);
+            UpperRight = uppercenter - (cNorm * width / 2);
+            LowerLeft = UpperLeft - (aNorm * width);
+            LowerRight = UpperRight - (aNorm * width);
+
+            // Set vert position and texture coordinates
+            l.b[0].Position = LowerLeft;
+            l.b[0].TextureCoordinate = textureLowerLeft;
+            l.b[1].Position = UpperLeft;
+            l.b[1].TextureCoordinate = textureUpperLeft;
+            l.b[2].Position = LowerRight;
+            l.b[2].TextureCoordinate = textureLowerRight;
+            l.b[3].Position = UpperRight;
+            l.b[3].TextureCoordinate = textureUpperRight;
+
+            //get vert corners
+            uppercenter = (aNorm * width / 2) + orig;
+            UpperLeft = uppercenter + (bNorm * width / 2);
+            UpperRight = uppercenter - (bNorm * width / 2);
+            LowerLeft = UpperLeft - (aNorm * width);
+            LowerRight = UpperRight - (aNorm * width);
+
+            // Set vert position and texture coordinates
+            l.c[0].Position = LowerLeft;
+            l.c[0].TextureCoordinate = textureLowerLeft;
+            l.c[1].Position = UpperLeft;
+            l.c[1].TextureCoordinate = textureUpperLeft;
+            l.c[2].Position = LowerRight;
+            l.c[2].TextureCoordinate = textureLowerRight;
+            l.c[3].Position = UpperRight;
+            l.c[3].TextureCoordinate = textureUpperRight;
+
+            return l;
         }
 
         public static void makeProjectile(Agent p, Ray r, float distance, int width, float speed, float damage, string weaponClass) {
-                Projectile l = new Projectile();
-                l.a = new VertexPositionNormalTexture[4];
-                l.b = new VertexPositionNormalTexture[4];
-                l.c = new VertexPositionNormalTexture[4];
-                l.indices = new int[6];
-                l.revIndices = new int[6];
+            Vector3 orig = r.Position + r.Direction * width / 2;
+            Projectile l = createProjectile(orig, width, new Projectile());
+            l.collisionDist = distance;
+            l.dir = r.Direction;
+            l.position = orig;
+            l.speed = speed;
+            l.size = width;
+            l.texture = p.core.weaponTrailTextures[weaponClass];
+            l.damage = damage;
+            l.p = p;
+            l.explosionSize = 800;
+            l.explosionTexture = p.core.explosionTextures["shock"];
 
-                // Set the index buffer for each vertex
-                l.indices[0] = 0;
-                l.indices[1] = 1;
-                l.indices[2] = 2;
-                l.indices[3] = 2;
-                l.indices[4] = 1;
-                l.indices[5] = 3;
-
-                l.revIndices[0] = 2;
-                l.revIndices[1] = 1;
-                l.revIndices[2] = 0;
-                l.revIndices[3] = 3;
-                l.revIndices[4] = 1;
-                l.revIndices[5] = 2;
-
-                //texture coordinates
-                Vector2 textureUpperLeft = new Vector2(0.0f, 0.0f);
-                Vector2 textureUpperRight = new Vector2(1.0f, 0.0f);
-                Vector2 textureLowerLeft = new Vector2(0.0f, 1.0f);
-                Vector2 textureLowerRight = new Vector2(1.0f, 1.0f);
-
-                Vector3 orig = r.Position + r.Direction * width / 2;
-
-                //normal for vertical quads
-                Vector3 aNorm = Vector3.Forward;
-
-                //normal for horizontal quads
-                Vector3 bNorm = Vector3.Up;
-
-                Vector3 cNorm = Vector3.Right;
-
-                // normals for vertices
-                for (int i = 0; i < l.a.Length; i++) {
-                    l.a[i].Normal = aNorm;
-                    l.b[i].Normal = bNorm;
-                    l.c[i].Normal = cNorm;
-                }
-
-                //get horiz corners
-                Vector3 uppercenter = (cNorm * width / 2) + orig;
-                Vector3 UpperLeft = uppercenter + (bNorm * width / 2);
-                Vector3 UpperRight = uppercenter - (bNorm * width / 2);
-                Vector3 LowerLeft = UpperLeft - (cNorm * width);
-                Vector3 LowerRight = UpperRight - (cNorm * width);
-
-                // Set horiz position and texture coordinates
-                l.a[0].Position = LowerLeft;
-                l.a[0].TextureCoordinate = textureLowerLeft;
-                l.a[1].Position = UpperLeft;
-                l.a[1].TextureCoordinate = textureUpperLeft;
-                l.a[2].Position = LowerRight;
-                l.a[2].TextureCoordinate = textureLowerRight;
-                l.a[3].Position = UpperRight;
-                l.a[3].TextureCoordinate = textureUpperRight;
-
-                //get vert corners
-                uppercenter = (aNorm * width / 2) + orig;
-                UpperLeft = uppercenter + (cNorm * width / 2);
-                UpperRight = uppercenter - (cNorm * width / 2);
-                LowerLeft = UpperLeft - (aNorm * width);
-                LowerRight = UpperRight - (aNorm * width);
-
-                // Set vert position and texture coordinates
-                l.b[0].Position = LowerLeft;
-                l.b[0].TextureCoordinate = textureLowerLeft;
-                l.b[1].Position = UpperLeft;
-                l.b[1].TextureCoordinate = textureUpperLeft;
-                l.b[2].Position = LowerRight;
-                l.b[2].TextureCoordinate = textureLowerRight;
-                l.b[3].Position = UpperRight;
-                l.b[3].TextureCoordinate = textureUpperRight;
-
-                //get vert corners
-                uppercenter = (aNorm * width / 2) + orig;
-                UpperLeft = uppercenter + (bNorm * width / 2);
-                UpperRight = uppercenter - (bNorm * width / 2);
-                LowerLeft = UpperLeft - (aNorm * width);
-                LowerRight = UpperRight - (aNorm * width);
-
-                // Set vert position and texture coordinates
-                l.c[0].Position = LowerLeft;
-                l.c[0].TextureCoordinate = textureLowerLeft;
-                l.c[1].Position = UpperLeft;
-                l.c[1].TextureCoordinate = textureUpperLeft;
-                l.c[2].Position = LowerRight;
-                l.c[2].TextureCoordinate = textureLowerRight;
-                l.c[3].Position = UpperRight;
-                l.c[3].TextureCoordinate = textureUpperRight;
-
-                l.collisionDist = distance;
-                l.dir = r.Direction;
-                l.position = orig;
-                l.speed = speed;
-                l.size = width;
-                l.texture = p.core.weaponTrailTextures[weaponClass];
-                l.damage = damage;
-
-                p.core.renderEngine.projectiles.Add(l);
-
+            p.core.renderEngine.projectiles.Add(l);
         }
 
         public static void makeRocket(Agent p, Ray r, float distance, float speed, float damage) {
@@ -276,8 +280,23 @@ namespace Emergence.Weapons
             rocket.curTrailDist = 0;
             rocket.size = 60;
             rocket.damage = damage;
+            rocket.explosionSize = 1000;
+            rocket.explosionTexture = p.core.explosionTextures["rocket"];
 
             p.core.renderEngine.rockets.Add(rocket);
+        }
+
+        public static void makeExplosion(Agent p, Vector3 position, float speed, float finalSize, Texture2D explosionTexture) {
+            int width = 10;
+            Explosion l = (Explosion)createProjectile(position, width, new Explosion());
+            l.collisionDist = finalSize;
+            l.position = position;
+            l.speed = speed;
+            l.size = width;
+            l.texture = explosionTexture;
+            l.p = p;
+
+            p.core.renderEngine.explosions.Add(l);
         }
     }
 }

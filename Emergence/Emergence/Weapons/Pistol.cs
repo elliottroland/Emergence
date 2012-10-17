@@ -43,14 +43,13 @@ namespace Emergence.Weapons
                 List<Agent> l = new List<Agent>();
                 l.Add(p);
                 PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
-                if (hs != null)
+                PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), l);
+                if (hs != null && (ahs == null || hs.Distance() < ahs.Distance())) {
                     makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 5, 5, "Pistol");
-                else {
-                    PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), l);
-                    if (ahs != null) {
-                        ahs.agent.health -= damage;
-                        makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 5, 5, "Pistol");
-                    }
+                }
+                else if (ahs != null) {
+                    ahs.agent.health -= damage;
+                    makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 5, 5, "Pistol");
                 }
             }
         
