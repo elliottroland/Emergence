@@ -9,7 +9,7 @@ using Emergence.Weapons;
 
 namespace Emergence {
     abstract public class Agent : ICollidable {
-        public Vector3 position;
+        protected Vector3 position, oldPosition;
         public Vector2 direction; //theta, phi -- representing, in spherical coords the direction of a unit vector
         public float speed = 400f, rotationSpeed = 15f, lookSensitivity = 15f, jump = 8f, terminalVelocity = -1000f;
         public CoreEngine core;
@@ -19,7 +19,14 @@ namespace Emergence {
         public int health = 100;
         public int ammo = 200;
 
+        public int maxHealth = 150, maxAmmo = 300;
         public float spawnTime = 0, spawnDelay = 5;
+        public bool takingDamage = false;
+        public int kills = 0, deaths = 0;
+        public float timeSinceDamageDealt = 0, timeLimitSinceDamageDealt = 2;
+
+        public Agent damageSource;
+        public String name;
 
         public Velocities agentVelocities;
 
@@ -33,6 +40,10 @@ namespace Emergence {
 
             agentVelocities = new Velocities();
             collisionCells = new List<CollisionGridCell>();
+        }
+
+        public void setName(String s) {
+            name = s;
         }
 
         public Vector3 getDirectionVector() {
@@ -52,6 +63,13 @@ namespace Emergence {
 
         public Vector3 getCenter() {
             return getBoundingBox().Min + size * 0.5f;
+        }
+
+        public void dealDamage(float damage, Agent source) {
+            health -= (int)damage;
+            takingDamage = true;
+            damageSource = source;
+            timeSinceDamageDealt = 0;
         }
 
         public BoundingBox getBoundingBoxFor(Vector3 pos) {
@@ -81,5 +99,20 @@ namespace Emergence {
         }
 
         abstract public void Update(GameTime gameTime);
+
+        public void setPosition(Vector3 newPos) {
+            oldPosition = position;
+            position = newPos;
+        }
+
+        public Vector3 getPosition() {
+            return position;
+        }
+
+        public Vector3 getOldPosition() {
+            if (oldPosition == null)
+                return Vector3.Zero;
+            return oldPosition;
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace Emergence.Weapons
             base.fire(p, ph);
 
             if (curCooldown == cooldown) {
-                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                PhysicsEngine.HitScan hs = ph.hitscan(p.getPosition() + new Vector3(0, 75, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
                 if (hs != null) {
                     makeProjectile(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 60, 1000, 50, "ShockRifle");
                 }

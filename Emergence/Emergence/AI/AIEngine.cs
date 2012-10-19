@@ -12,6 +12,7 @@ namespace Emergence.AI {
         public Vector3 position;
         public Face face;
         public List<MeshNode> neighbours;
+        public PickUpGen linkedPickupGen;
 
         public MeshNode(Vector3 pos, Face f) {
             position = pos;
@@ -82,9 +83,10 @@ namespace Emergence.AI {
                 Vector3 gh = g.pos + heightVec;
                 //cast a ray down
                 PhysicsEngine.HitScan h = core.physicsEngine.hitscan(gh, -Vector3.Up, null);
-                if (h != null && h.collisionFace != null) {
+                if (h != null && h.collisionFace != null && h.Distance() < 60+nodeHeight) {
                     gh = h.collisionPoint + new Vector3(0, nodeLift, 0);
                     MeshNode m = new MeshNode(gh, h.collisionFace);
+                    m.linkedPickupGen = g;
                     mesh.Add(m);
                     pickupNodes.Add(m);
                 }

@@ -225,6 +225,10 @@ namespace Emergence
                         if (isPressed(playerBindings[pIndex].gameButtons[i]))//if button is down             
                             playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button   
                     }
+                    else if (playerBindings[pIndex].gameControls[i] == Actions.Aim) {
+                        if (isPressed(playerBindings[pIndex].gameButtons[i]))//if button is down             
+                            playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button   
+                    }
                     else {
                         if (isDown(playerBindings[pIndex].gameButtons[i]))//if button is down             
                             playerActions[pIndex].Add(playerBindings[pIndex].gameControls[i]);//add action bound to button   

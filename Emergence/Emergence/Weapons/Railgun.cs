@@ -22,7 +22,7 @@ namespace Emergence.Weapons
         public Railgun()
         {
 
-            cooldown = 1.75f;
+            cooldown = 2f;
             damage = 999999;
             ammoUsed = 40;
 
@@ -40,13 +40,13 @@ namespace Emergence.Weapons
             if (curCooldown == cooldown) {
                 List<Agent> l = new List<Agent>();
                 l.Add(p);
-                PhysicsEngine.HitScan hs = ph.hitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
-                PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.position + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), l);
+                PhysicsEngine.HitScan hs = ph.hitscan(p.getPosition() + new Vector3(0, 75, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), null);
+                PhysicsEngine.AgentHitScan ahs = ph.agentHitscan(p.getPosition() + new Vector3(0, 60, 0) + p.getDirectionVector() * 10, p.getDirectionVector(), l);
                 if (hs != null && (ahs == null || hs.Distance() < ahs.Distance()))
                     makeLaser(p, hs.ray, Vector3.Distance(hs.ray.Position, hs.collisionPoint), 10, 10, "Railgun");
                 else {
                     if (ahs != null) {
-                        ahs.agent.health -= damage;
+                        ahs.agent.dealDamage((int)damage, p);
                         makeLaser(p, ahs.ray, Vector3.Distance(ahs.ray.Position, ahs.collisionPoint), 10, 10, "Railgun");
                     }
                 }

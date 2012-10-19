@@ -84,6 +84,8 @@ namespace Emergence
         public float roundStartTime = 0;
         public float roundTime = 0;
 
+        public bool playerUpdateAlt = true;
+
         public CoreEngine()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -101,6 +103,7 @@ namespace Emergence
         protected override void Initialize()
         {
             //renderEngine = new RenderEngine(this, RenderEngine.Layout.ONE);
+            Render.RenderEngine.defaultView = GraphicsDevice.Viewport;
             inputEngine = new InputEngine(this);
             physicsEngine = new PhysicsEngine(this);
             aiEngine = new AIEngine(this);
@@ -135,7 +138,7 @@ namespace Emergence
             //load the trextures
             textures = new Dictionary<string, Texture2D>();
             explosionTextures = new Dictionary<string, Texture2D>();
-            explosionTextures["rocket"] = Content.Load<Texture2D>("weaponTrails/shock_ball");
+            explosionTextures["rocket"] = Content.Load<Texture2D>("weaponTrails/explosion");
             explosionTextures["shock"] = Content.Load<Texture2D>("weaponTrails/shock_ball");
             /*textures.Add("base_floor/pool_side2", Content.Load<Texture2D>("textures/base_floor/pool_side2"));
             textures.Add("base_wall/atech1_f", Content.Load<Texture2D>("textures/base_wall/atech1_f"));
@@ -169,7 +172,7 @@ namespace Emergence
 
             //load weapon icons
             weaponIcons = new Dictionary<Type, Texture2D>();
-            weaponIcons[new Weapons.FlakCannon().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_flakk");
+            //weaponIcons[new Weapons.FlakCannon().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_flakk");
             weaponIcons[new Weapons.Pistol().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_pistol");
             weaponIcons[new Weapons.Railgun().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_railgun");
             weaponIcons[new Weapons.Rifle().GetType()] = Content.Load<Texture2D>("WeaponIcons/icon_rifle");
@@ -212,7 +215,8 @@ namespace Emergence
         }
 
         public void startGame(string mapName, bool[] playersPlaying)    {
-            initialRoundTime = 300;
+            //initialRoundTime = 300;
+            roundTime = initialRoundTime;
             GameTime gameTime = new GameTime();
             roundStartTime = gameTime.TotalGameTime.Seconds;
             loadMap("Content/maps/" + mapName + ".map");
@@ -231,7 +235,7 @@ namespace Emergence
             renderEngine = new RenderEngine(this, playerIndices);
 
             //once the map is loaded the player has a position, so take it for the test agent
-            for (int i = 0; i < 1; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].position));
+            for (int i = 0; i < 2; ++i) aiEngine.agents.Add(new AIAgent(this, players[0].getPosition()));
 
             currentState = GameState.GameScreen;
         }
@@ -243,14 +247,14 @@ namespace Emergence
             foreach (Vector3 pos in mapEngine.playerPoss) {
                 float dist = 0;
                 foreach (Agent a in allAgents())
-                    dist += Vector3.Distance(a.position, pos);
+                    dist += Vector3.Distance(a.getPosition(), pos);
                 if (dist > maxDist) {
                     maxDist = dist;
                     minPoint = pos;
                 }
             }
 
-            p.position = minPoint;
+            p.setPosition(minPoint);
         }
 
         public Player getPlayerForIndex(PlayerIndex pi)
@@ -299,11 +303,26 @@ namespace Emergence
             {
 
                 pickupEngine.Update(gameTime);
-                foreach (Player player in players)
-                    player.Update(gameTime);
+                foreach (Player player in players)  player.Update(gameTime);
+                /*if (players.Length == 1)
+                    players[0].Update(gameTime);
+                else {
+                    playerUpdateAlt = !playerUpdateAlt;
+                    int start = (playerUpdateAlt ? 1 : 0);
+                    bool fake = false;
+                    for (int i = 0; i < players.Length; i++) {
+                        if (fake)
+                            players[(i+start) % players.Length].fakeUpdate(gameTime);
+                        else
+                            players[(i+start) % players.Length].Update(gameTime);
+                        fake = !fake;
+                    }
+                }*/
 
                 aiEngine.Update(gameTime);
                 renderEngine.Update(gameTime);
+                //roundTime = initialRoundTime - gameTime.TotalGameTime.Seconds + roundStartTime;
+                roundTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             base.Update(gameTime);
@@ -335,10 +354,10 @@ namespace Emergence
             }
 
             //DrawStringDebug("" + 1000 / gameTime.ElapsedGameTime.Milliseconds);
-            if(players.Length > 0)
+            /*if(players.Length > 0)
                 DrawStringDebug("health: " + players[0].health
                                     + "\nammo: " + players[0].ammo
-                                    + "\nweapon: " + players[0].equipped.GetType().Name);
+                                    + "\nweapon: " + players[0].equipped.GetType().Name);*/
 
             base.Draw(gameTime);
         }

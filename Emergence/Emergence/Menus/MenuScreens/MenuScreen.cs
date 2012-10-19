@@ -27,6 +27,9 @@ namespace Emergence
         public static Texture2D LS_button, RS_button;
 
         public static Texture2D background, light, selectWheel,splitWheel,loadWheel, title, line;
+        public static Texture2D ugLeft, ugRight;
+        public static Texture2D splatter1, splatter2;
+        public static Texture2D crossHair;
 
         //Screen Params        
         public static int screenWidth = 1024;
@@ -50,7 +53,11 @@ namespace Emergence
         public abstract MenuScreen Update(GameTime g);
         public abstract void Draw();
 
-        public void getInput()
+        public void getInput() {
+            getInput(false);
+        }
+
+        public void getInput(bool doubleFix)
         {
             if (type != "Title")
             {
@@ -103,6 +110,16 @@ namespace Emergence
             splitWheel = g.Content.Load<Texture2D>("MenuTextures/splitScreenWheel");
             line = g.Content.Load<Texture2D>("MenuTextures/line");
             loadWheel = g.Content.Load<Texture2D>("MenuTextures/loadWheel");
+
+            ugLeft = g.Content.Load<Texture2D>("WeaponIcons/hug_upgrade_blue");
+            ugRight = g.Content.Load<Texture2D>("WeaponIcons/hug_upgrade_red");
+
+            splatter1 = g.Content.Load<Texture2D>("WeaponIcons/screenSplatter1");
+            splatter2 = g.Content.Load<Texture2D>("WeaponIcons/screenSplatter2");
+
+            crossHair = g.Content.Load<Texture2D>("WeaponIcons/crosshair");
+
+
         }
 
         public SelectedStruct updateSelected(List<MenuItem> menuItems, CoreEngine coreEngine, Vector2 selectVector)

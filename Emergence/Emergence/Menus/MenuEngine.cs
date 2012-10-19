@@ -72,6 +72,7 @@ namespace Emergence
 
         public void Draw(GameTime gameTime)
         {
+            coreEngine.GraphicsDevice.Viewport = Render.RenderEngine.defaultView;
             currentMenu.Draw();
         }
     }

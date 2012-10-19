@@ -244,7 +244,7 @@ namespace Emergence
                                    
 
 
-                    coreEngine.startGame("test2", new bool[]{true, false,false,false});
+                    coreEngine.startGame("test3", new bool[]{true, false,false,false});
 
 
                     return this;
@@ -533,7 +533,8 @@ namespace Emergence
 
         public override MenuScreen Update(GameTime g)
         {
-            getInput();
+            getInput(true);
+
 
             if (menuActions.Contains<MenuAction>(MenuAction.Select))
             {

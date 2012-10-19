@@ -255,7 +255,7 @@ namespace Emergence.Weapons
         public static void makeProjectile(Agent p, Ray r, float distance, int width, float speed, float damage, string weaponClass) {
             Vector3 orig = r.Position + r.Direction * width / 2;
             Projectile l = createProjectile(orig, width, new Projectile());
-            l.collisionDist = distance;
+            l.collisionDist = distance-5;
             l.dir = r.Direction;
             l.position = orig;
             l.speed = speed;
@@ -263,7 +263,7 @@ namespace Emergence.Weapons
             l.texture = p.core.weaponTrailTextures[weaponClass];
             l.damage = damage;
             l.p = p;
-            l.explosionSize = 800;
+            l.explosionSize = 200;
             l.explosionTexture = p.core.explosionTextures["shock"];
 
             p.core.renderEngine.projectiles.Add(l);
@@ -273,20 +273,20 @@ namespace Emergence.Weapons
             Rocket rocket = new Rocket();
             rocket.position = r.Position;
             rocket.dir = r.Direction;
-            rocket.collisionDist = distance;
+            rocket.collisionDist = distance-5;
             rocket.speed = speed;
             rocket.p = p;
             rocket.trailDist = 5;
             rocket.curTrailDist = 0;
             rocket.size = 60;
             rocket.damage = damage;
-            rocket.explosionSize = 1000;
+            rocket.explosionSize = 300;
             rocket.explosionTexture = p.core.explosionTextures["rocket"];
 
             p.core.renderEngine.rockets.Add(rocket);
         }
 
-        public static void makeExplosion(Agent p, Vector3 position, float speed, float finalSize, Texture2D explosionTexture) {
+        public static void makeExplosion(Agent p, Vector3 position, float speed, float finalSize, float damage, Texture2D explosionTexture) {
             int width = 10;
             Explosion l = (Explosion)createProjectile(position, width, new Explosion());
             l.collisionDist = finalSize;
@@ -294,9 +294,11 @@ namespace Emergence.Weapons
             l.speed = speed;
             l.size = width;
             l.texture = explosionTexture;
+            l.damage = damage;
             l.p = p;
 
             p.core.renderEngine.explosions.Add(l);
+            p.core.physicsEngine.splashDamage(position, finalSize, l.damage);
         }
     }
 }

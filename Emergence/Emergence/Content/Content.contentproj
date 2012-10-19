@@ -409,6 +409,10 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+    <None Include="maps\test3.map">
+      <Name>test3</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="weaponTrails\weapontraillist.txt">
       <Name>weapontraillist</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -481,6 +485,30 @@
     </Compile>
     <Compile Include="WeaponIcons\icon_shotgun.png">
       <Name>icon_shotgun</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="weaponTrails\explosion.png">
+      <Name>explosion</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WeaponIcons\crosshair.png">
+      <Name>crosshair</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="WeaponIcons\screenSplatter1.png">
+      <Name>screenSplatter1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="WeaponIcons\screenSplatter2.png">
+      <Name>screenSplatter2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

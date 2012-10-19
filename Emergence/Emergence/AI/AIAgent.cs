@@ -5,6 +5,8 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Emergence.Weapons;
+using Emergence.Pickup;
+
 //git is awesome
 namespace Emergence.AI {
     public class AIAgent : Agent {
@@ -18,11 +20,17 @@ namespace Emergence.AI {
         float lastShotTimeLimit = 5;        //the seconds that we give up after not having shot at them
         float timeSinceLastShot = 5;        //the time since we last shot at the agent because we could see them
 
-        float checkTime = 0.1f, curCheckTime = 0;
+        float reevaulationTime = 1.25f, curReevaluationTime = 0, //how often the AI re-evaulates their target
+            agentShootTime = 0.05f, curAgentShootTime = 0;
+
+        float sightRadius = 3000;
+
+        enum State { SearchForHealth, SearchForAmmo, SearchForUpgrade, FollowAgent, Roaming };
+        //State state = State.SearchForPickup;
 
         public AIAgent(CoreEngine c, Vector3 position, Vector2 direction)
             : base(c, position, direction) {
-            speed = 200f;
+            speed = 300f;
         }
         public AIAgent(CoreEngine c, Vector3 position)
             : this(c, position, new Vector2(1, 0)) { }
@@ -37,7 +45,10 @@ namespace Emergence.AI {
             targetAquisitionDuration = 0;
             path.Clear();
             MeshNode start = findClosestMeshNode(ignore);
-            if (start == null)  return;
+            if (start == null) {
+                Console.WriteLine("start is null");
+                return;
+            }
 
             path = pathFrom(start, target, ignore);
         }
@@ -140,6 +151,8 @@ namespace Emergence.AI {
                 return;
             }
 
+            timeSinceDamageDealt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             //update the weapon
             equipped.Update(gameTime);
 
@@ -154,40 +167,168 @@ namespace Emergence.AI {
             else if(agentTarget != null)
                 timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (agentTarget == null) {
+            curReevaluationTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (curReevaluationTime <= 0) {
+                curReevaluationTime = reevaulationTime;
                 agentTarget = null;
+
+                /* depending on the current state of this agent we want to do something
+                 * different. if we are low on health, then we move towards a health pickup
+                 * if we are low on ammo, then towards ammo, otherwise we look for an opponent.
+                 * Now there are also overriding circumstances: if an enemy is too close, then we
+                 * attack them (unless we have no ammo). also, if we have a low-level weapon then
+                 * we want to upgrade our weapon. to do this we calculate all relevant data
+                 */
+
+                //find a new target, but only if ammo is sufficient
                 float closestFeasibleTargetDist = float.MaxValue;
-                Vector3 eye = getEyePosition(),
-                    dir = getDirectionVector();
-                foreach (Agent a in core.allAgents()) {
-                    if (a.spawnTime > 0 || a == this) continue;  //if the agent is not in the level, then you can't see them
-                    Vector3 aCent = a.getCenter();
-                    float dist = Vector3.Distance(eye, aCent);
-                    if ( dist < closestFeasibleTargetDist    //we're only concerned in closer enemies
-                            && Vector3.Dot(dir, Vector3.Normalize(aCent - eye)) > 0.2) {   //if they're infront of us
+                Agent closestAgent = null;
+                //we need to at least be able to shoot our gun at the enemy for a second
+                if (ammo >= equipped.ammoUsed * 2 && ammo >= equipped.ammoUsed / equipped.cooldown) {
+                    Vector3 eye = getEyePosition(),
+                            dir = getDirectionVector();
+                    //first try and go after the guy that just shot us
+                    if (damageSource != null
+                            && damageSource != this
+                            && damageSource.spawnTime == 0
+                            && timeSinceDamageDealt <= timeLimitSinceDamageDealt) {
+                        timeSinceDamageDealt = timeLimitSinceDamageDealt + 1;
+                        Vector3 aCent = damageSource.getCenter();
+                        float dist = Vector3.Distance(eye, aCent);
                         PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(eye, aCent - eye, null);
                         if (hs == null || hs.Distance() > dist) {
-                            agentTarget = a;
+                            closestAgent = damageSource;
                             closestFeasibleTargetDist = Vector3.Distance(eye, aCent);
-                            /*direction = getDirectionFromVector(Vector3.Normalize(aCent - eye));
-                            direction += new Vector2((float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 4)), (float)((core.aiEngine.random.NextDouble() * 2 - 1) * (MathHelper.PiOver4 / 8)));
-                            clampDirection();
-                            equipped.fire(this, core.physicsEngine);*/
+                        }
+                    }
+                    if(closestAgent == null) {
+                        foreach (Agent a in core.allAgents()) {
+                            if (a.spawnTime > 0 || a == this) continue;  //if the agent is not in the level, then you can't see them
+                            Vector3 aCent = a.getCenter();
+                            float dist = Vector3.Distance(eye, aCent);
+                            if (dist < closestFeasibleTargetDist    //we're only concerned in closer enemies
+                                    && Vector3.Dot(dir, Vector3.Normalize(aCent - eye)) > -0.2) {   //if they're infront of us
+                                PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(eye, aCent - eye, null);
+                                if (hs == null || hs.Distance() > dist) {
+                                    closestAgent = a;
+                                    closestFeasibleTargetDist = Vector3.Distance(eye, aCent);
+                                }
+                            }
                         }
                     }
                 }
-                if (agentTarget != null) {
-                    //plot a path towards the target, the actual movement of this will be taken care of later
+
+                //calculate the tier of a weapon
+                int weaponTier = 2;
+                if (equipped is Rifle || equipped is Shotgun)
+                    weaponTier = 1;
+                else if (equipped is Pistol)
+                    weaponTier = 0;
+
+                //calculate the nearest ammo, upgrade and health pickups
+                float closestHealthDist = float.MaxValue, closestAmmoDist = float.MaxValue, closestUpgradeDist = float.MaxValue;
+                MeshNode closestHealth = null, closestAmmo = null, closestUpgrade = null;
+                foreach (MeshNode m in core.aiEngine.pickupNodes) {
+                    if (m.linkedPickupGen.held != null) {
+                        float dist = Vector3.Distance(m.position, position);
+                        if (m.linkedPickupGen.itemType == PickUp.PickUpType.HEALTH) {
+                            if (dist < closestHealthDist) {
+                                closestHealthDist = dist;
+                                closestHealth = m;
+                            }
+                        }
+                        else if (m.linkedPickupGen.itemType == PickUp.PickUpType.AMMO) {
+                            if (dist < closestAmmoDist) {
+                                closestAmmoDist = dist;
+                                closestAmmo = m;
+                            }
+                        }
+                        else if (dist < closestUpgradeDist) {
+                            closestUpgradeDist = dist;
+                            closestUpgrade = m;
+                        }
+                    }
+                }
+
+                //now decide what to do, but how? we calculate a score for each value between 0 and 1
+                double agentScore = Math.Min(1, Math.Max(0, (closestAgent == null || closestFeasibleTargetDist >= sightRadius ?
+                                        0 : Math.Pow((sightRadius - closestFeasibleTargetDist) / sightRadius, 0.4)))),
+                       healthScore = Math.Min(1, Math.Max(0, (closestHealth == null ?
+                                        0 : Math.Pow((double)(70 - health)/maxHealth, 2)))),
+                       ammoScore = Math.Min(1, Math.Max(0, (closestAmmo == null ?
+                                        0 : Math.Pow((double)(maxAmmo - ammo)/maxAmmo, 3)))),
+                       upgradeScore = Math.Min(1, Math.Max(0, (closestUpgrade == null ?
+                                        0 : Math.Pow((double)(2 - weaponTier) / 2, 4))));
+
+                //find the max
+                double maxScore = Math.Max(agentScore, Math.Max(healthScore, Math.Max(ammoScore, upgradeScore)));
+
+                //do the work
+                if (maxScore > 0) {
                     ignore.Clear();
-                    setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
-                    Console.WriteLine("setting path");
+                    if (agentScore == maxScore) {
+                        Console.WriteLine("going for agent: " + closestAgent);
+                        agentTarget = closestAgent;
+                        setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.getPosition(), 100, ignore), ignore);
+                    }
+                    else if (healthScore == maxScore) {
+                        Console.WriteLine("going for health: " + closestHealth);
+                        setPathTo(closestHealth, null);
+                    }
+                    else if (ammoScore == maxScore) {
+                        Console.WriteLine("going for ammo: " + closestAmmo);
+                        setPathTo(closestAmmo, null);
+                    }
+                    else {
+                        Console.WriteLine("going for upgrade: " + closestUpgrade);
+                        setPathTo(closestUpgrade, null);
+                    }
                 }
             }
-            else if(path.Count == 0) {  //if we're here we need to try shoot at the target
-                //setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
-                //Console.WriteLine("adding to path");
-                //addToPath(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
-                setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.position, 100, ignore), ignore);
+
+            if (agentTarget != null && (agentTarget == this || agentTarget.spawnTime > 0))
+                agentTarget = null;
+            
+            if(agentTarget != null) {
+                //walking towards the target
+                if (path.Count == 0)
+                    setPathTo(core.aiEngine.findClosestMeshNode(agentTarget.getPosition(), 100, ignore), ignore);
+                Vector3 aCent = agentTarget.getCenter();
+                Vector3 cent = position + new Vector3(0, size.Y / 2, 0);
+                direction = getDirectionFromVector(Vector3.Normalize(aCent - cent));
+                //shooting the target
+                curAgentShootTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (curAgentShootTime <= 0 && equipped.curCooldown <= 0) {
+                    curAgentShootTime = agentShootTime;
+                    //try and shoot the player
+                    PhysicsEngine.HitScan hs = core.physicsEngine.hitscan(cent, aCent - cent, null);
+                    if (hs == null || hs.Distance() > Vector3.Distance(cent, aCent)) {
+                        timeSinceLastShot = 0;
+                        //actually shoot now
+                        //we want to adjust the direction based on the relative motion of the target to this agent
+                        Vector3 right = Vector3.Normalize(Vector3.Cross(aCent - cent, Vector3.Up));
+                        //now get the target's previous move in terms of right and up
+                        Vector3 move = agentTarget.getPosition() - agentTarget.getOldPosition() + position - oldPosition;
+                        double x = Math.Abs(Vector3.Dot(move, right)),
+                            y = Math.Abs(Vector3.Dot(move, Vector3.Up));
+                        //clamp x and y
+                        //what's the max speed that they could've moved?
+                        double max = agentTarget.speed * gameTime.ElapsedGameTime.TotalSeconds;
+                        x = Math.Min(x/max, 1);
+                        y = Math.Min(y/max, 1);
+                        
+                        //y determines the inaccuracy of up-down aiming and x for left-right
+                        //the "range" of this inaccuracy is determined by the distance the agent is from the me
+                        double inaccuracy = Math.Pow(Math.Min(Vector3.Distance(cent, aCent) / sightRadius, 1), 0.02);
+
+                        Console.WriteLine(inaccuracy * x);
+                        direction.X += (float)((core.aiEngine.random.NextDouble() * 2 - 1) * Math.PI * inaccuracy * x / 2);
+                        direction.Y += (float)((core.aiEngine.random.NextDouble() * 2 - 1) * Math.PI * inaccuracy * y / 2);
+
+                        equipped.fire(this, core.physicsEngine);
+                    }
+                }
             }
 
 
@@ -198,10 +339,12 @@ namespace Emergence.AI {
                 setPathTo(core.aiEngine.pickupNodes[core.aiEngine.random.Next(core.aiEngine.pickupNodes.Count)], ignore);
                 if (path.Count == 0) {
                     Console.WriteLine("no path");
+                    core.spawnPlayer(this);
                     return;
                 }
             }
 
+            //walk along the current path
             if (path.Count > 0) {
 
                 //try move to the latest point in the path
@@ -240,7 +383,7 @@ namespace Emergence.AI {
                 else {
                     velocity.Y = 0;
                     velocity.Normalize();
-                    core.physicsEngine.applyMovement(gameTime, this, speed * velocity);
+                    core.physicsEngine.applyMovement((float)gameTime.ElapsedGameTime.TotalSeconds, this, speed * velocity);
                 }
 
                 /* the targetAquisitionDuration variable helps us keep track of the time taken

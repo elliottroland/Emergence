@@ -192,7 +192,8 @@ namespace Emergence {
             foreach(ICollidable collidable in getCollidablesToCheck(a, velocity))
                 if (collidable is PickUp) {
                     PickUp p = (PickUp)collidable;
-                    if (collidesWithPickup(agentRadius, agentPoint, agentVelocity, p)) {
+                    //if (collidesWithPickup(agentRadius, agentPoint, agentVelocity, p)) {
+                    if(collidable.getBoundingBox().Intersects(a.getBoundingBox())) {
                         Console.WriteLine("picked up");
                         pickedUp.Add(p);
                     }
@@ -203,7 +204,7 @@ namespace Emergence {
                 p.affect(a);
             }
 
-            a.position += velocity;
+            a.setPosition(a.getPosition() + velocity);
         }
 
         public CollisionPackage collides(Vector3 moverRadius, Vector3 basePoint, Vector3 velocity, ICollidable collider) {
@@ -443,14 +444,32 @@ namespace Emergence {
             return collideWithWorld(moverRadius, newBasePoint, newVelocityVector, recursionDepth + 1, collidable);
         }
 
-        public void applyMovement(GameTime gameTime, PlayerIndex pi, Vector3 velocity) {
+        public void applyMovement(float elapsedTime, PlayerIndex pi, Vector3 velocity) {
             if (!core.clip)
-                core.getPlayerForIndex(pi).position = core.getPlayerForIndex(pi).position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                core.getPlayerForIndex(pi).setPosition(core.getPlayerForIndex(pi).getPosition() + velocity * elapsedTime);
             else
-                applyMovement(gameTime, core.getPlayerForIndex(pi), velocity);
+                applyMovement(elapsedTime, core.getPlayerForIndex(pi), velocity);
         }
 
-        public void applyMovement(GameTime gameTime, Agent player, Vector3 velocity) {
+        public void applyBlink(float elapsedTime, Player player, Vector3 move) {
+            BoundingBox playerBoundingBox = player.getBoundingBox();
+            Vector3 cent = center(playerBoundingBox);
+
+            //fix the move with a hitscan
+            HitScan hs = hitscan(cent, Vector3.Normalize(move), null);
+            if (hs != null && hs.Distance() < Math.Sqrt(Vector3.Dot(move, move)))
+                move = Vector3.Normalize(move) * hs.Distance() + hs.collisionFace.plane.getNormal()*70;
+
+            Vector3 offset = center(playerBoundingBox) - player.getPosition();
+            Vector3 playerRadius = size(playerBoundingBox) * 0.5f;
+            Vector3 basePoint = toESpace(playerRadius, cent);
+            Vector3 evelocity = toESpace(playerRadius, move);
+            Vector3 pos = collideWithWorld(playerRadius, basePoint, evelocity, 0, player);
+
+            player.setPosition(toWorldSpace(playerRadius, pos) - offset);
+        }
+
+        public void applyMovement(float elapsedTime, Agent player, Vector3 velocity) {
             BoundingBox playerBoundingBox = player.getBoundingBox();
 
             //update the persistentVelocity
@@ -458,17 +477,15 @@ namespace Emergence {
             if(pv.persistentVelocity.Y == 0)
                 pv.persistentVelocity.Y = velocity.Y;
             velocity.Y = 0;
-            pv.persistentVelocity.Y += -gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            pv.persistentVelocity.Y += -gravity * elapsedTime;
 
             //fix it to ensure terminalVelcoity
             if (pv.persistentVelocity.Y <= player.terminalVelocity)
                 pv.persistentVelocity.Y = player.terminalVelocity;
 
-            Vector3 retMove = (velocity) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            foreach (Brush b in core.mapEngine.brushes)
-                b.colliding = false;
+            Vector3 retMove = (velocity) * elapsedTime;
 
-            Vector3 offset = center(playerBoundingBox) - player.position;
+            Vector3 offset = center(playerBoundingBox) - player.getPosition();
 
             Vector3 playerRadius = size(playerBoundingBox) * 0.5f;
             Vector3 basePoint = toESpace(playerRadius, center(playerBoundingBox));
@@ -492,7 +509,22 @@ namespace Emergence {
                 pv.persistentVelocity.Y = -0.005f;
             }
 
-            player.position = toWorldSpace(playerRadius, finalPos) - offset;
+            player.setPosition(toWorldSpace(playerRadius, finalPos) - offset);
+        }
+
+        public void splashDamage(Vector3 position, float size, float damage) {
+            foreach(Agent a in core.allAgents())    {
+                if(a.spawnTime > 0) continue;
+                BoundingBox bb = a.getBoundingBox();
+                Vector3 cent = bb.Min + (bb.Max - bb.Min) * 0.5f;
+                float dist = Vector3.Distance(cent, position);
+                if (dist < size) {
+                    //do hitscan check
+                    HitScan hs = hitscan(position, cent - position, null);
+                    if (hs == null || hs.Distance() > dist)
+                        a.health -= (int)Math.Ceiling(damage * Math.Pow(1 - dist / size, 0.5));
+                }
+            }
         }
 
         public class HitScan {

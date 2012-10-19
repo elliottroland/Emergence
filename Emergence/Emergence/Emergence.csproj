@@ -109,9 +109,6 @@
     <Compile Include="Pickup\PickUp.cs" />
     <Compile Include="Pickup\PickUpEngine.cs" />
     <Compile Include="Pickup\PickUpGen.cs" />
-    <Compile Include="Weapons\BFG.cs" />
-    <Compile Include="Weapons\FastRocket.cs" />
-    <Compile Include="Weapons\FlakCannon.cs" />
     <Compile Include="Map\MapEngine.cs" />
     <Compile Include="PhysicsEngine.cs" />
     <Compile Include="Weapons\Pistol.cs" />
@@ -125,10 +122,8 @@
     <Compile Include="Weapons\RocketLauncher.cs" />
     <Compile Include="Weapons\ShockRifle.cs" />
     <Compile Include="Weapons\Shotgun.cs" />
-    <Compile Include="Weapons\SniperRifle.cs" />
     <Compile Include="Map\Vertex.cs" />
     <Compile Include="Render\RenderEngine.cs" />
-    <Compile Include="Weapons\TripleRocket.cs" />
     <Compile Include="Weapons\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
